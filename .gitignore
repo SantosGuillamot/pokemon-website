@@ -1,0 +1,24 @@
+# Dependencies
+node_modules
+
+# Build output
+dist
+public/js
+public/css
+
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# Database
+*.db
+
+# OS
+.DS_Store
+
+# Claude
+.claude
+
+# Migrations
+drizzle/
