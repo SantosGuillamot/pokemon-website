@@ -22,3 +22,6 @@ public/css
 
 # Migrations
 drizzle/
+# TODO: remove after first version is designed — delete all migration files,
+# run db:generate once for a clean 0000_initial_schema.sql, then untrack this line.
+src/db/migrations
