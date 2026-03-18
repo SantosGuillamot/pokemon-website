@@ -250,7 +250,11 @@ Deferred until auth is needed.
 
 ### 🔜 Phase 6 — Polish / Stretch Goals
 
-All deferred. See original plan for details.
+| Task | Description                                                                                         | Status     |
+| ---- | --------------------------------------------------------------------------------------------------- | ---------- |
+| 6.1  | Analyze whether to download Pokemon sprites/artwork and self-host instead of using GitHub CDN URLs   | ⬜ Todo    |
+
+Other stretch goals deferred. See original plan for details.
 
 ---
 
