@@ -6,8 +6,8 @@
   "scripts": {
     "build:js": "node --import tsx/esm scripts/build.ts",
     "build:js:watch": "node --import tsx/esm scripts/build.ts --watch",
-    "docker:up": "docker compose -f docker/docker-compose.yml up -d",
-    "docker:down": "docker compose -f docker/docker-compose.yml down",
+    "docker:up": "docker compose --env-file .env -f docker/docker-compose.yml up -d",
+    "docker:down": "docker compose --env-file .env -f docker/docker-compose.yml down",
     "build:css": "tailwindcss -i src/styles/input.css -o public/css/app.css --minify",
     "build:css:watch": "tailwindcss -i src/styles/input.css -o public/css/app.css --watch",
     "dev": "node --watch --import tsx/esm src/server.ts",
