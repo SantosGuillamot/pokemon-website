@@ -6,7 +6,7 @@ const app = new Hono();
 
 app.get('/', (c) => {
   return c.html(
-    <Layout>
+    <Layout scripts={['/public/js/index-store.js']}>
       <IndexPage />
     </Layout>
   );

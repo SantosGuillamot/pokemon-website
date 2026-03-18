@@ -1,12 +1,15 @@
-// TODO: Install @wordpress/interactivity and implement the store
-// import { store } from '@wordpress/interactivity';
-//
-// store('pokemon', {
-//   state: {
-//     get pokemon() {
-//       return { name: 'Bulbasaur' };
-//     },
-//   },
-// });
+import { store } from '@wordpress/interactivity';
 
-export {}
+const { state } = store('pokemon', {
+  state: {
+    pokemon: {
+      name: 'Bulbasaur',
+    },
+  },
+  actions: {
+    toggle: () => {
+      const current = state.pokemon.name;
+      state.pokemon.name = current === 'Bulbasaur' ? 'Pikachu' : 'Bulbasaur';
+    },
+  },
+});

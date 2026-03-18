@@ -222,6 +222,7 @@ Competitive items only (no Poké Balls, key items, etc.).
 | 2.5  | Hono RPC: Teams API (auth-guarded)                                                    | ⏸ Deferred |
 | 2.6  | JSX `Layout.tsx` + `Nav.tsx`                                                          | ✅ Done    |
 | 2.7  | Install `@wordpress/interactivity` + wire into esbuild + create basic store           | ⬜ Todo    |
+| 2.8  | Add `@wordpress/interactivity-router` for client-side navigation                     | ⬜ Todo    |
 
 ### 🔄 Phase 3 — Pages
 
