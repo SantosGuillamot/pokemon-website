@@ -215,22 +215,24 @@ Competitive items only (no Poké Balls, key items, etc.).
 
 | Task | Description                                                                           | Status     |
 | ---- | ------------------------------------------------------------------------------------- | ---------- |
-| 2.1  | Hono middleware (logger, secureHeaders, static files, error handler)                  | ⬜ Todo    |
+| 2.1  | Hono middleware (logger, secureHeaders, static files, error handler)                  | ✅ Done    |
 | 2.2  | Better Auth setup + session middleware                                                | ⏸ Deferred |
-| 2.3  | Hono RPC: Pokemon API (`GET /api/pokemon`, `/api/pokemon/:id`, `/api/pokemon/random`) | ⬜ Todo    |
+| 2.3  | Hono RPC: Pokemon API (`GET /api/pokemon/:id`) — minimal, returns single pokemon     | ✅ Done    |
 | 2.4  | Hono RPC: Moves + damage calculator                                                   | ⏸ Deferred |
 | 2.5  | Hono RPC: Teams API (auth-guarded)                                                    | ⏸ Deferred |
-| 2.6  | JSX `Layout.tsx` + `Nav.tsx`                                                          | ⬜ Todo    |
+| 2.6  | JSX `Layout.tsx` + `Nav.tsx`                                                          | ✅ Done    |
+| 2.7  | Install `@wordpress/interactivity` + wire into esbuild + create basic store           | ⬜ Todo    |
 
-### 🔜 Phase 3 — Pages
+### 🔄 Phase 3 — Pages
 
 | Task | Description                                           | Status     |
 | ---- | ----------------------------------------------------- | ---------- |
-| 3.1  | Index page — Pokemon search + type filter, iAPI store | ⬜ Todo    |
-| 3.2  | Types mini-game                                       | ⏸ Deferred |
-| 3.3  | Speed mini-game                                       | ⏸ Deferred |
-| 3.4  | Theory crafting (requires auth)                       | ⏸ Deferred |
-| 3.5  | Damage calculator                                     | ⏸ Deferred |
+| 3.1  | Index page — minimal hello-world with iAPI directives  | ✅ Done    |
+| 3.2  | Index page — Pokemon search + type filter, full iAPI store | ⬜ Todo |
+| 3.3  | Types mini-game                                       | ⏸ Deferred |
+| 3.4  | Speed mini-game                                       | ⏸ Deferred |
+| 3.5  | Theory crafting (requires auth)                       | ⏸ Deferred |
+| 3.6  | Damage calculator                                     | ⏸ Deferred |
 
 ### 🔜 Phase 4 — Auth UI
 
@@ -252,7 +254,8 @@ All deferred. See original plan for details.
 
 ---
 
-## Next Up: Phase 2
+## Next Up
 
-Start with tasks **2.1**, **2.3**, and **2.6** (can run in parallel after 2.1).
-Then **3.1** (Pokemon index page).
+1. **Task 2.7**: Install `@wordpress/interactivity`, wire it into the esbuild config, and create a basic store in `src/interactivity/index-store.ts` so the `data-wp-text` directive on the index page works.
+2. Run `npm run db:generate && npm run db:migrate && npm run db:seed` to populate the database.
+3. Run `npm run dev` + `npm run build:js:watch` + `npm run build:css:watch` to see the app.
