@@ -1,37 +1,40 @@
 {
-  "name": "pokemon-website",
-  "version": "0.1.0",
-  "type": "module",
-  "private": true,
-  "scripts": {
-    "build:js": "node --import tsx/esm scripts/build.ts",
-    "build:js:watch": "node --import tsx/esm scripts/build.ts --watch",
-    "docker:up": "docker compose --env-file .env -f docker/docker-compose.yml up -d",
-    "docker:down": "docker compose --env-file .env -f docker/docker-compose.yml down",
-    "build:css": "tailwindcss -i src/styles/input.css -o public/css/app.css --minify",
-    "build:css:watch": "tailwindcss -i src/styles/input.css -o public/css/app.css --watch",
-    "dev": "node --watch --import tsx/esm src/server.ts",
-    "start": "node src/server.ts",
-    "db:generate": "drizzle-kit generate",
-    "db:migrate": "drizzle-kit migrate",
-    "db:studio": "drizzle-kit studio",
-    "db:seed": "node --import tsx/esm scripts/seed.ts"
-  },
-  "devDependencies": {
-    "@types/node": "^25.5.0",
-    "@types/pg": "^8.18.0",
-    "drizzle-kit": "^0.31.9",
-    "esbuild": "^0.27.4",
-    "tailwindcss": "^4.2.1",
-    "tsx": "^4.21.0",
-    "typescript": "^5.9.3"
-  },
-  "dependencies": {
-    "@hono/node-server": "^1.19.11",
-    "@wordpress/interactivity": "^6.41.0",
-    "dotenv": "^17.3.1",
-    "drizzle-orm": "^0.45.1",
-    "hono": "^4.12.8",
-    "pg": "^8.20.0"
-  }
+	"name": "pokemon-website",
+	"version": "0.1.0",
+	"type": "module",
+	"private": true,
+	"scripts": {
+		"build:js": "node --import tsx/esm scripts/build.ts",
+		"build:js:watch": "node --import tsx/esm scripts/build.ts --watch",
+		"docker:up": "docker compose --env-file .env -f docker/docker-compose.yml up -d",
+		"docker:down": "docker compose --env-file .env -f docker/docker-compose.yml down",
+		"build:css": "tailwindcss -i src/styles/input.css -o public/css/app.css --minify",
+		"build:css:watch": "tailwindcss -i src/styles/input.css -o public/css/app.css --watch",
+		"dev": "node --watch --import tsx/esm src/server.ts",
+		"start": "node src/server.ts",
+		"db:generate": "drizzle-kit generate",
+		"db:migrate": "drizzle-kit migrate",
+		"db:studio": "drizzle-kit studio",
+		"db:seed": "node --import tsx/esm scripts/seed.ts",
+		"lint": "biome check",
+		"lint:fix": "biome check --write"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "2.4.8",
+		"@types/node": "^25.5.0",
+		"@types/pg": "^8.18.0",
+		"drizzle-kit": "^0.31.9",
+		"esbuild": "^0.27.4",
+		"tailwindcss": "^4.2.1",
+		"tsx": "^4.21.0",
+		"typescript": "^5.9.3"
+	},
+	"dependencies": {
+		"@hono/node-server": "^1.19.11",
+		"@wordpress/interactivity": "^6.41.0",
+		"dotenv": "^17.3.1",
+		"drizzle-orm": "^0.45.1",
+		"hono": "^4.12.8",
+		"pg": "^8.20.0"
+	}
 }
