@@ -4,6 +4,7 @@ const isDev = process.argv.includes('--watch');
 
 const entryPoints = [
   'src/interactivity/index-store.ts',
+  'src/interactivity/about-store.ts',
 ];
 
 const buildOptions: esbuild.BuildOptions = {

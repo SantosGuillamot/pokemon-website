@@ -1,15 +1,23 @@
-import { store } from '@wordpress/interactivity';
+import { store } from "@wordpress/interactivity";
 
-const { state } = store('pokemon', {
+export type PokemonStore = {
   state: {
     pokemon: {
-      name: 'Bulbasaur',
+      name: string;
+    };
+  };
+};
+
+const { state } = store("pokemon", {
+  state: {
+    pokemon: {
+      name: "Bulbasaur",
     },
   },
   actions: {
     toggle: () => {
       const current = state.pokemon.name;
-      state.pokemon.name = current === 'Bulbasaur' ? 'Pikachu' : 'Bulbasaur';
+      state.pokemon.name = current === "Bulbasaur" ? "Pikachu" : "Bulbasaur";
     },
   },
 });
