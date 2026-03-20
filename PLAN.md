@@ -221,7 +221,7 @@ Competitive items only (no Poké Balls, key items, etc.).
 | 2.4  | Hono RPC: Moves + damage calculator                                                   | ⏸ Deferred |
 | 2.5  | Hono RPC: Teams API (auth-guarded)                                                    | ⏸ Deferred |
 | 2.6  | JSX `Layout.tsx` + `Nav.tsx`                                                          | ✅ Done    |
-| 2.7  | Install `@wordpress/interactivity` + wire into esbuild + create basic store           | ⬜ Todo    |
+| 2.7  | Install `@wordpress/interactivity` + wire into esbuild + create basic store           | ✅ Done    |
 | 2.8  | Add `@wordpress/interactivity-router` for client-side navigation                     | ⬜ Todo    |
 
 ### 🔄 Phase 3 — Pages
@@ -261,6 +261,4 @@ Other stretch goals deferred. See original plan for details.
 
 ## Next Up
 
-1. **Task 2.7**: Install `@wordpress/interactivity`, wire it into the esbuild config, and create a basic store in `src/interactivity/index-store.ts` so the `data-wp-text` directive on the index page works.
-2. Run `npm run db:generate && npm run db:migrate && npm run db:seed` to populate the database.
-3. Run `npm run dev` + `npm run build:js:watch` + `npm run build:css:watch` to see the app.
+1. **Task 2.8**: Add `@wordpress/interactivity-router` for client-side navigation.
