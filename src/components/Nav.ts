@@ -1,7 +1,7 @@
-import type { FC } from "hono/jsx";
+import { html } from "hono/html";
 
-const Nav: FC = () => {
-	return (
+const Nav = () => {
+	return html`
 		<nav class="sticky top-0 z-50 bg-gray-900 px-6 py-4 flex items-center">
 			<a
 				href="/"
@@ -10,7 +10,7 @@ const Nav: FC = () => {
 				Pokemon
 			</a>
 		</nav>
-	);
+	`;
 };
 
 export default Nav;

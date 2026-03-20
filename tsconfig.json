@@ -3,8 +3,6 @@
 		"target": "ESNext",
 		"module": "ESNext",
 		"moduleResolution": "bundler",
-		"jsx": "react-jsx",
-		"jsxImportSource": "hono/jsx",
 		"strict": true,
 		"noEmit": true,
 		"esModuleInterop": true,

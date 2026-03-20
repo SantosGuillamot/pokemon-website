@@ -9,7 +9,7 @@ A Pokemon website built to hard-test the WordPress Interactivity API outside of 
 | Runtime                | Node 22 (via nvm)                                                          |
 | Backend                | Hono + `@hono/node-server`                                                 |
 | API layer              | Hono RPC                                                                   |
-| Templates              | Hono JSX (`jsxImportSource: hono/jsx`)                                     |
+| Templates              | Hono `html` helper (`hono/html`) — tagged template literals                |
 | Frontend interactivity | `@wordpress/interactivity` (no WordPress)                                  |
 | Styles                 | Tailwind CSS CLI **v4** (`@import "tailwindcss"`, no `tailwind.config.js`) |
 | JS bundler             | esbuild — ESM + code splitting, one entry per page                         |
@@ -40,6 +40,7 @@ npm run build:css:watch  # Tailwind watch
 - **No auth yet**: Better Auth and teams features deferred until core pages are built
 - **Moves seeded, items not seeded**: moves are seeded via PokéAPI for all Pokemon. Items are a large dataset not needed until the damage calculator is built
 - **Interactivity API boundary**: stores in `src/interactivity/` must never import from `src/db/` or `src/api/` runtime modules. Client imports `AppType` type only from Hono RPC
+- **No JSX**: Switched from Hono JSX to Hono's `html` tagged template helper. The Interactivity API only needs plain HTML with `data-wp-*` directives — JSX's component model and type system add no value here (Hono types all HTML attributes as `any`). The `html` helper auto-escapes, composes via nested tags, and requires no tsconfig JSX config.
 
 ## Project Structure
 
@@ -53,15 +54,15 @@ src/
     schema/              ← One file per entity, all exported from index.ts
     migrations/          ← Gitignored during design phase
   routes/
-    index.ts             ← GET / → Pokemon search page (TODO)
+    index.ts             ← GET / → Pokemon search page
   api/
     index.ts             ← Aggregates routers, exports AppType (TODO)
     pokemon.ts           ← GET /api/pokemon, /api/pokemon/:id (TODO)
   pages/
-    IndexPage.tsx        ← Pokemon search page (TODO)
+    IndexPage.ts         ← Pokemon search page (TODO)
   components/
-    Layout.tsx           ← HTML shell (TODO)
-    Nav.tsx              ← Navigation (TODO)
+    Layout.ts            ← HTML shell (TODO)
+    Nav.ts               ← Navigation (TODO)
   interactivity/
     index-store.ts       ← @wordpress/interactivity store for index page (TODO)
   styles/
@@ -185,7 +186,7 @@ Competitive items only (no Poké Balls, key items, etc.).
 | Task | Description                                 | Status  |
 | ---- | ------------------------------------------- | ------- |
 | 0.1  | `package.json`, `.nvmrc`, `.gitignore`      | ✅ Done |
-| 0.2  | `tsconfig.json` (ESNext, bundler, Hono JSX) | ✅ Done |
+| 0.2  | `tsconfig.json` (ESNext, bundler)            | ✅ Done |
 | 0.3  | `src/` directory skeleton                   | ✅ Done |
 | 0.4  | esbuild config (`scripts/build.ts`)         | ✅ Done |
 | 0.5  | Tailwind CSS CLI v4 config                  | ✅ Done |
@@ -220,7 +221,7 @@ Competitive items only (no Poké Balls, key items, etc.).
 | 2.3  | Hono RPC: Pokemon API (`GET /api/pokemon/:id`) — minimal, returns single pokemon     | ✅ Done    |
 | 2.4  | Hono RPC: Moves + damage calculator                                                   | ⏸ Deferred |
 | 2.5  | Hono RPC: Teams API (auth-guarded)                                                    | ⏸ Deferred |
-| 2.6  | JSX `Layout.tsx` + `Nav.tsx`                                                          | ✅ Done    |
+| 2.6  | `Layout.ts` + `Nav.ts` (html tagged templates)                                       | ✅ Done    |
 | 2.7  | Install `@wordpress/interactivity` + wire into esbuild + create basic store           | ✅ Done    |
 | 2.8  | Add `@wordpress/interactivity-router` for client-side navigation                     | ⬜ Todo    |
 

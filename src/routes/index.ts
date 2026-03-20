@@ -7,17 +7,17 @@ const app = new Hono();
 
 app.get("/", (c) => {
 	return c.html(
-		<Layout scripts={["/public/js/index-store.js"]}>
-			<IndexPage />
-		</Layout>,
+		Layout({ scripts: ["/public/js/index-store.js"], children: IndexPage() }),
 	);
 });
 
 app.get("/about", (c) => {
 	return c.html(
-		<Layout title="About" scripts={["/public/js/about-store.js"]}>
-			<AboutPage />
-		</Layout>,
+		Layout({
+			title: "About",
+			scripts: ["/public/js/about-store.js"],
+			children: AboutPage(),
+		}),
 	);
 });
 
