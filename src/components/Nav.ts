@@ -11,6 +11,14 @@ const Nav = () => {
 			>
 				Pokemon
 			</a>
+			<a
+				href="/about"
+				data-wp-on--click="pokemon/router::actions.navigateTo"
+				data-wp-on--mouseenter="pokemon/router::actions.prefetchPage"
+				class="ml-6 text-gray-400 hover:text-gray-200 transition-colors"
+			>
+				About
+			</a>
 		</nav>
 	`;
 };
