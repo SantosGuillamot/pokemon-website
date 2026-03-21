@@ -25,6 +25,17 @@ const Layout = ({
 				<title>${title}</title>
 				<link rel="stylesheet" href="/public/css/app.css" />
 				<script type="application/json" id="wp-interactivity-data">${serverData}</script>
+				<script type="importmap" id="wp-importmap">
+					{
+						"imports": {
+							"@wordpress/interactivity": "/public/js/@wordpress/interactivity.js",
+							"@wordpress/interactivity-router": "/public/js/@wordpress/interactivity-router.js",
+							"@pokemon-website/stores/pokemon": "/public/js/global-stores/pokemon.js",
+							"@pokemon-website/stores/router": "/public/js/global-stores/router.js"
+						}
+					}
+				</script>
+				<script type="module" src="/public/js/@wordpress/interactivity.js"></script>
 				<script type="module" src="/public/js/global-stores/router.js" data-wp-router-options='{"loadOnClientNavigation":true}'></script>
 				${scripts?.map((src) => html`<script type="module" src="${src}" data-wp-router-options='{"loadOnClientNavigation":true}'></script>`)}
 			</head>

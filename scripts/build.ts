@@ -17,8 +17,38 @@ const buildOptions: esbuild.BuildOptions = {
 	target: "es2022",
 	minify: !isDev,
 	sourcemap: isDev,
+	external: [
+		"@wordpress/interactivity",
+		"@wordpress/interactivity-router",
+		"@pokemon-website/stores/*",
+	],
 };
 
+// Vendor builds — run once (only change on `npm install`).
+await esbuild.build({
+	entryPoints: [
+		"node_modules/@wordpress/interactivity/build-module/index.mjs",
+	],
+	bundle: true,
+	format: "esm",
+	outfile: "public/js/@wordpress/interactivity.js",
+	target: "es2022",
+	minify: !isDev,
+});
+
+await esbuild.build({
+	entryPoints: [
+		"node_modules/@wordpress/interactivity-router/build-module/index.mjs",
+	],
+	bundle: true,
+	format: "esm",
+	outfile: "public/js/@wordpress/interactivity-router.js",
+	external: ["@wordpress/interactivity"],
+	target: "es2022",
+	minify: !isDev,
+});
+
+// Project code build.
 if (isDev) {
 	const ctx = await esbuild.context(buildOptions);
 	await ctx.watch();

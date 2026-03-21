@@ -8,7 +8,8 @@
 		"esModuleInterop": true,
 		"skipLibCheck": true,
 		"paths": {
-			"~/*": ["./src/*"]
+			"~/*": ["./src/*"],
+			"@pokemon-website/stores/*": ["./src/global-stores/*"]
 		}
 	},
 	"include": ["src/**/*", "scripts/**/*"],

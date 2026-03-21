@@ -1,6 +1,7 @@
 import { store } from "@wordpress/interactivity";
-import type { PokemonStore } from "../../global-stores/pokemon.js";
-import "../../global-stores/pokemon.js";
+import "@wordpress/interactivity-router";
+import type { PokemonStore } from "@pokemon-website/stores/pokemon";
+import "@pokemon-website/stores/pokemon";
 
 const { state: pokemonState } = store<PokemonStore>("pokemon", {});
 
