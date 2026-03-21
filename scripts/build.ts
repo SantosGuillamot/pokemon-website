@@ -26,14 +26,15 @@ const buildOptions: esbuild.BuildOptions = {
 
 // Vendor builds — run once (only change on `npm install`).
 await esbuild.build({
-	entryPoints: [
-		"node_modules/@wordpress/interactivity/build-module/index.mjs",
-	],
+	entryPoints: ["node_modules/@wordpress/interactivity/build-module/index.mjs"],
 	bundle: true,
 	format: "esm",
 	outfile: "public/js/@wordpress/interactivity.js",
 	target: "es2022",
 	minify: !isDev,
+	define: {
+		"globalThis.SCRIPT_DEBUG": "false",
+	},
 });
 
 await esbuild.build({
@@ -43,9 +44,13 @@ await esbuild.build({
 	bundle: true,
 	format: "esm",
 	outfile: "public/js/@wordpress/interactivity-router.js",
-	external: ["@wordpress/interactivity"],
+	// Don't use @wordpress/a11y for now. It is used for screen reader announcements only.
+	external: ["@wordpress/interactivity", "@wordpress/a11y"],
 	target: "es2022",
 	minify: !isDev,
+	define: {
+		"globalThis.SCRIPT_DEBUG": "false",
+	},
 });
 
 // Project code build.
