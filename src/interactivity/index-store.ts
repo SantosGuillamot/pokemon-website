@@ -12,7 +12,7 @@ const { state } = store("pokemon", {
 	state: {
 		pokemonId: "1",
 		pokemon: {
-			name: "",
+			name: "Pikachu",
 		},
 	},
 	actions: {

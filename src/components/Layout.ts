@@ -1,5 +1,6 @@
 import { html } from "hono/html";
 import type { HtmlEscapedString } from "hono/utils/html";
+import { getServerData, processDirectives } from "iapi-ssr-processor";
 import Nav from "./Nav.js";
 
 type LayoutProps = {
@@ -13,7 +14,9 @@ const Layout = ({
 	scripts,
 	children,
 }: LayoutProps) => {
-	return html`
+	const serverData = JSON.stringify(getServerData());
+
+	const pageHtml = html`
 		<!doctype html>
 		<html lang="en">
 			<head>
@@ -21,6 +24,7 @@ const Layout = ({
 				<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 				<title>${title}</title>
 				<link rel="stylesheet" href="/public/css/app.css" />
+				<script type="application/json" id="wp-interactivity-data">${serverData}</script>
 				${scripts?.map((src) => html`<script type="module" src="${src}"></script>`)}
 			</head>
 			<body class="bg-gray-950 text-gray-100 min-h-screen font-sans antialiased">
@@ -29,6 +33,8 @@ const Layout = ({
 			</body>
 		</html>
 	`;
+
+	return processDirectives(pageHtml.toString());
 };
 
 export default Layout;

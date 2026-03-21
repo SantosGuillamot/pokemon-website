@@ -1,4 +1,5 @@
 import { Hono } from "hono";
+import { resetServerState } from "iapi-ssr-processor";
 import Layout from "../components/Layout.js";
 import AboutPage from "../pages/AboutPage.js";
 import IndexPage from "../pages/IndexPage.js";
@@ -6,12 +7,14 @@ import IndexPage from "../pages/IndexPage.js";
 const app = new Hono();
 
 app.get("/", (c) => {
+	resetServerState();
 	return c.html(
 		Layout({ scripts: ["/public/js/index-store.js"], children: IndexPage() }),
 	);
 });
 
 app.get("/about", (c) => {
+	resetServerState();
 	return c.html(
 		Layout({
 			title: "About",
