@@ -255,6 +255,7 @@ Deferred until auth is needed.
 | Task | Description                                                                                         | Status     |
 | ---- | --------------------------------------------------------------------------------------------------- | ---------- |
 | 6.1  | Analyze whether to download Pokemon sprites/artwork and self-host instead of using GitHub CDN URLs   | ⬜ Todo    |
+| 6.2  | Explore automating client-side navigation directives on internal `<a>` tags                          | ⬜ Todo    |
 
 Other stretch goals deferred. See original plan for details.
 

@@ -5,6 +5,8 @@ const Nav = () => {
 		<nav class="sticky top-0 z-50 bg-gray-900 px-6 py-4 flex items-center">
 			<a
 				href="/"
+				data-wp-on--click="pokemon/router::actions.navigateTo"
+				data-wp-on--mouseenter="pokemon/router::actions.prefetchPage"
 				class="text-xl font-bold text-white hover:text-gray-300 transition-colors"
 			>
 				Pokemon

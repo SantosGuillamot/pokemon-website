@@ -4,6 +4,7 @@ const isDev = process.argv.includes("--watch");
 
 const entryPoints = [
 	"src/global-stores/pokemon.ts",
+	"src/global-stores/router.ts",
 	"src/pages/about/store.ts",
 ];
 

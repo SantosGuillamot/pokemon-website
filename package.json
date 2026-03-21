@@ -32,6 +32,7 @@
 	"dependencies": {
 		"@hono/node-server": "^1.19.11",
 		"@wordpress/interactivity": "^6.41.0",
+		"@wordpress/interactivity-router": "^2.42.0",
 		"dotenv": "^17.3.1",
 		"drizzle-orm": "^0.45.1",
 		"hono": "^4.12.8",

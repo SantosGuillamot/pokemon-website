@@ -25,9 +25,10 @@ const Layout = ({
 				<title>${title}</title>
 				<link rel="stylesheet" href="/public/css/app.css" />
 				<script type="application/json" id="wp-interactivity-data">${serverData}</script>
-				${scripts?.map((src) => html`<script type="module" src="${src}"></script>`)}
+				<script type="module" src="/public/js/global-stores/router.js" data-wp-router-options='{"loadOnClientNavigation":true}'></script>
+				${scripts?.map((src) => html`<script type="module" src="${src}" data-wp-router-options='{"loadOnClientNavigation":true}'></script>`)}
 			</head>
-			<body class="bg-gray-950 text-gray-100 min-h-screen font-sans antialiased">
+			<body data-wp-interactive="pokemon/router" data-wp-router-region="full-page-csn" class="bg-gray-950 text-gray-100 min-h-screen font-sans antialiased">
 				${Nav()}
 				${children}
 			</body>
