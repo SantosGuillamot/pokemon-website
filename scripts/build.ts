@@ -3,8 +3,8 @@ import * as esbuild from "esbuild";
 const isDev = process.argv.includes("--watch");
 
 const entryPoints = [
-	"src/interactivity/index-store.ts",
-	"src/interactivity/about-store.ts",
+	"src/global-stores/pokemon.ts",
+	"src/pages/about/store.ts",
 ];
 
 const buildOptions: esbuild.BuildOptions = {

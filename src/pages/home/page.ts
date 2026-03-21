@@ -1,7 +1,7 @@
 import { html } from "hono/html";
 import { setServerState } from "iapi-ssr-processor";
 
-const IndexPage = () => {
+const HomePage = () => {
 	setServerState("pokemon", {
 		pokemonId: "1",
 		pokemon: { name: "Pikachu" },
@@ -33,4 +33,4 @@ const IndexPage = () => {
 	`;
 };
 
-export default IndexPage;
+export default HomePage;

@@ -1,15 +1,15 @@
 import { Hono } from "hono";
 import { resetServerState } from "iapi-ssr-processor";
 import Layout from "../components/Layout.js";
-import AboutPage from "../pages/AboutPage.js";
-import IndexPage from "../pages/IndexPage.js";
+import AboutPage from "../pages/about/page.js";
+import HomePage from "../pages/home/page.js";
 
 const app = new Hono();
 
 app.get("/", (c) => {
 	resetServerState();
 	return c.html(
-		Layout({ scripts: ["/public/js/index-store.js"], children: IndexPage() }),
+		Layout({ scripts: ["/public/js/global-stores/pokemon.js"], children: HomePage() }),
 	);
 });
 
@@ -18,7 +18,7 @@ app.get("/about", (c) => {
 	return c.html(
 		Layout({
 			title: "About",
-			scripts: ["/public/js/about-store.js"],
+			scripts: ["/public/js/pages/about/store.js"],
 			children: AboutPage(),
 		}),
 	);
