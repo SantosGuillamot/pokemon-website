@@ -265,6 +265,4 @@ Other stretch goals deferred. See original plan for details.
 ## Next Up
 
 1. Create global pokemons store. Populate the pokemons store with pokemons from the DB/API, reusing the same call in the server and the client.
-2. Review if we should use import maps. Especially for client-side navigation.
-3. Review updated state after CSN.
-4. Review how to fix the reload after navigating to the initial load page.
+2. Review how to handle the design.
