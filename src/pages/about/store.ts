@@ -8,7 +8,7 @@ const { state: pokemonState } = store<PokemonStore>("pokemon", {});
 store("about", {
 	state: {
 		get greeting() {
-			return `Welcome! Current pokemon is ${pokemonState.pokemon.name}`;
+			return `Welcome! Current pokemon is ${pokemonState.pokemon?.name ?? "none"}`;
 		},
 	},
 });

@@ -1,32 +1,30 @@
-import { getElement, store } from "@wordpress/interactivity";
+import type { Pokemon } from "@pokemon-website/types/pokemon";
+import { store } from "@wordpress/interactivity";
 
 export type PokemonStore = {
 	state: {
-		pokemon: {
-			name: string;
-		};
+		pokemons: Record<string, Pokemon>;
+		pokemonId: string;
+		pokemon: Pokemon | undefined;
 	};
 };
 
 const { state } = store("pokemon", {
 	state: {
-		pokemonId: "1",
-		pokemon: {
-			name: "Pikachu",
+		pokemons: {} as Record<string, Pokemon>,
+		pokemonId: "",
+		get pokemon(): Pokemon | undefined {
+			return state.pokemons[state.pokemonId];
 		},
-	},
+},
 	actions: {
-		updateId: () => {
-			const { ref } = getElement();
-			state.pokemonId = (ref as HTMLInputElement).value;
-		},
-		*fetchPokemon(): Generator {
-			const res: Response = yield fetch(`/api/pokemon/${state.pokemonId}`);
+		*loadPokemons(): Generator {
+			const res: Response = yield fetch("/api/pokemon");
 			if (res.ok) {
-				const data: { name: string } = yield res.json();
-				state.pokemon.name = data.name;
-			} else {
-				state.pokemon.name = "Not found";
+				const data: Pokemon[] = yield res.json();
+				for (const pokemon of data) {
+					state.pokemons[String(pokemon.id)] = pokemon;
+				}
 			}
 		},
 	},

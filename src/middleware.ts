@@ -2,8 +2,10 @@ import { serveStatic } from "@hono/node-server/serve-static";
 import type { Hono } from "hono";
 import { logger } from "hono/logger";
 import { secureHeaders } from "hono/secure-headers";
+import { trimTrailingSlash } from "hono/trailing-slash";
 
 export function registerMiddleware(app: Hono): void {
+	app.use(trimTrailingSlash());
 	app.use(logger());
 	app.use(secureHeaders());
 
