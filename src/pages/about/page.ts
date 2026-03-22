@@ -1,7 +1,9 @@
 import { html } from "hono/html";
 import { setServerState } from "iapi-ssr-processor";
+import { loadPokemons } from "../../server/utils.js";
 
-const AboutPage = () => {
+const AboutPage = async () => {
+	await loadPokemons({ ids: [1] });
 	setServerState("pokemon", { pokemonId: "1" });
 
 	return html`
