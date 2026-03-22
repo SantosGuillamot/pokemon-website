@@ -6,6 +6,15 @@ import { setServerState } from "iapi-ssr-processor";
 import api from "./api/index.js";
 
 export async function loadPokemons(params?: LoadPokemonsParams): Promise<void> {
+	// TODO: explore patterns to reuse store getters between client and server.
+	const state = setServerState("pokemon", {
+		pokemons: {},
+		pokemonId: "",
+		get pokemon(): Pokemon | undefined {
+			return state.pokemons[state.pokemonId];
+		},
+	}) as { pokemons: Record<string, Pokemon>; pokemonId: string };
+
 	const searchParams = new URLSearchParams();
 	if (params?.ids?.length) {
 		searchParams.set("ids", params.ids.join(","));
