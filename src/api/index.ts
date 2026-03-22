@@ -1,9 +1,9 @@
 import { Hono } from "hono";
-import pokemonRouter from "./pokemon";
+import pokemonsRouter from "./pokemons";
 
 const app = new Hono();
 
-const route = app.route("/api/pokemon", pokemonRouter);
+const route = app.route("/api/pokemons", pokemonsRouter);
 
 export type AppType = typeof route;
 export default app;

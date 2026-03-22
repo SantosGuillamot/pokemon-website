@@ -13,7 +13,7 @@ import { abilities } from "./abilities";
 import { moves } from "./moves";
 import { types } from "./types";
 
-export const pokemon = pgTable("pokemon", {
+export const pokemons = pgTable("pokemons", {
 	id: serial("id").primaryKey(),
 	dexNumber: integer("dex_number").notNull().unique(),
 	name: varchar("name", { length: 100 }).notNull().unique(),
@@ -33,7 +33,7 @@ export const pokemonTypes = pgTable(
 	{
 		pokemonId: integer("pokemon_id")
 			.notNull()
-			.references(() => pokemon.id, { onDelete: "cascade" }),
+			.references(() => pokemons.id, { onDelete: "cascade" }),
 		typeId: integer("type_id")
 			.notNull()
 			.references(() => types.id),
@@ -47,7 +47,7 @@ export const pokemonAbilities = pgTable(
 	{
 		pokemonId: integer("pokemon_id")
 			.notNull()
-			.references(() => pokemon.id, { onDelete: "cascade" }),
+			.references(() => pokemons.id, { onDelete: "cascade" }),
 		abilityId: integer("ability_id")
 			.notNull()
 			.references(() => abilities.id),
@@ -62,7 +62,7 @@ export const pokemonMoves = pgTable(
 	{
 		pokemonId: integer("pokemon_id")
 			.notNull()
-			.references(() => pokemon.id, { onDelete: "cascade" }),
+			.references(() => pokemons.id, { onDelete: "cascade" }),
 		moveId: integer("move_id")
 			.notNull()
 			.references(() => moves.id),

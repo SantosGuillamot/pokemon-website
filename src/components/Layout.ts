@@ -30,7 +30,7 @@ const Layout = ({
 						"imports": {
 							"@wordpress/interactivity": "/public/js/@wordpress/interactivity.js",
 							"@wordpress/interactivity-router": "/public/js/@wordpress/interactivity-router.js",
-							"@pokemon-website/stores/pokemon": "/public/js/global-stores/pokemon.js",
+							"@pokemon-website/stores/pokemons": "/public/js/global-stores/pokemons.js",
 							"@pokemon-website/stores/router": "/public/js/global-stores/router.js"
 						}
 					}

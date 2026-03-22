@@ -5,7 +5,7 @@ import {
 	abilities,
 	moves,
 	natures,
-	pokemon,
+	pokemons,
 	pokemonAbilities,
 	pokemonMoves,
 	pokemonTypes,
@@ -358,7 +358,7 @@ async function seedPokemon() {
 		}
 
 		const [inserted] = await db
-			.insert(pokemon)
+			.insert(pokemons)
 			.values({
 				dexNumber: data.id,
 				name: data.name,
@@ -373,7 +373,7 @@ async function seedPokemon() {
 				height: String(data.height),
 			})
 			.onConflictDoNothing()
-			.returning({ id: pokemon.id });
+			.returning({ id: pokemons.id });
 
 		// If the row already existed, look it up
 		let pokemonId: number;
@@ -381,9 +381,9 @@ async function seedPokemon() {
 			pokemonId = inserted.id;
 		} else {
 			const existing = await db
-				.select({ id: pokemon.id })
-				.from(pokemon)
-				.where(eq(pokemon.dexNumber, data.id))
+				.select({ id: pokemons.id })
+				.from(pokemons)
+				.where(eq(pokemons.dexNumber, data.id))
 				.limit(1);
 			pokemonId = existing[0].id;
 		}

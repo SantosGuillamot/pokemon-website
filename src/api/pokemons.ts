@@ -1,7 +1,7 @@
 import { asc, eq, inArray } from "drizzle-orm";
 import { Hono } from "hono";
 import { db } from "../db/client";
-import { pokemon } from "../db/schema";
+import { pokemons } from "../db/schema";
 
 const app = new Hono();
 
@@ -21,9 +21,9 @@ const route = app
 
 			const list = await db
 				.select()
-				.from(pokemon)
-				.where(inArray(pokemon.id, ids))
-				.orderBy(asc(pokemon.id));
+				.from(pokemons)
+				.where(inArray(pokemons.id, ids))
+				.orderBy(asc(pokemons.id));
 
 			return c.json(list);
 		}
@@ -37,8 +37,8 @@ const route = app
 
 		const list = await db
 			.select()
-			.from(pokemon)
-			.orderBy(asc(pokemon.id))
+			.from(pokemons)
+			.orderBy(asc(pokemons.id))
 			.limit(limit)
 			.offset(offset);
 
@@ -51,7 +51,7 @@ const route = app
 			return c.json({ error: "Invalid ID" }, 400);
 		}
 
-		const [found] = await db.select().from(pokemon).where(eq(pokemon.id, id));
+		const [found] = await db.select().from(pokemons).where(eq(pokemons.id, id));
 
 		if (!found) {
 			return c.json({ error: "Pokemon not found" }, 404);

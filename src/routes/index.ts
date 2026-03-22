@@ -10,7 +10,7 @@ app.get("/", async (c) => {
 	resetServerState();
 	return c.html(
 		Layout({
-			scripts: ["/public/js/global-stores/pokemon.js"],
+			scripts: ["/public/js/global-stores/pokemons.js"],
 			children: await HomePage(),
 		}),
 	);

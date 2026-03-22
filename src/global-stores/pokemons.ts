@@ -1,7 +1,7 @@
 import type {
 	LoadPokemonsParams,
 	Pokemon,
-} from "@pokemon-website/types/pokemon";
+} from "@pokemon-website/types/pokemons";
 import { store } from "@wordpress/interactivity";
 
 export type PokemonStore = {
@@ -40,8 +40,8 @@ const { state } = store<PokemonStore>("pokemon", {
 		*loadPokemons(params?: LoadPokemonsParams): Generator {
 			const searchParams = buildSearchParams(params);
 			const url = searchParams.toString()
-				? `/api/pokemon?${searchParams}`
-				: "/api/pokemon";
+				? `/api/pokemons?${searchParams}`
+				: "/api/pokemons";
 			const res: Response = yield fetch(url);
 			if (res.ok) {
 				const data: Pokemon[] = yield res.json();
