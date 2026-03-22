@@ -1,8 +1,8 @@
 import { Hono } from "hono";
 import { resetServerState } from "iapi-ssr-processor";
 import Layout from "../components/Layout.js";
-import AboutPage from "../pages/about/page.js";
-import HomePage from "../pages/home/page.js";
+import AboutPage from "../pages/about.js";
+import HomePage from "../pages/home.js";
 
 const app = new Hono();
 
