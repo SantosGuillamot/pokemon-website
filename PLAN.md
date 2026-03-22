@@ -264,6 +264,5 @@ Other stretch goals deferred. See original plan for details.
 
 ## Next Up
 
-1. Create global pokemons store. Populate the pokemons store with pokemons from the DB/API, reusing the same call in the server and the client.
-2. Explore patterns to reuse store getters between client (`store()`) and server (`setServerState()`). Both support getters with the same closure pattern, but sharing the definition cleanly (without duplication or awkward casts) needs a shared abstraction — e.g. a factory, `this`-based getters, or a typed wrapper around `setServerState`.
-3. Review how to handle the design.
+1. Explore patterns to reuse store getters between client (`store()`) and server (`setServerState()`). Both support getters with the same closure pattern, but sharing the definition cleanly (without duplication or awkward casts) needs a shared abstraction — e.g. a factory, `this`-based getters, or a typed wrapper around `setServerState`.
+2. Review how to handle the design.
