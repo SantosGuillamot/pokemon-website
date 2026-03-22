@@ -9,7 +9,7 @@
 		"skipLibCheck": true,
 		"paths": {
 			"~/*": ["./src/*"],
-			"@pokemon-website/stores/*": ["./src/global-stores/*"],
+			"@pokemon-website/stores/*": ["./src/client/stores/*"],
 			"@pokemon-website/types/*": ["./src/types/*"]
 		}
 	},

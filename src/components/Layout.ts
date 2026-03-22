@@ -30,13 +30,13 @@ const Layout = ({
 						"imports": {
 							"@wordpress/interactivity": "/public/js/@wordpress/interactivity.js",
 							"@wordpress/interactivity-router": "/public/js/@wordpress/interactivity-router.js",
-							"@pokemon-website/stores/pokemons": "/public/js/global-stores/pokemons.js",
-							"@pokemon-website/stores/router": "/public/js/global-stores/router.js"
+							"@pokemon-website/stores/pokemons": "/public/js/stores/pokemons.js",
+							"@pokemon-website/stores/router": "/public/js/stores/router.js"
 						}
 					}
 				</script>
 				<script type="module" src="/public/js/@wordpress/interactivity.js"></script>
-				<script type="module" src="/public/js/global-stores/router.js" data-wp-router-options='{"loadOnClientNavigation":true}'></script>
+				<script type="module" src="/public/js/stores/router.js" data-wp-router-options='{"loadOnClientNavigation":true}'></script>
 				${scripts?.map((src) => html`<script type="module" src="${src}" data-wp-router-options='{"loadOnClientNavigation":true}'></script>`)}
 			</head>
 			<body data-wp-interactive="pokemon" data-wp-router-region="full-page-csn" class="bg-gray-950 text-gray-100 min-h-screen font-sans antialiased">

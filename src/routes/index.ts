@@ -10,7 +10,7 @@ app.get("/", async (c) => {
 	resetServerState();
 	return c.html(
 		Layout({
-			scripts: ["/public/js/global-stores/pokemons.js"],
+			scripts: ["/public/js/stores/pokemons.js"],
 			children: await HomePage(),
 		}),
 	);
@@ -21,7 +21,7 @@ app.get("/about", async (c) => {
 	return c.html(
 		Layout({
 			title: "About",
-			scripts: ["/public/js/pages/about/store.js"],
+			scripts: ["/public/js/stores/pages/about.js"],
 			children: await AboutPage(),
 		}),
 	);

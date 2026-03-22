@@ -3,9 +3,9 @@ import * as esbuild from "esbuild";
 const isDev = process.argv.includes("--watch");
 
 const entryPoints = [
-	"src/global-stores/pokemons.ts",
-	"src/global-stores/router.ts",
-	"src/pages/about/store.ts",
+	"src/client/stores/pokemons.ts",
+	"src/client/stores/router.ts",
+	"src/client/stores/pages/about.ts",
 ];
 
 const buildOptions: esbuild.BuildOptions = {
@@ -14,6 +14,7 @@ const buildOptions: esbuild.BuildOptions = {
 	splitting: true,
 	format: "esm",
 	outdir: "public/js",
+	outbase: "src/client",
 	target: "es2022",
 	minify: !isDev,
 	sourcemap: isDev,

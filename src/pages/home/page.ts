@@ -1,6 +1,6 @@
 import { html } from "hono/html";
 import { setServerState } from "iapi-ssr-processor";
-import { loadPokemons } from "../../server/utils.js";
+import { loadPokemons } from "../../utils.js";
 
 const HomePage = async () => {
 	await loadPokemons({ ids: [1] });

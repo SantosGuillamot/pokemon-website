@@ -3,7 +3,7 @@ import type {
 	Pokemon,
 } from "@pokemon-website/types/pokemons";
 import { setServerState } from "iapi-ssr-processor";
-import api from "../api/index.js";
+import api from "./api/index.js";
 
 export async function loadPokemons(params?: LoadPokemonsParams): Promise<void> {
 	const searchParams = new URLSearchParams();
