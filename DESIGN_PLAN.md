@@ -54,14 +54,26 @@ Rules to follow across all design decisions. Not open questions — just "always
 
 ---
 
-## 1. Brand Identity & Tone
+## 1. Brand Identity & Tone ✅
 
-Define the personality of the site so every visual decision stays coherent.
+Personal / for-fun project — no commercial goals. The primary user is the author; the site should be something *you* enjoy using.
 
-- [ ] **Tone**: Fun & playful? Clean & competitive? Nostalgic retro? Something else?
-- [ ] **Target audience**: Casual fans, competitive players, or both?
-- [ ] **Visual mood**: Pick 3-5 adjectives (e.g., bold, modern, approachable, vibrant, clean).
-- [ ] **Reference sites / moodboard**: Collect 3-5 existing sites or designs that capture the desired feel.
+- [x] **Tone**: Playful and competitive. Light personality without being childish. Clean and modern — not nostalgic or retro.
+- [x] **Target audience**: The author, casual Pokemon fans, and competitive players.
+- [x] **Visual mood** (5 adjectives):
+  1. **Clean** — minimal UI, whitespace-forward, no clutter.
+  2. **Modern** — current design language, not retro.
+  3. **Playful** — light personality, fun without being childish.
+  4. **Refined** — restrained base palette, details feel intentional.
+  5. **Functional** — data-heavy pages (damage calc, tables) stay scannable, not decorative.
+- [x] **Visual principle**: The site itself is clean and restrained; the Pokemon content (type colors, artwork) provides the vibrancy. The UI gets out of the way and lets the Pokemon be the color.
+- [x] **Reference sites**:
+  - [frontity.org](https://frontity.org/) — clean, professional, generous whitespace, blue accent on neutral base.
+  - [hajster.com](https://hajster.com/en) — minimal, warm, approachable, image-driven.
+  - [capeq.com](https://capeq.com/) — restrained, high contrast, structured sections.
+  - [iamrob.in](https://iamrob.in/) — personal, refined, thoughtful use of accent color.
+  - [ysabella.me](https://www.ysabella.me/) — playful, vibrant, creative details on a clean base.
+  - [Dribbble: Customer Table SaaS](https://dribbble.com/shots/23946207-Customer-Table-SaaS) — functional, polished, scannable data table.
 
 ---
 
