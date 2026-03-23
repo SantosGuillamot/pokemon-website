@@ -23,6 +23,7 @@ const Layout = ({
 				<meta charset="UTF-8" />
 				<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 				<title>${title}</title>
+				<link rel="icon" href="/public/images/logo.svg" type="image/svg+xml" />
 				<link rel="stylesheet" href="/public/css/app.css" />
 				<script type="application/json" id="wp-interactivity-data">${raw(serverData)}</script>
 				<script type="importmap" id="wp-importmap">

@@ -77,12 +77,13 @@ Personal / for-fun project — no commercial goals. The primary user is the auth
 
 ---
 
-## 2. Logo
+## 2. Logo ✅
 
-- [ ] **Style direction**: Wordmark, icon + wordmark, icon only?
-- [ ] **Relationship to Pokemon branding**: Inspired by official style, or fully custom?
-- [ ] **Variants**: Full, compact/icon-only (for mobile nav, favicon).
-- [ ] **File formats**: SVG for web, PNG fallbacks?
+- [x] **Style direction**: Icon only (for now). May add a wordmark later.
+- [x] **Relationship to Pokemon branding**: Fully custom — an animal, not a Pokemon.
+- [x] **Variants**: Single icon used for nav and favicon. Add more variants if needed later.
+- [x] **File formats**: SVG only. No PNG fallbacks needed (97%+ browser support).
+- [x] **Location**: `public/images/logo.svg` (6.9 KB).
 
 ---
 

@@ -7,8 +7,9 @@ const Nav = () => {
 				href="/"
 				data-wp-on--click="pokemon/router::actions.navigateTo"
 				data-wp-on--mouseenter="pokemon/router::actions.prefetchPage"
-				class="text-xl font-bold text-white hover:text-gray-300 transition-colors"
+				class="flex items-center gap-2 text-xl font-bold text-white hover:text-gray-300 transition-colors"
 			>
+				<img src="/public/images/logo.svg" alt="Pokemon Website logo" width="40"/>
 				Pokemon
 			</a>
 			<a
