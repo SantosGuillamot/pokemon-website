@@ -40,7 +40,7 @@ const Layout = ({
 				<script type="module" src="/public/js/stores/router.js" data-wp-router-options='{"loadOnClientNavigation":true}'></script>
 				${scripts?.map((src) => html`<script type="module" src="${src}" data-wp-router-options='{"loadOnClientNavigation":true}'></script>`)}
 			</head>
-			<body data-wp-interactive="pokemon" data-wp-router-region="full-page-csn" class="bg-gray-950 text-gray-100 min-h-screen font-sans antialiased">
+			<body data-wp-interactive="pokemon" data-wp-router-region="full-page-csn" class="min-h-screen font-sans antialiased">
 				${Nav()}
 				${children}
 			</body>
