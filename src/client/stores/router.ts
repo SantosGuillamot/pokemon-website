@@ -4,12 +4,14 @@ store("pokemon/router", {
 	actions: {
 		navigateTo: withSyncEvent(function* (event: Event) {
 			event.preventDefault();
+			const href = (event.currentTarget as HTMLAnchorElement).href;
 			const { actions } = yield import("@wordpress/interactivity-router");
-			yield actions.navigate((event.target as HTMLAnchorElement).href);
+			yield actions.navigate(href);
 		}),
 		prefetchPage: function* (event: Event): Generator {
+			const href = (event.currentTarget as HTMLAnchorElement).href;
 			const { actions } = yield import("@wordpress/interactivity-router");
-			yield actions.prefetch((event.target as HTMLAnchorElement).href);
+			yield actions.prefetch(href);
 		},
 	},
 });
