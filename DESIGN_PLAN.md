@@ -87,13 +87,13 @@ Personal / for-fun project — no commercial goals. The primary user is the auth
 
 ---
 
-## 3. Color Palette
+## 3. Color Palette ✅
 
-- [ ] **Primary color**: Main brand color used for key actions and accents.
-- [ ] **Secondary color(s)**: Supporting colors for variety.
-- [ ] **Neutral scale**: Grays/off-whites for backgrounds, borders, text.
-- [ ] **Semantic colors**: Success, warning, error, info.
-- [ ] **Pokemon type colors**: Already stored in DB (`types.color`). Decide if they stay as-is or get adjusted to fit the palette.
+- [x] **Primary color**: Yellow `#FFDE00`. Small accents only (hover, focus rings, indicators). Never as text on white — use on dark backgrounds or as a background fill.
+- [x] **Secondary color**: Red `#C41425`. CTAs, links, important highlights. Passes AA for normal text on white (~4.6:1).
+- [x] **Neutral scale**: Black `#111111` (primary text, headings — softened from pure black), White `#FFFFFF` (page background), Fog `#EEEEEE` (subtle background sections, card fills), Darker-gray `#666666` (secondary text, borders, disabled states — ~5.7:1 on white). Opacities of base colors will be used for additional shades (hover states, lighter tints, subtle borders) instead of a full gray scale.
+- [x] **Semantic colors**: Success `#15803D` (~4.6:1 on white). Error shares the brand red `#C41425` — context (alert patterns vs UI accents) distinguishes meaning; revisit if ambiguity arises. Warning and info deferred until needed.
+- [x] **Pokemon type colors**: Rely on the DB values (`types.color`) as-is. Revisit if they clash with the palette.
 - [x] **Contrast target**: AA (4.5:1). ✅ Resolved in tooling decisions.
 - [x] **Dark mode**: ⏸ Deferred. Using semantic token names (`--color-surface`, not `--color-gray-950`) so it can be added later.
 
@@ -146,7 +146,7 @@ Define the base styles for core HTML elements. Each one needs: font-family, font
 ### Body Text
 
 - [ ] **Paragraph**: Font size, line-height, color, max-width for readability (e.g., `65ch`).
-- [ ] **Small text**: For captions, labels, metadata.
+- [ ] **Sizes**Define which sizes to use and make the same decisions for all of them.
 - [ ] **Bold/emphasis**: Just `font-weight: 700` or a different color/treatment?
 
 ### Links
