@@ -225,6 +225,22 @@ Competitive items only (no Poké Balls, key items, etc.).
 | 2.7  | Install `@wordpress/interactivity` + wire into esbuild + create basic store           | ✅ Done    |
 | 2.8  | Add `@wordpress/interactivity-router` for client-side navigation                     | ⬜ Todo    |
 
+### ⬜ Phase 2.5 — Design System
+
+Depends on resolving open design decisions in `DESIGN_PLAN.md` (brand, colors, typography, component styles).
+
+| Task  | Description                                                                                              | Status  |
+| ----- | -------------------------------------------------------------------------------------------------------- | ------- |
+| 2.5.1 | Resolve design decisions in `DESIGN_PLAN.md` (brand identity, colors, typography, components)            | ⬜ Todo |
+| 2.5.2 | Compile resolved decisions into `DESIGN.md` — the implementation reference (no open questions)           | ⬜ Todo |
+| 2.5.3 | Set up `@theme` tokens in `src/styles/input.css` (colors, type colors bg+text, fonts, radii, shadows)   | ⬜ Todo |
+| 2.5.4 | Self-host fonts: download woff2 files to `public/fonts/`, add `@font-face` rules, preload in Layout     | ⬜ Todo |
+| 2.5.5 | Install `lucide-static`, create `Icon` component helper for inline SVGs                                  | ⬜ Todo |
+| 2.5.6 | Create base UI components: Button, Card, Badge/TypeBadge, Input/SearchBar, FilterChip                    | ⬜ Todo |
+| 2.5.7 | Add `@apply` component classes in `input.css` for repeated patterns (`.pokemon-card`, `.type-badge`, etc.) | ⬜ Todo |
+| 2.5.8 | Add global styles: focus-visible ring, reduced-motion reset, base element styles                         | ⬜ Todo |
+| 2.5.9 | Create `/design-system` dev-only route rendering all components with variants                            | ⬜ Todo |
+
 ### 🔄 Phase 3 — Pages
 
 | Task | Description                                           | Status     |
@@ -265,4 +281,4 @@ Other stretch goals deferred. See original plan for details.
 ## Next Up
 
 1. Explore patterns to reuse store getters between client (`store()`) and server (`setServerState()`). Both support getters with the same closure pattern, but sharing the definition cleanly (without duplication or awkward casts) needs a shared abstraction — e.g. a factory, `this`-based getters, or a typed wrapper around `setServerState`.
-2. Review how to handle the design.
+2. Resolve open design decisions in `DESIGN_PLAN.md` (Phase 2.5.1) — brand identity, colors, typography, component styles. All tooling decisions are settled; remaining items are creative/design choices.
