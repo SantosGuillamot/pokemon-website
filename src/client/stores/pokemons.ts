@@ -12,6 +12,7 @@ export type PokemonStore = {
 	};
 	actions: {
 		loadPokemons: (params?: LoadPokemonsParams) => void;
+		changePokemonId: (event: Event) => void;
 	};
 };
 
@@ -31,12 +32,22 @@ function buildSearchParams(params?: LoadPokemonsParams): URLSearchParams {
 
 const { state } = store<PokemonStore>("pokemon", {
 	state: {
-		pokemons: {} as Record<string, Pokemon>,
 		get pokemon(): Pokemon | undefined {
 			return state.pokemons[state.pokemonId];
 		},
 	},
 	actions: {
+		*changePokemonId(event: Event): Generator {
+			const value = (event.target as HTMLInputElement).value;
+			if (!value) return;
+			const id = Number(value);
+			if (!state.pokemons[value]) {
+				yield store<PokemonStore>("pokemon").actions.loadPokemons({
+					ids: [id],
+				});
+			}
+			state.pokemonId = value;
+		},
 		*loadPokemons(params?: LoadPokemonsParams): Generator {
 			const searchParams = buildSearchParams(params);
 			const url = searchParams.toString()

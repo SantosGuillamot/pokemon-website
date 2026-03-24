@@ -10,8 +10,18 @@ const HomePage = async () => {
 		<main class="max-w-7xl mx-auto px-4 py-8">
 			<h1 class="text-3xl font-bold mb-4">Pokemon Website</h1>
 			<div data-wp-interactive="pokemon" class="space-y-4">
+				<label class="block">
+					<span class="text-sm font-medium">Pokemon ID:</span>
+					<input
+						type="number"
+						min="1"
+						data-wp-bind--value="state.pokemonId"
+						data-wp-on--input="actions.changePokemonId"
+						class="ml-2 border rounded px-2 py-1 w-20"
+					/>
+				</label>
 				<p data-wp-text="state.pokemon.name"></p>
-				<img src="public/images/logo.svg" alt="Pokemon Website logo" width="400"/>
+				<img data-wp-bind--src="state.pokemon.images.artwork" alt="Pokemon artwork" width="400"/>
 			</div>
 		</main>
 	`;
