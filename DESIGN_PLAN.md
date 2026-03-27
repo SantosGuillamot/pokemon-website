@@ -58,15 +58,15 @@ Rules to follow across all design decisions. Not open questions — just "always
 
 Personal / for-fun project — no commercial goals. The primary user is the author; the site should be something *you* enjoy using.
 
-- [x] **Tone**: Playful and competitive. Light personality without being childish. Clean and modern — not nostalgic or retro.
+- [x] **Tone**: Playful and competitive. Light personality with retro charm — evokes the feel of the original Pokemon games (Game Boy era) through typography and details, while keeping the layout clean and usable.
 - [x] **Target audience**: The author, casual Pokemon fans, and competitive players.
 - [x] **Visual mood** (5 adjectives):
-  1. **Clean** — minimal UI, whitespace-forward, no clutter.
-  2. **Modern** — current design language, not retro.
+  1. **Retro** — pixel-font headings, monospaced body, nods to Game Boy-era Pokemon.
+  2. **Clean** — minimal UI, whitespace-forward, no clutter despite the retro flavor.
   3. **Playful** — light personality, fun without being childish.
-  4. **Refined** — restrained base palette, details feel intentional.
+  4. **Nostalgic** — typography and details recall early Pokemon games.
   5. **Functional** — data-heavy pages (damage calc, tables) stay scannable, not decorative.
-- [x] **Visual principle**: The site itself is clean and restrained; the Pokemon content (type colors, artwork) provides the vibrancy. The UI gets out of the way and lets the Pokemon be the color.
+- [x] **Visual principle**: The site blends retro personality (pixel fonts, monospaced text) with a clean, spacious layout. The Pokemon content (type colors, artwork) provides the vibrancy. The UI evokes nostalgia while staying usable.
 - [x] **Reference sites**:
   - [frontity.org](https://frontity.org/) — clean, professional, generous whitespace, blue accent on neutral base.
   - [hajster.com](https://hajster.com/en) — minimal, warm, approachable, image-driven.
@@ -101,15 +101,20 @@ Personal / for-fun project — no commercial goals. The primary user is the auth
 
 ## 4. Typography
 
-- [ ] **Font families**:
-  - Heading font (display/accent).
-  - Body font (readable at small sizes).
-  - Mono font (for stats/numbers)? Or reuse body?
+- [x] **Font families**:
+  - **Heading**: DotGothic16 — pixel/dot-matrix Gothic font. Evokes Game Boy-era Pokemon. Used for headings and display text only.
+  - **Body**: Space Mono — monospaced font. Reinforces the retro/terminal aesthetic across paragraphs and UI text.
+  - **Fallback**: Karla — humanist sans-serif. Available as a swap if DotGothic16 or Space Mono feel too restrictive in practice.
+  - All three available on Google Fonts (SIL Open Font License).
 - [x] **Font source**: Self-hosted woff2 files in `public/fonts/`. ✅ Resolved in tooling decisions.
 - [x] **Font format**: `woff2` only. ✅ Resolved in tooling decisions.
-- [ ] **Font weights needed**: e.g., 400 (regular), 600 (semibold), 700 (bold).
-- [ ] **Base font size**: e.g., `16px`.
-- [ ] **Type scale**: Define the ratio or specific sizes for each level (e.g., Major Third 1.25, or explicit px values).
+- [x] **Font weights needed**:
+  - DotGothic16: 400 (only available weight — hierarchy via size, not weight).
+  - Space Mono: 400 (body text, table data), 700 (bold emphasis, table headers, labels).
+  - Karla (fallback): 400, 700.
+  - 3 woff2 files to self-host: DotGothic16-400, SpaceMono-400, SpaceMono-700.
+- [x] **Base font size**: `16px`.
+- [x] **Type scale**: Custom values (defined per element in the Element Styles section).
 
 ---
 

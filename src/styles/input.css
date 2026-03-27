@@ -1,1 +1,41 @@
 @import "tailwindcss";
+
+@font-face {
+	font-family: "DotGothic16";
+	src: url("/public/fonts/dotgothic16.woff2") format("woff2");
+	font-weight: 400;
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: "Space Mono";
+	src: url("/public/fonts/space-mono.woff2") format("woff2");
+	font-weight: 400;
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: "Space Mono";
+	src: url("/public/fonts/space-mono700.woff2") format("woff2");
+	font-weight: 700;
+	font-style: normal;
+	font-display: swap;
+}
+
+@theme {
+	--font-heading: "DotGothic16", sans-serif;
+	--font-body: "Space Mono", monospace;
+}
+
+@layer base {
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6 {
+		font-family: var(--font-heading);
+	}
+}
