@@ -1,10 +1,13 @@
 import { Hono } from "hono";
 import { resetServerState } from "iapi-ssr-processor";
 import Layout from "../components/Layout.js";
-import AboutPage from "../pages/about.js";
+import DamageCalculatorPage from "../pages/damage-calculator.js";
 import DesignSystemPage from "../pages/design-system.js";
 import HomePage from "../pages/home.js";
+import SpeedsPage from "../pages/speeds.js";
+import TeamBuildingPage from "../pages/team-building.js";
 import TypesPage from "../pages/types.js";
+import WillItKoPage from "../pages/will-it-ko.js";
 
 const app = new Hono();
 
@@ -12,19 +15,7 @@ app.get("/", async (c) => {
 	resetServerState();
 	return c.html(
 		Layout({
-			scripts: ["/public/js/stores/pokemons.js"],
 			children: await HomePage(),
-		}),
-	);
-});
-
-app.get("/about", async (c) => {
-	resetServerState();
-	return c.html(
-		Layout({
-			title: "About",
-			scripts: ["/public/js/stores/pages/about.js"],
-			children: await AboutPage(),
 		}),
 	);
 });
@@ -35,6 +26,46 @@ app.get("/types", (c) => {
 		Layout({
 			title: "Types",
 			children: TypesPage(),
+		}),
+	);
+});
+
+app.get("/speeds", (c) => {
+	resetServerState();
+	return c.html(
+		Layout({
+			title: "Speeds",
+			children: SpeedsPage(),
+		}),
+	);
+});
+
+app.get("/will-it-ko", (c) => {
+	resetServerState();
+	return c.html(
+		Layout({
+			title: "Will It KO",
+			children: WillItKoPage(),
+		}),
+	);
+});
+
+app.get("/damage-calculator", (c) => {
+	resetServerState();
+	return c.html(
+		Layout({
+			title: "Damage Calculator",
+			children: DamageCalculatorPage(),
+		}),
+	);
+});
+
+app.get("/team-building", (c) => {
+	resetServerState();
+	return c.html(
+		Layout({
+			title: "Team Building",
+			children: TeamBuildingPage(),
 		}),
 	);
 });

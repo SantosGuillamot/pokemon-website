@@ -1,15 +1,22 @@
 import { html, raw } from "hono/html";
 import { setServerState } from "iapi-ssr-processor";
-import { Menu, X } from "lucide-static";
+import { Globe, Menu, X } from "lucide-static";
 import { githubIcon, twitterIcon } from "../icons.js";
 
 const NAV_LINKS = [
-	{ label: "HOME", href: "/" },
-	{ label: "ABOUT", href: "/about" },
 	{ label: "TYPES", href: "/types" },
+	{ label: "SPEEDS", href: "/speeds" },
+	{ label: "WILL IT KO", href: "/will-it-ko" },
+	{ label: "CALCULATOR", href: "/damage-calculator" },
+	{ label: "TEAM BUILDER", href: "/team-building" },
 ];
 
 const SOCIAL_LINKS = [
+	{
+		label: "Website (opens in a new tab)",
+		href: "https://mariosantos.es",
+		icon: Globe,
+	},
 	{
 		label: "X (opens in a new tab)",
 		href: "https://x.com/SantosGuillamot",
