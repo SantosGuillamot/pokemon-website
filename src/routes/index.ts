@@ -2,6 +2,7 @@ import { Hono } from "hono";
 import { resetServerState } from "iapi-ssr-processor";
 import Layout from "../components/Layout.js";
 import AboutPage from "../pages/about.js";
+import DesignSystemPage from "../pages/design-system.js";
 import HomePage from "../pages/home.js";
 
 const app = new Hono();
@@ -23,6 +24,16 @@ app.get("/about", async (c) => {
 			title: "About",
 			scripts: ["/public/js/stores/pages/about.js"],
 			children: await AboutPage(),
+		}),
+	);
+});
+
+app.get("/design-system", (c) => {
+	resetServerState();
+	return c.html(
+		Layout({
+			title: "Design System",
+			children: DesignSystemPage(),
 		}),
 	);
 });

@@ -27,15 +27,190 @@
 @theme {
 	--font-heading: "DotGothic16", sans-serif;
 	--font-body: "Space Mono", monospace;
+
+	/* Colors */
+	/* ⚠️ --color-primary has ~1.2:1 contrast on white — only use as background with dark text */
+	--color-primary: #ffde00;
+	--color-secondary: #c41425;
+	--color-success: #15803d;
+	--color-black: #111111;
+	--color-darker-gray: #666666;
+	--color-fog: #eeeeee;
+
+	/* Typography scale — Headings */
+	--text-h1: 3rem;
+	--text-h1--line-height: 4.5rem;
+	--text-h2: 2rem;
+	--text-h2--line-height: 2.5rem;
+	--text-h3: 1.5rem;
+	--text-h3--line-height: 2rem;
+	--text-h4: 1.25rem;
+	--text-h4--line-height: 1.5rem;
+
+	/* Typography scale — Body
+	   Note: Tailwind's built-in text-sm/text-base/text-lg utilities remain
+	   available alongside these custom tokens for flexibility. */
+	--text-paragraph-lg: 1.25rem;
+	--text-paragraph-lg--line-height: 2rem;
+	--text-paragraph: 1rem;
+	--text-paragraph--line-height: 1.5rem;
+	--text-paragraph-sm: 0.875rem;
+	--text-paragraph-sm--line-height: 1.25rem;
 }
 
 @layer base {
+	/* Headings — shared */
 	h1,
 	h2,
 	h3,
-	h4,
-	h5,
-	h6 {
+	h4 {
 		font-family: var(--font-heading);
+		font-weight: 400;
+		letter-spacing: 0.05em;
+		color: var(--color-black);
+	}
+
+	h1 {
+		font-size: var(--text-h1);
+		line-height: var(--text-h1--line-height);
+	}
+
+	h2 {
+		font-size: var(--text-h2);
+		line-height: var(--text-h2--line-height);
+	}
+
+	h3 {
+		font-size: var(--text-h3);
+		line-height: var(--text-h3--line-height);
+	}
+
+	h4 {
+		font-size: var(--text-h4);
+		line-height: var(--text-h4--line-height);
+		text-transform: uppercase;
+	}
+
+	/* Responsive heading sizes */
+	@media (width < theme(--breakpoint-sm)) {
+		h1 {
+			font-size: 2rem;
+			line-height: 2.5rem;
+		}
+
+		h2 {
+			font-size: 1.5rem;
+			line-height: 2rem;
+		}
+	}
+
+	/* Body */
+	body {
+		font-family: var(--font-body);
+		font-size: var(--text-paragraph);
+		line-height: var(--text-paragraph--line-height);
+		color: var(--color-black);
+	}
+}
+
+@layer components {
+	/* Links */
+	a.link {
+		color: var(--color-secondary);
+		text-decoration: underline;
+		text-underline-offset: 2px;
+		transition: color 0.15s ease;
+	}
+
+	a.link:hover {
+		color: color-mix(in srgb, var(--color-secondary) 80%, black);
+	}
+
+	a.link:focus-visible {
+		outline: 2px solid var(--color-secondary);
+		outline-offset: 2px;
+		border-radius: 2px;
+	}
+
+	/* Buttons — Base */
+	.btn {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		font-family: var(--font-heading);
+		font-size: var(--text-paragraph);
+		line-height: var(--text-paragraph--line-height);
+		padding: 12px 24px;
+		border: 2px solid transparent;
+		border-radius: 6px;
+		cursor: pointer;
+		transition:
+			background-color 0.15s ease,
+			color 0.15s ease,
+			border-color 0.15s ease;
+	}
+
+	.btn:focus-visible {
+		outline: 2px solid var(--color-secondary);
+		outline-offset: 2px;
+	}
+
+	.btn:disabled {
+		cursor: not-allowed;
+		opacity: 0.5;
+	}
+
+	/* Buttons — Primary */
+	.btn-primary {
+		background-color: var(--color-secondary);
+		color: white;
+	}
+
+	.btn-primary:hover:not(:disabled) {
+		background-color: color-mix(
+			in srgb,
+			var(--color-secondary) 85%,
+			black
+		);
+	}
+
+	.btn-primary:active:not(:disabled) {
+		background-color: color-mix(
+			in srgb,
+			var(--color-secondary) 75%,
+			black
+		);
+	}
+
+	.btn-primary:disabled {
+		background-color: var(--color-darker-gray);
+		opacity: 1;
+	}
+
+	/* Buttons — Secondary */
+	.btn-secondary {
+		background-color: transparent;
+		color: var(--color-secondary);
+		border-color: var(--color-secondary);
+	}
+
+	.btn-secondary:hover:not(:disabled) {
+		background-color: var(--color-secondary);
+		color: white;
+	}
+
+	.btn-secondary:active:not(:disabled) {
+		background-color: color-mix(
+			in srgb,
+			var(--color-secondary) 85%,
+			black
+		);
+		color: white;
+	}
+
+	.btn-secondary:disabled {
+		border-color: var(--color-darker-gray);
+		color: var(--color-darker-gray);
+		opacity: 1;
 	}
 }
