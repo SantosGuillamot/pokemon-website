@@ -9,6 +9,15 @@ export function registerMiddleware(app: Hono): void {
 	app.use(logger());
 	app.use(secureHeaders());
 
+	// Cache fonts for 1 year — they rarely change and are locally hosted.
+	app.use(
+		"/public/fonts/*",
+		serveStatic({ root: "./" }),
+		async (c, next) => {
+			await next();
+			c.header("Cache-Control", "public, max-age=31536000, immutable");
+		},
+	);
 	app.use("/public/*", serveStatic({ root: "./" }));
 
 	app.onError((err, c) => {

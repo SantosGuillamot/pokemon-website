@@ -23,6 +23,8 @@ const Layout = ({
 				<meta charset="UTF-8" />
 				<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 				<title>${title}</title>
+				<link rel="preload" as="font" href="/public/fonts/dotgothic16.woff2" type="font/woff2" crossorigin />
+				<link rel="preload" as="font" href="/public/fonts/space-mono.woff2" type="font/woff2" crossorigin />
 				<link rel="icon" href="/public/icons/logo.svg" type="image/svg+xml" />
 				<link rel="stylesheet" href="/public/css/app.css" />
 				<script type="application/json" id="wp-interactivity-data">${raw(serverData)}</script>
