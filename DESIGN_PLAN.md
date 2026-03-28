@@ -226,15 +226,22 @@ Needed for search and filters on the index page.
 
 ---
 
-## 8. Navigation Header
+## 8. Navigation Header ✅
 
-- [ ] **Layout**: Logo left, links right? Centered? How does it collapse on mobile?
-- [ ] **Position**: Fixed/sticky or static?
-- [ ] **Height**: e.g., `64px` desktop, `56px` mobile.
-- [ ] **Background**: Solid, transparent, blur/glassmorphism?
-- [ ] **Mobile menu**: Hamburger → slide-out? Dropdown? Full-screen overlay?
-- [ ] **Active page indicator**: Underline, background, color change?
-- [ ] **Nav items**: Which pages appear in the nav?
+- [x] **Position**: Fixed (`fixed top-0 left-0 right-0 z-50`). Page content needs top padding to compensate.
+- [x] **Height**: `80px` at all breakpoints.
+- [x] **Background**: Solid `--color-primary` yellow (`#FFDE00`). All text and icons use `--color-black` (`#111111`). Soft box-shadow using `--color-black` at low opacity.
+- [x] **Layout (desktop)**:
+  - **Left**: Logo (`logo.svg`, 40px) + "POKEMON" text. Same style as H4 (DotGothic16, uppercase, `1rem/1.25rem`, `0.05em` tracking). Links to `/`.
+  - **Center-right**: Page links — HOME, ABOUT, TYPES. Same H4 style. Spaced with a comfortable gap (~`2rem`).
+  - **Far right**: Social icons (Twitter/X, GitHub) inline SVGs, `20px`. Separated from nav links by a subtle left border. Link to personal accounts.
+- [x] **Layout (mobile)**: Logo + "POKEMON" text on the left (always visible). Hamburger icon (`menu` from Lucide) on the right.
+- [x] **Mobile menu**: Full-screen overlay on white (`#FFFFFF`) background. X close button (`x` from Lucide) top-right. Nav links stacked vertically, centered, DotGothic16 uppercase, larger size (~`1.5rem`). Social icons grouped at the bottom.
+- [x] **Active page indicator**: `2px` underline offset below the link text using `--color-black`. Driven client-side via IAPI `callbacks.isActive` reading `window.location.pathname` — no server-side path passing needed. Applied on both desktop and mobile.
+- [x] **Nav items**: HOME (`/`), ABOUT (`/about`), TYPES (`/types`). Design system route excluded (dev-only).
+- [x] **Nav link hover**: Subtle opacity reduction or `color-mix()` lighten on hover, with `transition-colors`. No underline on hover (reserved for active state).
+- [x] **Breakpoint**: Nav links + social icons visible on `md` (768px) and up. Below `md`, collapse to hamburger.
+- [ ] **Mobile menu accessibility**: Review focus management — focus the close button (or first focusable element) on open, trap Tab/Shift+Tab within the overlay, return focus to the hamburger on close.
 
 ---
 

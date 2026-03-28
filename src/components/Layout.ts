@@ -32,17 +32,19 @@ const Layout = ({
 							"@wordpress/interactivity": "/public/js/@wordpress/interactivity.js",
 							"@wordpress/interactivity-router": "/public/js/@wordpress/interactivity-router.js",
 							"@pokemon-website/stores/pokemons": "/public/js/stores/pokemons.js",
-							"@pokemon-website/stores/router": "/public/js/stores/router.js"
+							"@pokemon-website/stores/router": "/public/js/stores/router.js",
+							"@pokemon-website/stores/nav": "/public/js/stores/nav.js"
 						}
 					}
 				</script>
 				<script type="module" src="/public/js/@wordpress/interactivity.js"></script>
 				<script type="module" src="/public/js/stores/router.js" data-wp-router-options='{"loadOnClientNavigation":true}'></script>
+				<script type="module" src="/public/js/stores/nav.js" data-wp-router-options='{"loadOnClientNavigation":true}'></script>
 				${scripts?.map((src) => html`<script type="module" src="${src}" data-wp-router-options='{"loadOnClientNavigation":true}'></script>`)}
 			</head>
 			<body data-wp-interactive="pokemon" data-wp-router-region="full-page-csn" class="min-h-screen font-body antialiased">
 				${Nav()}
-				<div class="max-w-7xl mx-auto px-6 py-12">
+				<div class="max-w-7xl mx-auto px-6 pt-28 pb-12">
 					${children}
 				</div>
 			</body>

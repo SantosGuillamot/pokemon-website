@@ -4,6 +4,7 @@ import Layout from "../components/Layout.js";
 import AboutPage from "../pages/about.js";
 import DesignSystemPage from "../pages/design-system.js";
 import HomePage from "../pages/home.js";
+import TypesPage from "../pages/types.js";
 
 const app = new Hono();
 
@@ -24,6 +25,16 @@ app.get("/about", async (c) => {
 			title: "About",
 			scripts: ["/public/js/stores/pages/about.js"],
 			children: await AboutPage(),
+		}),
+	);
+});
+
+app.get("/types", (c) => {
+	resetServerState();
+	return c.html(
+		Layout({
+			title: "Types",
+			children: TypesPage(),
 		}),
 	);
 });

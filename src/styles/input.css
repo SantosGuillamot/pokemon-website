@@ -118,6 +118,47 @@
 }
 
 @layer components {
+	/* Nav header */
+	.nav-header {
+		box-shadow:
+			0 4px 14px 0 rgb(from var(--color-black) r g b / 0.09),
+			0 2px 4px 0 rgb(from var(--color-black) r g b / 0.12);
+	}
+
+	/* Nav links */
+	.nav-link {
+		position: relative;
+		padding-bottom: 4px;
+	}
+
+	.nav-link:focus-visible {
+		outline: 2px solid var(--color-black);
+		outline-offset: 2px;
+		border-radius: 2px;
+	}
+
+	.nav-link-active::after {
+		content: "";
+		position: absolute;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		height: 2px;
+		background-color: var(--color-black);
+	}
+
+	/* Nav buttons (hamburger, close) */
+	.nav-btn {
+		min-width: 44px;
+		min-height: 44px;
+	}
+
+	.nav-btn:focus-visible {
+		outline: 2px solid var(--color-black);
+		outline-offset: 2px;
+		border-radius: 2px;
+	}
+
 	/* Links */
 	a.link {
 		color: var(--color-secondary);
