@@ -26,7 +26,7 @@ const Nav = () => {
 	setServerState("pokemon/nav", { isMenuOpen: false });
 
 	return html`
-		<nav data-wp-interactive="pokemon/nav" aria-label="Main navigation" class="nav-header fixed top-0 left-0 right-0 z-50 h-20 bg-primary">
+		<nav data-wp-interactive="pokemon/nav" aria-label="Main navigation" class="nav-header fixed top-0 left-0 right-0 z-50 h-20 bg-primary font-bold">
 			<div class="mx-auto flex h-full max-w-7xl items-center justify-between px-6">
 				<!-- Logo + site name -->
 				<a
