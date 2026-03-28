@@ -140,13 +140,14 @@ Personal / for-fun project — no commercial goals. The primary user is the auth
 
 Define the base styles for core HTML elements. Each one needs: font-family, font-size, font-weight, line-height, color, letter-spacing, margins.
 
-### Headings
+### Headings ✅
 
-- [ ] **H1**: Size, weight, letter-spacing, color, bottom margin. Where is it used?
-- [ ] **H2**: Same decisions.
-- [ ] **H3**: Same decisions.
-- [ ] **H4**: Same decisions. Is H4 even needed?
-- [ ] **Heading font**: Same as body or different?
+- [x] **Shared**: DotGothic16, weight 400 (only available weight), `0.05em` letter-spacing, `--color-black`. Hierarchy via size only.
+- [x] **H1**: `3rem/4.5rem`, `mb: 1.5rem`. Responsive: `2rem/2.5rem` below `sm`.
+- [x] **H2**: `2rem/2.5rem`, `mb: 1rem`. Responsive: `1.5rem/2rem` below `sm`.
+- [x] **H3**: `1.5rem/2rem`, `mb: 0.75rem`. No responsive override.
+- [x] **H4**: `1rem/1.25rem`, `mb: 0.5rem`, uppercase. Used for labels/subsections.
+- [x] **Heading font**: Different from body — DotGothic16 (headings) vs Space Mono (body).
 
 ### Body Text ✅
 
