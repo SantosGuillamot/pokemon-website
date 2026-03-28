@@ -2,7 +2,7 @@ import { html } from "hono/html";
 
 const DesignSystemPage = () => {
 	return html`
-		<main class="max-w-5xl mx-auto px-4 sm:px-6 py-12">
+		<main>
 			<h1>Design System</h1>
 			<p class="text-paragraph-lg mb-12 text-darker-gray">
 				A living reference of all design elements. Use this page to
@@ -10,7 +10,7 @@ const DesignSystemPage = () => {
 			</p>
 
 			<!-- Typography -->
-			<section class="mb-16">
+			<section class="mb-12 lg:mb-16">
 				<h2 class="mb-8 pb-2 border-b border-fog">Typography</h2>
 
 				<!-- Headings -->
@@ -112,7 +112,7 @@ const DesignSystemPage = () => {
 			</section>
 
 			<!-- Buttons -->
-			<section class="mb-16">
+			<section class="mb-12 lg:mb-16">
 				<h2 class="mb-8 pb-2 border-b border-fog">Buttons</h2>
 
 				<div class="space-y-8">
@@ -138,7 +138,7 @@ const DesignSystemPage = () => {
 			</section>
 
 			<!-- Links -->
-			<section class="mb-16">
+			<section class="mb-12 lg:mb-16">
 				<h2 class="mb-8 pb-2 border-b border-fog">Links</h2>
 
 				<div class="space-y-6">
@@ -162,7 +162,7 @@ const DesignSystemPage = () => {
 			</section>
 
 			<!-- Lists -->
-			<section class="mb-16">
+			<section class="mb-12 lg:mb-16">
 				<h2 class="mb-8 pb-2 border-b border-fog">Lists</h2>
 
 				<div class="space-y-8">
@@ -180,7 +180,7 @@ const DesignSystemPage = () => {
 			</section>
 
 			<!-- Colors -->
-			<section class="mb-16">
+			<section class="mb-12 lg:mb-16">
 				<h2 class="mb-8 pb-2 border-b border-fog">Color Palette</h2>
 
 				<div class="space-y-8">

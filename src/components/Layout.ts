@@ -42,7 +42,9 @@ const Layout = ({
 			</head>
 			<body data-wp-interactive="pokemon" data-wp-router-region="full-page-csn" class="min-h-screen font-body antialiased">
 				${Nav()}
-				${children}
+				<div class="max-w-7xl mx-auto px-6 py-12">
+					${children}
+				</div>
 			</body>
 		</html>
 	`;
