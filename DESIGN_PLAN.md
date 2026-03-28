@@ -148,18 +148,17 @@ Define the base styles for core HTML elements. Each one needs: font-family, font
 - [ ] **H4**: Same decisions. Is H4 even needed?
 - [ ] **Heading font**: Same as body or different?
 
-### Body Text
+### Body Text ✅
 
-- [ ] **Paragraph**: Font size, line-height, color, max-width for readability (e.g., `65ch`).
-- [ ] **Sizes**Define which sizes to use and make the same decisions for all of them.
-- [ ] **Bold/emphasis**: Just `font-weight: 700` or a different color/treatment?
+- [x] **Paragraph**: Three sizes — Large (`1.25rem/2rem`), Regular (`1rem/1.5rem`), Small (`0.875rem/1.25rem`). All Space Mono. Color inherits `--color-black`. Tokens defined in `@theme` as `--text-paragraph-lg`, `--text-paragraph`, `--text-paragraph-sm` with paired `--line-height` suffixes.
+- [x] **Bold/emphasis**: Standard `<strong>` (700) and `<em>` (italic). No special color treatment.
 
-### Links
+### Links ✅
 
-- [ ] **Default link style**: Color, underline, hover state.
-- [ ] **Visited state**: Different color or same?
-- [ ] **Nav links vs inline links**: Different treatment?
-- [ ] **Focus-visible style**: Outline, ring, or box-shadow? Color, width, offset? Applies to all interactive elements (links, buttons, inputs, chips).
+- [x] **Default link style**: `a.link` component class — `--color-secondary` red, underline with `2px` offset, `color-mix()` darken on hover.
+- [x] **Visited state**: No distinct visited style — same as default.
+- [x] **Nav links vs inline links**: Different treatment. Nav links are plain text with `transition-colors`; inline links use the `.link` class with underline + color.
+- [x] **Focus-visible style**: `2px solid --color-secondary` outline with `2px` offset and `2px` border-radius. Applied consistently to links, buttons, and text buttons.
 
 ### Tables
 
@@ -183,12 +182,14 @@ Reusable wrappers that provide consistent structure and visual rhythm across all
 - [ ] **Section vertical padding**: Consistent top/bottom padding for all sections, or small/medium/large sizes?
 - [ ] **Section separators**: Divided by background contrast alone, subtle border, or spacing only?
 
-### Buttons
+### Buttons ✅
 
-- [ ] **Primary button**: Background, text color, padding, border-radius, hover/active/disabled states.
-- [ ] **Secondary button**: Outline or ghost variant?
-- [ ] **Sizes**: One size or small/medium/large?
-- [ ] **Icon buttons**: Needed? (e.g., search submit).
+- [x] **Shared base** (`.btn`): `inline-flex`, centered, DotGothic16 heading font, `12px 16px` padding, `1px solid --color-black` border, `3px 3px 0` box-shadow. Pokeball SVG icon via `::before` pseudo-element with 360° spin on hover. Active state: `translateY(2px)` with reduced shadow. Disabled: `not-allowed` cursor, `0.6` opacity, muted background.
+- [x] **Primary** (`.btn-primary`): `--color-primary` yellow background, `--color-black` text. Hover reduces opacity to 0.8 via relative color syntax.
+- [x] **Secondary** (`.btn-secondary`): Transparent background, `--color-black` border/text. Hover adds subtle `--color-fog` background at 0.3 opacity.
+- [x] **Text** (`.btn-text`): Standalone component (not extending `.btn`). `--color-secondary` red text, no border/shadow. Pokeball icon via `mask-image` inheriting `currentColor`. Animated underline on hover (0% → 100% `background-size`). Active: `translateY(2px)`. Focus-visible matches link style.
+- [x] **Sizes**: One size only. Revisit if needed.
+- [x] **Icon buttons**: Not needed yet. Revisit during component build.
 
 ### Pokemon Card
 
