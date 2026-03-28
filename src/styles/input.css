@@ -144,7 +144,7 @@
 		font-family: var(--font-heading);
 		font-size: var(--text-paragraph);
 		line-height: var(--text-paragraph--line-height);
-		padding: 12px 24px;
+		padding: 12px 16px;
 		border: 1px solid var(--color-black);
 		box-shadow: 3px 3px 0 var(--color-black);
 		cursor: pointer;
@@ -166,6 +166,21 @@
 		box-shadow: 1px 1px 0 var(--color-black);
 	}
 
+	.btn::before {
+		content: "";
+		display: inline-block;
+		width: 1rem;
+		height: 1rem;
+		margin-right: 0.5rem;
+		background: url("/public/icons/Pokeball.svg") no-repeat center / contain;
+		transform: translateY(1px);
+		transition: transform 0.4s ease;
+	}
+
+	.btn:not(:disabled):hover::before {
+		transform: translateY(1px) rotate(360deg);
+	}
+
 	.btn:disabled {
 		cursor: not-allowed;
 		background-color: rgb(from var(--color-darker-gray) r g b / 0.1);
@@ -179,7 +194,7 @@
 	}
 
 	.btn-primary:hover:not(:disabled) {
-		background-color: rgb(from var(--color-primary) r g b / 0.8);
+		background-color: rgb(from var(--color-primary) r g b / 0.6);
 	}
 
 
