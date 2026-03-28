@@ -220,15 +220,8 @@
 		transition: color 0.15s ease;
 	}
 
-	/* Underline — faint base + progress fill */
-	.btn-text::after {
-		content: "";
-		position: absolute;
-		left: calc(1rem + 0.5rem);
-		bottom: 0;
-		right: 0;
-		height: 2px;
-		background: rgb(from var(--color-secondary) r g b / 0.2);
+	.btn-text:hover {
+		color: color-mix(in srgb, var(--color-secondary) 80%, black);
 	}
 
 	.btn-text::before {
@@ -250,7 +243,15 @@
 		transform: translateY(1px) rotate(360deg);
 	}
 
+	/* Underline — faint base + progress fill on hover */
 	.btn-text::after {
+		content: "";
+		position: absolute;
+		left: calc(1rem + 0.5rem);
+		bottom: 0;
+		right: 0;
+		height: 2px;
+		background-color: rgb(from var(--color-secondary) r g b / 0.2);
 		background-image: linear-gradient(var(--color-secondary), var(--color-secondary));
 		background-size: 0% 100%;
 		background-repeat: no-repeat;
@@ -259,6 +260,10 @@
 
 	.btn-text:hover::after {
 		background-size: 100% 100%;
+	}
+
+	.btn-text:active {
+		transform: translateY(2px);
 	}
 
 	.btn-text:focus-visible {

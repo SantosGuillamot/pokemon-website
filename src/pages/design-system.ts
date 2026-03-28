@@ -134,11 +134,11 @@ const DesignSystemPage = () => {
 							</button>
 						</div>
 					</div>
-				</div>
-				<div>
-					<h3 class="mb-4">Text</h3>
-					<div class="flex flex-wrap items-center gap-4">
-						<a href="#" class="btn-text">Learn more</a>
+					<div>
+						<h3 class="mb-4">Text</h3>
+						<div class="flex flex-wrap items-center gap-4">
+							<a href="#" class="btn-text">Learn more</a>
+						</div>
 					</div>
 				</div>
 			</section>
