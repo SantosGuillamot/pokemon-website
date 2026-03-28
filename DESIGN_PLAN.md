@@ -99,7 +99,7 @@ Personal / for-fun project — no commercial goals. The primary user is the auth
 
 ---
 
-## 4. Typography
+## 4. Typography ✅
 
 - [x] **Font families**:
   - **Heading**: DotGothic16 — pixel/dot-matrix Gothic font. Evokes Game Boy-era Pokemon. Used for headings and display text only.
@@ -118,12 +118,12 @@ Personal / for-fun project — no commercial goals. The primary user is the auth
 
 ---
 
-## 5. Layout System
+## 5. Layout System ✅
 
-- [ ] **Max content width**: e.g., `1280px`, `1440px`.
+- [x] **Max content width**: `1280px`. Enough room for the type chart and damage calculator side-by-side layout without feeling stretched on simpler pages.
 - [x] **Spacing unit**: 4px grid (Tailwind v4 default `--spacing: 0.25rem`). ✅ Resolved in tooling decisions.
-- [ ] **Default page padding** (horizontal gutters): e.g., `16px` mobile, `24px` tablet, `32px` desktop.
-- [ ] **Section spacing**: Vertical rhythm between major page sections.
+- [x] **Default page padding** (horizontal gutters): `24px` at all breakpoints. Monospaced body font needs a bit more breathing room.
+- [x] **Section spacing**: `64px` desktop (`lg`+), `48px` mobile. Keeps the spacious feel without disconnecting sections.
 - [x] **Breakpoints**: Tailwind v4 defaults unless overridden. ✅ Resolved in tooling decisions.
   | Name     | Min-width | Notes              |
   | -------- | --------- | ------------------ |
