@@ -9,7 +9,7 @@ const Nav = () => {
 				data-wp-on--mouseenter="pokemon/router::actions.prefetchPage"
 				class="flex items-center gap-2 text-xl font-bold transition-colors"
 			>
-				<img src="/public/images/logo.svg" alt="Pokemon Website logo" width="40"/>
+				<img src="/public/icons/logo.svg" alt="Pokemon Website logo" width="40"/>
 				Pokemon
 			</a>
 			<a

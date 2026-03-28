@@ -83,7 +83,7 @@ Personal / for-fun project — no commercial goals. The primary user is the auth
 - [x] **Relationship to Pokemon branding**: Fully custom — an animal, not a Pokemon.
 - [x] **Variants**: Single icon used for nav and favicon. Add more variants if needed later.
 - [x] **File formats**: SVG only. No PNG fallbacks needed (97%+ browser support).
-- [x] **Location**: `public/images/logo.svg` (6.9 KB).
+- [x] **Location**: `public/icons/logo.svg` (6.9 KB).
 
 ---
 

@@ -41,7 +41,7 @@ const DesignSystemPage = () => {
 						</div>
 						<div>
 							<p class="text-paragraph-sm text-darker-gray mb-1">
-								H4 — DotGothic16 20/24 — Uppercase
+								H4 — DotGothic16 16/20 — Uppercase
 							</p>
 							<h4>
 								The quick brown Vulpix jumps over the lazy
