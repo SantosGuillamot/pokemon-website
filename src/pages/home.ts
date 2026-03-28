@@ -8,7 +8,7 @@ const HomePage = async () => {
 
 	return html`
 		<main>
-			<h1 class="text-3xl font-bold mb-4">Pokemon Website</h1>
+			<h1>Pokemon Website</h1>
 			<div data-wp-interactive="pokemon" class="space-y-4">
 				<label class="block">
 					<span class="text-sm font-medium">Pokemon ID:</span>

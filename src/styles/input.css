@@ -73,22 +73,26 @@
 	h1 {
 		font-size: var(--text-h1);
 		line-height: var(--text-h1--line-height);
+		margin-bottom: 1.5rem;
 	}
 
 	h2 {
 		font-size: var(--text-h2);
 		line-height: var(--text-h2--line-height);
+		margin-bottom: 1rem;
 	}
 
 	h3 {
 		font-size: var(--text-h3);
 		line-height: var(--text-h3--line-height);
+		margin-bottom: 0.75rem;
 	}
 
 	h4 {
 		font-size: var(--text-h4);
 		line-height: var(--text-h4--line-height);
 		text-transform: uppercase;
+		margin-bottom: 0.5rem;
 	}
 
 	/* Responsive heading sizes */
