@@ -206,6 +206,6 @@
 	}
 
 	.btn-secondary:hover:not(:disabled) {
-		background-color: rgb(from var(--color-primary) r g b / 0.2);
+		background-color: rgb(from var(--color-darker-gray) r g b / 0.05);
 	}
 }
