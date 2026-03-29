@@ -6,6 +6,7 @@ import { githubIcon, twitterIcon } from "../icons.js";
 const NAV_LINKS = [
 	{ label: "TYPES", href: "/types" },
 	{ label: "SPEEDS", href: "/speeds" },
+	{ label: "ROLES", href: "/roles" },
 	{ label: "WILL IT KO?", href: "/will-it-ko" },
 	{ label: "CALCULATOR", href: "/damage-calculator" },
 	{ label: "TEAM BUILDER", href: "/team-building" },

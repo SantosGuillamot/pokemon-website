@@ -7,6 +7,7 @@ import HomePage from "../pages/home.js";
 import SpeedsPage from "../pages/speeds.js";
 import TeamBuildingPage from "../pages/team-building.js";
 import TypesPage from "../pages/types.js";
+import RolesPage from "../pages/roles.js";
 import WillItKoPage from "../pages/will-it-ko.js";
 
 const app = new Hono();
@@ -36,6 +37,16 @@ app.get("/speeds", (c) => {
 		Layout({
 			title: "Speeds",
 			children: SpeedsPage(),
+		}),
+	);
+});
+
+app.get("/roles", (c) => {
+	resetServerState();
+	return c.html(
+		Layout({
+			title: "Roles",
+			children: RolesPage(),
 		}),
 	);
 });
