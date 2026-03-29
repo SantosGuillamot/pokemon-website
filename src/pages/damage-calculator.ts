@@ -1,19 +1,15 @@
 import { html } from "hono/html";
+import Hero from "../sections/Hero.js";
 import Section from "../sections/Section.js";
 
 const DamageCalculatorPage = () => {
 	return html`
 		<main>
-			${Section({
-				children: html`
-					<div class="space-y-4">
-						<h1>Damage Calculator</h1>
-						<p class="text-p-lg text-darker-gray max-w-2xl">
-							Full damage calculator for Pokemon Champions. Configure
-							every detail and see the exact damage output.
-						</p>
-					</div>
-				`,
+			${Hero({
+				title: "Damage Calculator",
+				description:
+					"Full damage calculator for Pokemon Champions. Configure every detail and see the exact damage output.",
+				image: "/public/icons/Pokeball.svg",
 			})}
 
 			${Section({

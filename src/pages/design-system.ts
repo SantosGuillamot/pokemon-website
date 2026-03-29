@@ -1,21 +1,17 @@
 import { html } from "hono/html";
 import { Gauge, Crosshair, Grid2x2 } from "lucide-static";
 import Card from "../components/Card.js";
+import Hero from "../sections/Hero.js";
 import Section from "../sections/Section.js";
 
 const DesignSystemPage = () => {
 	return html`
 		<main>
-			${Section({
-				children: html`
-					<div class="space-y-4">
-						<h1>Design System</h1>
-						<p class="text-paragraph-lg text-darker-gray">
-							A living reference of all design elements. Use this page to
-							test, compare, and make decisions.
-						</p>
-					</div>
-				`,
+			${Hero({
+				title: "Design System",
+				description:
+					"A living reference of all design elements. Use this page to test, compare, and make decisions.",
+				image: "/public/icons/Pokeball.svg",
 			})}
 
 			<!-- Typography -->

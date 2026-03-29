@@ -63,16 +63,10 @@ const HomePage = async () => {
 	return html`
 		<main>
 			${Hero({
-				children: html`
-					<div class="space-y-4">
-						<h1>Pokemon Champions</h1>
-						<p class="text-paragraph-lg text-darker-gray mx-auto max-w-2xl">
-							Your competitive companion for Pokemon Champions. Train your
-							battle instincts, learn type matchups, calculate damage, and
-							build winning teams.
-						</p>
-					</div>
-				`,
+				title: "Pokemon Champions",
+				description:
+					"Your competitive companion for Pokemon Champions. Train your battle instincts, learn type matchups, calculate damage, and build winning teams.",
+				image: "/public/icons/Pokeball.svg",
 			})}
 
 			${Section({

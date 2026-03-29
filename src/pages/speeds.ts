@@ -1,20 +1,15 @@
 import { html } from "hono/html";
+import Hero from "../sections/Hero.js";
 import Section from "../sections/Section.js";
 
 const WhosFasterPage = () => {
 	return html`
 		<main>
-			${Section({
-				children: html`
-					<div class="space-y-4">
-						<h1>Who's Faster?</h1>
-						<p class="text-p-lg text-darker-gray max-w-2xl">
-							Two Pokemon appear side by side. Guess which one is faster
-							based on their speed stat — or if they're tied. One wrong
-							answer ends your streak!
-						</p>
-					</div>
-				`,
+			${Hero({
+				title: "Who's Faster?",
+				description:
+					"Two Pokemon appear side by side. Guess which one is faster based on their speed stat — or if they're tied. One wrong answer ends your streak!",
+				image: "/public/icons/Pokeball.svg",
 			})}
 
 			${Section({

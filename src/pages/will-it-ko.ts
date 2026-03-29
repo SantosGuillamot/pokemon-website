@@ -1,20 +1,15 @@
 import { html } from "hono/html";
+import Hero from "../sections/Hero.js";
 import Section from "../sections/Section.js";
 
 const KoOrNotPage = () => {
 	return html`
 		<main>
-			${Section({
-				children: html`
-					<div class="space-y-4">
-						<h1>Will it KO?</h1>
-						<p class="text-p-lg text-darker-gray max-w-2xl">
-							A battle scenario appears — attacker, defender, move, and
-							field conditions. Does this attack one-hit KO the defender?
-							One wrong answer ends your streak!
-						</p>
-					</div>
-				`,
+			${Hero({
+				title: "Will it KO?",
+				description:
+					"A battle scenario appears — attacker, defender, move, and field conditions. Does this attack one-hit KO the defender? One wrong answer ends your streak!",
+				image: "/public/icons/Pokeball.svg",
 			})}
 
 			${Section({

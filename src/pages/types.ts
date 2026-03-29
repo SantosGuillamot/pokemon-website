@@ -1,20 +1,15 @@
 import { html } from "hono/html";
+import Hero from "../sections/Hero.js";
 import Section from "../sections/Section.js";
 
 const LearnTypesPage = () => {
 	return html`
 		<main>
-			${Section({
-				children: html`
-					<div class="space-y-4">
-						<h1>Learn Types</h1>
-						<p class="text-p-lg text-darker-gray max-w-2xl">
-							Master type effectiveness with two different modes. Fill in
-							the full type chart or guess a Pokemon's weaknesses in a
-							streak challenge.
-						</p>
-					</div>
-				`,
+			${Hero({
+				title: "Learn Types",
+				description:
+					"Master type effectiveness with two different modes. Fill in the full type chart or guess a Pokemon's weaknesses in a streak challenge.",
+				image: "/public/icons/Pokeball.svg",
 			})}
 
 			${Section({

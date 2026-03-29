@@ -1,20 +1,15 @@
 import { html } from "hono/html";
+import Hero from "../sections/Hero.js";
 import Section from "../sections/Section.js";
 
 const RolesPage = () => {
 	return html`
 		<main>
-			${Section({
-				children: html`
-					<div class="space-y-4">
-						<h1>Roles</h1>
-						<p class="text-p-lg text-darker-gray max-w-2xl">
-							A Pokemon appears — decide whether it hits harder physically
-							or specially, and whether it walls physical or special
-							attacks. One wrong answer ends your streak!
-						</p>
-					</div>
-				`,
+			${Hero({
+				title: "Roles",
+				description:
+					"A Pokemon appears — decide whether it hits harder physically or specially, and whether it walls physical or special attacks. One wrong answer ends your streak!",
+				image: "/public/icons/Pokeball.svg",
 			})}
 
 			${Section({

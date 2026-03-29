@@ -1,19 +1,15 @@
 import { html } from "hono/html";
+import Hero from "../sections/Hero.js";
 import Section from "../sections/Section.js";
 
 const TeamBuildingPage = () => {
 	return html`
 		<main>
-			${Section({
-				children: html`
-					<div class="space-y-4">
-						<h1>Team Building</h1>
-						<p class="text-p-lg text-darker-gray max-w-2xl">
-							Build and analyze competitive teams for Pokemon Champions.
-							Requires an account to save teams.
-						</p>
-					</div>
-				`,
+			${Hero({
+				title: "Team Building",
+				description:
+					"Build and analyze competitive teams for Pokemon Champions. Requires an account to save teams.",
+				image: "/public/icons/Pokeball.svg",
 			})}
 
 			${Section({
