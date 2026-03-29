@@ -425,7 +425,7 @@
 
 	.hero-image-bg {
 		z-index: 0;
-		transform: translate(5rem, 1.5rem) scale(1.5);
+		transform: translate(5rem, 1.5rem);
 	}
 
 	@media (width >= 48rem) {
