@@ -12,7 +12,7 @@ type CardProps = {
 const Card = ({ title, href, icon, description, children }: CardProps) => {
 	const content = html`
 		${icon ? html`<div class="card-icon" aria-hidden="true">${raw(icon)}</div>` : ""}
-		<h3>${title}</h3>
+		<h4>${title}</h4>
 		${description ? html`<p class="text-paragraph text-darker-gray">${description}</p>` : ""}
 		${children}
 	`;
@@ -21,8 +21,8 @@ const Card = ({ title, href, icon, description, children }: CardProps) => {
 		return html`<a
 			href="${href}"
 			class="card-squared"
-			data-wp-on--click="actions.navigateTo"
-			data-wp-on--mouseenter="actions.prefetchPage"
+			data-wp-on--click="pokemon/router::actions.navigateTo"
+			data-wp-on--mouseenter="pokemon/router::actions.prefetchPage"
 		>${content}</a>`;
 	}
 	return html`<div class="card-squared">${content}</div>`;

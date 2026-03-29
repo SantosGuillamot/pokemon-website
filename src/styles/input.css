@@ -24,9 +24,18 @@
 	font-display: swap;
 }
 
+@font-face {
+	font-family: "Karla";
+	src: url("/public/fonts/karla-regular.woff2") format("woff2");
+	font-weight: 400;
+	font-style: normal;
+	font-display: swap;
+}
+
 @theme {
-	--font-heading: "DotGothic16", sans-serif;
-	--font-body: "Space Mono", monospace;
+	--font-heading-retro: "DotGothic16", sans-serif;
+	--font-heading: "Space Mono", monospace;
+	--font-body: "Karla", sans-serif;
 
 	/* Colors */
 	/* ⚠️ --color-primary has ~1.2:1 contrast on white — only use as background with dark text */
@@ -85,12 +94,14 @@
 	}
 
 	h1 {
+		font-family: var(--font-heading-retro);
 		font-size: var(--text-h1);
 		line-height: var(--text-h1--line-height);
 		margin-bottom: 1.5rem;
 	}
 
 	h2 {
+		font-family: var(--font-heading);
 		font-size: var(--text-h2);
 		line-height: var(--text-h2--line-height);
 		margin-bottom: 1rem;

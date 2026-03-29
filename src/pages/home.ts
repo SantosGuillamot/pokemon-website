@@ -1,5 +1,12 @@
 import { html } from "hono/html";
-import { Grid2x2, Timer, Shield, Swords, Calculator, Users } from "lucide-static";
+import {
+	Calculator,
+	Grid2x2,
+	Shield,
+	Swords,
+	Timer,
+	Users,
+} from "lucide-static";
 import Card from "../components/Card.js";
 
 const GAMES = [
@@ -55,7 +62,7 @@ const HomePage = async () => {
 		<main class="space-y-16">
 			<!-- Hero section -->
 			<section class="space-y-4 text-center">
-				<h1>Pokemon Champions Tools</h1>
+				<h1>Pokemon Champions</h1>
 				<p class="text-paragraph-lg text-darker-gray mx-auto max-w-2xl">
 					Your competitive companion for Pokemon Champions. Train your
 					battle instincts, learn type matchups, calculate damage, and
@@ -63,21 +70,21 @@ const HomePage = async () => {
 				</p>
 			</section>
 
-			<!-- Games -->
-			<section class="space-y-8">
-				<h2 class="text-center">Games</h2>
-				<div class="flex flex-wrap justify-center gap-6">
-					${GAMES.map(({ title, description, href, icon }) =>
-						Card({ title, description, href, icon }),
-					)}
-				</div>
-			</section>
-
 			<!-- Tools -->
 			<section class="space-y-8">
 				<h2 class="text-center">Tools</h2>
 				<div class="flex flex-wrap justify-center gap-6">
 					${TOOLS.map(({ title, description, href, icon }) =>
+						Card({ title, description, href, icon }),
+					)}
+				</div>
+			</section>
+
+			<!-- Games -->
+			<section class="space-y-8">
+				<h2 class="text-center">Games</h2>
+				<div class="flex flex-wrap justify-center gap-6">
+					${GAMES.map(({ title, description, href, icon }) =>
 						Card({ title, description, href, icon }),
 					)}
 				</div>
