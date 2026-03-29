@@ -251,6 +251,7 @@ Depends on resolving open design decisions in `DESIGN_PLAN.md` (brand, colors, t
 | 3.4  | Speed mini-game                                       | ⏸ Deferred |
 | 3.5  | Theory crafting (requires auth)                       | ⏸ Deferred |
 | 3.6  | Damage calculator                                     | ⏸ Deferred |
+| 3.7  | Store all Pokemon images in the DB instead of hardcoding GitHub CDN URLs. Hero images, sprites, and any other Pokemon artwork should be served from DB data (`pokemon.images` jsonb) | ⬜ Todo |
 
 ### 🔜 Phase 4 — Auth UI
 
