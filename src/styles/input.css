@@ -376,6 +376,29 @@
 		border-radius: 2px;
 	}
 
+	/* Hero */
+	.hero {
+		isolation: isolate;
+	}
+
+	.hero::before {
+		content: "";
+		position: absolute;
+		inset: 0;
+		z-index: -2;
+		background-color: var(--color-white);
+		clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+	}
+
+	.hero::after {
+		content: "";
+		position: absolute;
+		inset: 0;
+		z-index: -1;
+		background-color: rgb(from var(--color-primary) r g b / 0.8);
+		clip-path: polygon(0 100%, 100% 85%, 100% 92%);
+	}
+
 	/* Cards */
 	.card-icon {
 		display: flex;

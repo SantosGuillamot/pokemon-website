@@ -8,7 +8,7 @@ type HeroProps = {
 
 const Hero = ({ children, class: className = "" }: HeroProps) => {
 	return html`
-		<section class="px-6 py-16 text-center ${className}">
+		<section class="hero relative px-6 py-16 text-center ${className}">
 			<div class="max-w-content mx-auto">
 				${children}
 			</div>
