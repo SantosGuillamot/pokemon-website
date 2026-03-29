@@ -9,7 +9,8 @@ const TeamBuildingPage = () => {
 				title: "Team Building",
 				description:
 					"Build and analyze competitive teams for Pokemon Champions. Requires an account to save teams.",
-				image: "/public/icons/Pokeball.svg",
+				image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png",
+				imageBg: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/9.png",
 			})}
 
 			${Section({

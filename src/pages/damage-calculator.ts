@@ -9,7 +9,8 @@ const DamageCalculatorPage = () => {
 				title: "Damage Calculator",
 				description:
 					"Full damage calculator for Pokemon Champions. Configure every detail and see the exact damage output.",
-				image: "/public/icons/Pokeball.svg",
+				image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png",
+				imageBg: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/9.png",
 			})}
 
 			${Section({

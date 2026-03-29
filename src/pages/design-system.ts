@@ -11,7 +11,8 @@ const DesignSystemPage = () => {
 				title: "Design System",
 				description:
 					"A living reference of all design elements. Use this page to test, compare, and make decisions.",
-				image: "/public/icons/Pokeball.svg",
+				image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png",
+				imageBg: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/9.png",
 			})}
 
 			<!-- Typography -->

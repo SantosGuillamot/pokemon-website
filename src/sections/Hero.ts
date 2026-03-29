@@ -5,6 +5,7 @@ type HeroProps = {
 	title: string;
 	description: string;
 	image: string;
+	imageBg?: string;
 	children?: HtmlEscapedString | Promise<HtmlEscapedString>;
 	class?: string;
 };
@@ -13,11 +14,12 @@ const Hero = ({
 	title,
 	description,
 	image,
+	imageBg,
 	children,
 	class: className = "",
 }: HeroProps) => {
 	return html`
-		<section class="hero relative px-6 py-24 ${className}">
+		<section class="hero relative px-6 py-18 ${className}">
 			<div class="max-w-content mx-auto flex flex-col items-center gap-8 md:flex-row md:items-center md:gap-12">
 				<div class="flex-1 space-y-4">
 					<h1>${title}</h1>
@@ -26,12 +28,23 @@ const Hero = ({
 					</p>
 					${children}
 				</div>
-				<div class="flex-1 flex justify-center">
-					<img
-						src="${image}"
-						alt=""
-						class="w-48 h-48 md:w-64 md:h-64"
-					/>
+				<div class="hero-image flex-1 flex justify-center self-end">
+					<div class="hero-image-stack">
+						${
+							imageBg
+								? html`<img
+								src="${imageBg}"
+								alt=""
+								class="hero-image-bg"
+							/>`
+								: ""
+						}
+						<img
+							src="${image}"
+							alt=""
+							class="hero-image-fg"
+						/>
+					</div>
 				</div>
 			</div>
 		</section>
