@@ -273,9 +273,96 @@ Deferred until auth is needed.
 | 6.1  | Analyze whether to download Pokemon sprites/artwork and self-host instead of using GitHub CDN URLs   | ⬜ Todo    |
 | 6.2  | Explore automating client-side navigation directives on internal `<a>` tags                          | ⬜ Todo    |
 | 6.3  | Review back/forward navigation to the initial page — current workaround prefetches on load, find a proper solution | ⬜ Todo    |
-| 6.4  | Decide i18n/translation strategy (routing, string extraction, Pokemon name translations, DB impact)  | ⬜ Todo    |
+| 6.4  | Decide i18n/translation strategy (routing, string extraction, Pokemon name translations, DB impact)  | ✅ Done    |
 
 Other stretch goals deferred. See original plan for details.
+
+---
+
+## i18n / Translation Strategy
+
+Decided after a 6-reviewer independent panel analysis. Two categories of translatable content, each with its own approach.
+
+### Target Languages
+
+Start with **en, es, fr, de, it, ja**. Korean and Chinese added later. PokéAPI provides name translations for all of these. English is the default and fallback everywhere.
+
+### Pokemon Data (DB) — JSONB columns
+
+Add a `names_i18n jsonb` column to each entity table (`pokemons`, `moves`, `abilities`, `types`, `items`, `natures`). For tables with `effect`, add `effects_i18n jsonb` too. The existing `name`/`effect` columns stay as-is (English canonical, unique constraint, fallback).
+
+Example: `pokemons.names_i18n = {"es":"Pikachu","fr":"Pikachu","ja":"ピカチュウ","ko":"피카츄"}`
+
+**Why JSONB over separate translation tables:** data is seeded once and read-only, no JOINs needed, adding a language is a data update not a migration, and the project already uses this pattern (`images jsonb` on pokemons).
+
+**Why JSONB over one column per language:** adding a language doesn't require a schema migration across 6+ tables; keeps schema clean (1-2 extra columns per table vs 10-20).
+
+**Seeding:** Extend the seed script to pull `names` arrays from PokéAPI endpoints. Pokemon names require fetching `/pokemon-species/{id}` (currently only `/pokemon/{id}` is fetched). Other entities already return `names` in their existing endpoints. Important: `effect_entries` in PokéAPI only have English and French — other languages fall back to English.
+
+**Query-time resolution:** `entity.namesI18n?.[locale] ?? entity.name`
+
+### UI Strings (Site) — JSON files + `__()` function (WordPress-style)
+
+Use the English string as the key (gettext/WordPress pattern), not abstract dot-notation keys:
+
+```ts
+__(locale, "Pokemon Champions Tools")
+__(locale, "Current streak: {count}", { count: 5 })
+```
+
+**File structure:**
+```
+src/i18n/
+  locales/
+    es.json    ← {"Pokemon Champions Tools": "Herramientas Pokemon Champions", ...}
+    fr.json
+    ...
+  index.ts     ← exports __() function
+```
+
+No `en.json` needed — the English string is the key itself, and if no translation exists, the key (= English) is returned. Simple `{param}` interpolation for dynamic values.
+
+**Why no i18n library:** ~100-200 strings, all server-rendered in `html` tagged templates. A custom `__()` function is ~20 lines. Zero client-side JS for translations.
+
+**Why string-as-key over abstract keys:** code stays readable (you see the actual text), no need to invent/maintain key names, fallback is free, familiar WordPress pattern.
+
+**Tradeoff:** changing an English string breaks the lookup in translation files. Manageable at this scale.
+
+### URL Strategy — Path prefix
+
+`/es/damage-calculator`, `/fr/types`, etc. English at root with no prefix (`/damage-calculator`).
+
+- Best SEO practice (consolidates domain authority, unlike subdomains)
+- No DNS/infrastructure changes needed on Hetzner/Coolify
+- Hono's built-in `languageDetector` middleware supports it natively
+- Existing English URLs remain stable
+
+### Language Detection — Hono built-in middleware
+
+Use `languageDetector` from `hono/language` with detection order: **path prefix → cookie → Accept-Language header → fallback to `en`**.
+
+Do NOT auto-redirect first-time visitors based on Accept-Language (harms SEO, annoys bilingual users). Serve English at root, let users choose via a language switcher in the Nav.
+
+### Client-Side (Interactivity API Stores)
+
+Inject translated strings into server state via `setServerState()`. Only the ~10-20 strings each page's interactivity needs are included. Client stores read `state.strings["..."]`. No client-side i18n library.
+
+For dynamically loaded Pokemon data (API calls), add a `?lang=` query parameter to API endpoints. The server resolves the localized name and returns it.
+
+### SEO
+
+- `<html lang="${locale}">` set dynamically in Layout
+- `<link rel="alternate" hreflang="...">` tags for all supported languages on every page
+- URL slugs stay in English across all locales (no translated slugs)
+
+### Implementation Phases
+
+1. **DB translations:** Add JSONB columns, extend seed script to pull PokeAPI translations
+2. **UI string extraction:** Create `src/i18n/` with `__()` function, replace hardcoded strings
+3. **Routing:** Add `languageDetector` middleware, `/:lang/` route group, hreflang tags
+4. **First language:** Add Spanish, validate end-to-end
+5. **Client stores:** Inject translated strings into Interactivity API state, add `?lang=` to API
+6. **Remaining languages:** fr, de, it, ja
 
 ---
 
