@@ -13,7 +13,7 @@ const Card = ({ title, href, icon, description, children }: CardProps) => {
 	const content = html`
 		${icon ? html`<div class="card-icon" aria-hidden="true">${raw(icon)}</div>` : ""}
 		<h3>${title}</h3>
-		${description ? html`<p class="text-paragraph-sm text-darker-gray">${description}</p>` : ""}
+		${description ? html`<p class="text-paragraph text-darker-gray">${description}</p>` : ""}
 		${children}
 	`;
 
