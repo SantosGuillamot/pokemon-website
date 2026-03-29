@@ -9,7 +9,7 @@ const KoOrNotPage = () => {
 				title: "Will it KO?",
 				description:
 					"A battle scenario appears — attacker, defender, move, and field conditions. Does this attack one-hit KO the defender? One wrong answer ends your streak!",
-				image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png",
+				image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/8.png",
 				imageBg: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/9.png",
 			})}
 

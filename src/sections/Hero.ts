@@ -19,7 +19,7 @@ const Hero = ({
 	class: className = "",
 }: HeroProps) => {
 	return html`
-		<section class="hero relative px-6 py-18 ${className}">
+		<section class="hero relative px-6 pb-18 ${className}">
 			<div class="max-w-content mx-auto flex flex-col items-center gap-8 md:flex-row md:items-center md:gap-12">
 				<div class="flex-1 space-y-4">
 					<h1>${title}</h1>

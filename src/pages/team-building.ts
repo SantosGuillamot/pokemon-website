@@ -9,7 +9,7 @@ const TeamBuildingPage = () => {
 				title: "Team Building",
 				description:
 					"Build and analyze competitive teams for Pokemon Champions. Requires an account to save teams.",
-				image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png",
+				image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/8.png",
 				imageBg: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/9.png",
 			})}
 
