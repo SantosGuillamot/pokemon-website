@@ -373,7 +373,7 @@
 		width: 3.5rem;
 		height: 3.5rem;
 		margin-bottom: 1rem;
-		background-color: var(--color-fog);
+		background-color: rgb(from var(--color-primary) r g b / 0.8);
 		border-radius: 12px;
 	}
 
@@ -402,6 +402,7 @@
 
 	a.card-squared:hover {
 		transform: translateY(-2px);
+		background-color: color-mix(in srgb, var(--color-fog) 40%, white);
 	}
 
 	a.card-squared:active {
