@@ -66,7 +66,7 @@ const HomePage = async () => {
 			<!-- Games -->
 			<section class="space-y-8">
 				<h2 class="text-center">Games</h2>
-				<div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+				<div class="flex flex-wrap justify-center gap-6">
 					${GAMES.map(({ title, description, href, icon }) =>
 						Card({ title, description, href, icon }),
 					)}
@@ -76,7 +76,7 @@ const HomePage = async () => {
 			<!-- Tools -->
 			<section class="space-y-8">
 				<h2 class="text-center">Tools</h2>
-				<div class="grid gap-6 sm:grid-cols-2">
+				<div class="flex flex-wrap justify-center gap-6">
 					${TOOLS.map(({ title, description, href, icon }) =>
 						Card({ title, description, href, icon }),
 					)}

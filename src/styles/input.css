@@ -384,8 +384,9 @@
 	}
 
 	.card-squared {
+		max-width: 30rem;
+		padding: 1.5rem 2rem;
 		background-color: var(--color-white);
-		padding: 1.5rem;
 		border: 1px solid var(--color-black);
 		box-shadow: var(--shadow-card);
 		transition:
