@@ -1,4 +1,6 @@
 import { html } from "hono/html";
+import { Gauge, Crosshair, Grid2x2 } from "lucide-static";
+import Card from "../components/Card.js";
 
 const DesignSystemPage = () => {
 	return html`
@@ -138,6 +140,85 @@ const DesignSystemPage = () => {
 						<h3 class="mb-4">Text</h3>
 						<div class="flex flex-wrap items-center gap-4">
 							<a href="#" class="btn-text">Learn more</a>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- Cards -->
+			<section class="mb-12 lg:mb-16">
+				<h2 class="mb-8 pb-2 border-b border-fog">Cards</h2>
+
+				<div class="space-y-8">
+					<div>
+						<h3 class="mb-4">Static</h3>
+						<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+							${Card({
+								title: "Static card",
+								children: html`
+									<p class="text-paragraph-sm text-darker-gray">
+										A non-interactive card. Used to
+										display content without linking
+										anywhere.
+									</p>
+								`,
+							})}
+						</div>
+					</div>
+					<div>
+						<h3 class="mb-4">Link with icon</h3>
+						<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+							${Card({
+								title: "Who's Faster?",
+								href: "#",
+								icon: Gauge,
+								children: html`
+									<p class="text-paragraph-sm text-darker-gray">
+										Guess which Pokemon is faster. Test
+										your knowledge in a streak game.
+									</p>
+								`,
+							})}
+							${Card({
+								title: "KO or Not?",
+								href: "#",
+								icon: Crosshair,
+								children: html`
+									<p class="text-paragraph-sm text-darker-gray">
+										Given a scenario, guess if it's a
+										one-hit KO. How long can you keep
+										your streak?
+									</p>
+								`,
+							})}
+							${Card({
+								title: "Learn Types",
+								href: "#",
+								icon: Grid2x2,
+								children: html`
+									<p class="text-paragraph-sm text-darker-gray">
+										Master the type chart. Fill it
+										from memory or guess a Pokemon's
+										weaknesses.
+									</p>
+								`,
+							})}
+						</div>
+					</div>
+					<div>
+						<h3 class="mb-4">Link without icon</h3>
+						<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+							${Card({
+								title: "Damage Calculator",
+								href: "#",
+								children: html`
+									<p class="text-paragraph-sm text-darker-gray">
+										Calculate damage output for any
+										matchup. Full support for items,
+										abilities, and field conditions.
+									</p>
+								`,
+							})}
 						</div>
 					</div>
 				</div>

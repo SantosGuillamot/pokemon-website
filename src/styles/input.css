@@ -37,9 +37,16 @@
 	--color-darker-gray: #666666;
 	--color-fog: #eeeeee;
 
+	/* Colors — surface */
+	--color-white: #ffffff;
+
 	/* Shadows */
 	--shadow-nav: 0 4px 14px 0 rgb(from #111111 r g b / 0.09),
 		0 2px 4px 0 rgb(from #111111 r g b / 0.12);
+	--shadow-btn: 3px 3px 0 var(--color-black);
+	--shadow-btn-pressed: 1px 1px 0 var(--color-black);
+	--shadow-card: 4px 4px 0 var(--color-black);
+	--shadow-card-pressed: 2px 2px 0 var(--color-black);
 
 	/* Layout */
 	--container-content: 75rem;
@@ -231,7 +238,7 @@
 		line-height: var(--text-paragraph--line-height);
 		padding: 12px 16px;
 		border: 1px solid var(--color-black);
-		box-shadow: 3px 3px 0 var(--color-black);
+		box-shadow: var(--shadow-btn);
 		cursor: pointer;
 		transition:
 			background-color 0.15s ease,
@@ -244,11 +251,12 @@
 	.btn:focus-visible {
 		outline: 2px solid var(--color-secondary);
 		outline-offset: 2px;
+		border-radius: 2px;
 	}
 
 	.btn:not(:disabled):active {
 		transform: translateY(2px);
-		box-shadow: 1px 1px 0 var(--color-black);
+		box-shadow: var(--shadow-btn-pressed);
 	}
 
 	.btn::before {
@@ -355,5 +363,67 @@
 		outline: 2px solid var(--color-secondary);
 		outline-offset: 2px;
 		border-radius: 2px;
+	}
+
+	/* Cards */
+	.card-icon {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 3.5rem;
+		height: 3.5rem;
+		margin-bottom: 1rem;
+		background-color: var(--color-fog);
+		border-radius: 12px;
+	}
+
+	.card-icon svg {
+		width: 1.5rem;
+		height: 1.5rem;
+		color: var(--color-black);
+	}
+
+	.card-squared {
+		background-color: var(--color-white);
+		padding: 1.5rem;
+		border: 1px solid var(--color-black);
+		box-shadow: var(--shadow-card);
+		transition:
+			transform 0.1s ease,
+			box-shadow 0.1s ease;
+	}
+
+	a.card-squared {
+		display: block;
+		text-decoration: none;
+		color: inherit;
+		cursor: pointer;
+	}
+
+	a.card-squared:hover {
+		transform: translateY(-2px);
+	}
+
+	a.card-squared:active {
+		transform: translateY(2px);
+		box-shadow: var(--shadow-card-pressed);
+	}
+
+	a.card-squared:focus-visible {
+		outline: 2px solid var(--color-secondary);
+		outline-offset: 2px;
+		border-radius: 2px;
+	}
+}
+
+/* Reduced motion — suppress all animations and transitions globally */
+@media (prefers-reduced-motion: reduce) {
+	*,
+	*::before,
+	*::after {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+		scroll-behavior: auto !important;
 	}
 }
