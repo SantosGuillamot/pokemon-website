@@ -8,6 +8,8 @@ import {
 	Users,
 } from "lucide-static";
 import Card from "../components/Card.js";
+import Hero from "../sections/Hero.js";
+import Section from "../sections/Section.js";
 
 const GAMES = [
 	{
@@ -59,36 +61,45 @@ const TOOLS = [
 
 const HomePage = async () => {
 	return html`
-		<main class="space-y-16">
-			<!-- Hero section -->
-			<section class="space-y-4 text-center">
-				<h1>Pokemon Champions</h1>
-				<p class="text-paragraph-lg text-darker-gray mx-auto max-w-2xl">
-					Your competitive companion for Pokemon Champions. Train your
-					battle instincts, learn type matchups, calculate damage, and
-					build winning teams.
-				</p>
-			</section>
+		<main>
+			${Hero({
+				children: html`
+					<div class="space-y-4">
+						<h1>Pokemon Champions</h1>
+						<p class="text-paragraph-lg text-darker-gray mx-auto max-w-2xl">
+							Your competitive companion for Pokemon Champions. Train your
+							battle instincts, learn type matchups, calculate damage, and
+							build winning teams.
+						</p>
+					</div>
+				`,
+			})}
 
-			<!-- Tools -->
-			<section class="space-y-8">
-				<h2 class="text-center">Tools</h2>
-				<div class="flex flex-wrap justify-center gap-6">
-					${TOOLS.map(({ title, description, href, icon }) =>
-						Card({ title, description, href, icon }),
-					)}
-				</div>
-			</section>
+			${Section({
+				children: html`
+					<div class="space-y-8">
+						<h2 class="text-center">Tools</h2>
+						<div class="flex flex-wrap justify-center gap-6">
+							${TOOLS.map(({ title, description, href, icon }) =>
+								Card({ title, description, href, icon }),
+							)}
+						</div>
+					</div>
+				`,
+			})}
 
-			<!-- Games -->
-			<section class="space-y-8">
-				<h2 class="text-center">Games</h2>
-				<div class="flex flex-wrap justify-center gap-6">
-					${GAMES.map(({ title, description, href, icon }) =>
-						Card({ title, description, href, icon }),
-					)}
-				</div>
-			</section>
+			${Section({
+				children: html`
+					<div class="space-y-8">
+						<h2 class="text-center">Games</h2>
+						<div class="flex flex-wrap justify-center gap-6">
+							${GAMES.map(({ title, description, href, icon }) =>
+								Card({ title, description, href, icon }),
+							)}
+						</div>
+					</div>
+				`,
+			})}
 		</main>
 	`;
 };
