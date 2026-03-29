@@ -1,6 +1,12 @@
 import { html } from "hono/html";
 
-const FEATURES = [
+const GAMES = [
+	{
+		title: "Learn Types",
+		description:
+			"Master type effectiveness by filling in the chart or guessing weaknesses.",
+		href: "/types",
+	},
 	{
 		title: "Who's Faster",
 		description:
@@ -8,17 +14,20 @@ const FEATURES = [
 		href: "/speeds",
 	},
 	{
+		title: "Roles",
+		description:
+			"Does it hit harder physically or specially? Learn each Pokemon's offensive and defensive role.",
+		href: "/roles",
+	},
+	{
 		title: "Will It KO?",
 		description:
 			"Train your damage intuition. Can this move one-hit KO the defender?",
 		href: "/will-it-ko",
 	},
-	{
-		title: "Learn Types",
-		description:
-			"Master type effectiveness by filling in the chart or guessing weaknesses.",
-		href: "/types",
-	},
+];
+
+const TOOLS = [
 	{
 		title: "Damage Calculator",
 		description:
@@ -46,11 +55,32 @@ const HomePage = async () => {
 				</p>
 			</section>
 
-			<!-- Feature cards -->
+			<!-- Games -->
 			<section class="space-y-8">
-				<h2 class="text-center">Explore</h2>
-				<div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-					${FEATURES.map(
+				<h2 class="text-center">Games</h2>
+				<div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+					${GAMES.map(
+						({ title, description, href }) => html`
+							<a
+								href="${href}"
+								data-wp-interactive="pokemon/router"
+								data-wp-on--click="actions.navigateTo"
+								data-wp-on--mouseenter="actions.prefetchPage"
+								class="block rounded-lg border-2 border-fog bg-white p-6 no-underline transition-shadow hover:shadow-md"
+							>
+								<h4 class="mb-2">${title}</h4>
+								<p class="text-p text-darker-gray">${description}</p>
+							</a>
+						`,
+					)}
+				</div>
+			</section>
+
+			<!-- Tools -->
+			<section class="space-y-8">
+				<h2 class="text-center">Tools</h2>
+				<div class="grid gap-6 sm:grid-cols-2">
+					${TOOLS.map(
 						({ title, description, href }) => html`
 							<a
 								href="${href}"

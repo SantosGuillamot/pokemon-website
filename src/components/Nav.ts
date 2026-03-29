@@ -1,13 +1,16 @@
 import { html, raw } from "hono/html";
 import { setServerState } from "iapi-ssr-processor";
-import { Globe, Menu, X } from "lucide-static";
+import { ChevronDown, Globe, Menu, X } from "lucide-static";
 import { githubIcon, twitterIcon } from "../icons.js";
 
-const NAV_LINKS = [
+const GAME_LINKS = [
 	{ label: "TYPES", href: "/types" },
 	{ label: "SPEEDS", href: "/speeds" },
 	{ label: "ROLES", href: "/roles" },
 	{ label: "WILL IT KO?", href: "/will-it-ko" },
+];
+
+const TOOL_LINKS = [
 	{ label: "CALCULATOR", href: "/damage-calculator" },
 	{ label: "TEAM BUILDER", href: "/team-building" },
 ];
@@ -31,7 +34,10 @@ const SOCIAL_LINKS = [
 ];
 
 const Nav = () => {
-	setServerState("pokemon/nav", { isMenuOpen: false });
+	setServerState("pokemon/nav", {
+		isMenuOpen: false,
+		isGamesDropdownOpen: false,
+	});
 
 	return html`
 		<nav data-wp-interactive="pokemon/nav" aria-label="Main navigation" class="nav-header fixed top-0 left-0 right-0 z-50 h-20 bg-primary font-bold">
@@ -54,7 +60,7 @@ const Nav = () => {
 
 				<!-- Desktop nav links -->
 				<div class="hidden items-center gap-8 md:flex">
-					${NAV_LINKS.map(
+					${TOOL_LINKS.map(
 						({ label, href }) => html`
 							<a
 								href="${href}"
@@ -69,6 +75,46 @@ const Nav = () => {
 							</a>
 						`,
 					)}
+
+					<!-- Games dropdown -->
+					<div
+						class="relative"
+						data-wp-on--mouseenter="actions.openGamesDropdown"
+						data-wp-on--mouseleave="actions.closeGamesDropdown"
+					>
+						<button
+							type="button"
+							class="nav-link flex items-center gap-1 font-heading text-h4 uppercase tracking-[0.1em] text-black transition-colors hover:text-black/70"
+							data-wp-on--click="actions.toggleGamesDropdown"
+							data-wp-bind--aria-expanded="state.isGamesDropdownOpen"
+							aria-haspopup="true"
+						>
+							GAMES
+							<span class="nav-dropdown-chevron inline-flex transition-transform duration-200" data-wp-class--nav-dropdown-chevron-open="state.isGamesDropdownOpen">${raw(ChevronDown)}</span>
+						</button>
+						<div
+							class="nav-dropdown flex flex-col rounded bg-white shadow-nav"
+							data-wp-bind--hidden="!state.isGamesDropdownOpen"
+							role="menu"
+						>
+							${GAME_LINKS.map(
+								({ label, href }) => html`
+									<a
+										href="${href}"
+										data-wp-context='${JSON.stringify({ navHref: href })}'
+										data-wp-on--click="pokemon/router::actions.navigateTo"
+										data-wp-on--mouseenter="pokemon/router::actions.prefetchPage"
+										data-wp-class--nav-link-active="callbacks.isActive"
+										data-wp-bind--aria-current="callbacks.ariaCurrent"
+										class="nav-dropdown-item font-heading uppercase tracking-[0.1em] text-black no-underline whitespace-nowrap px-5 py-2.5 first:rounded-t last:rounded-b hover:bg-fog"
+										role="menuitem"
+									>
+										${label}
+									</a>
+								`,
+							)}
+						</div>
+					</div>
 
 					<!-- Social icons -->
 					<div class="flex items-center gap-4 border-l border-black/20 pl-6">
@@ -123,7 +169,32 @@ const Nav = () => {
 
 				<!-- Mobile nav links -->
 				<div class="flex flex-1 flex-col items-center justify-center gap-8">
-					${NAV_LINKS.map(
+					<!-- Games group -->
+					<div class="flex flex-col items-center gap-4">
+						<span class="font-heading text-sm uppercase tracking-[0.15em] text-darker-gray">Games</span>
+						${GAME_LINKS.map(
+							({ label, href }) => html`
+								<a
+									href="${href}"
+									data-wp-context='${JSON.stringify({ navHref: href })}'
+									data-wp-on--click---close="actions.closeMenu"
+									data-wp-on--click---navigate="pokemon/router::actions.navigateTo"
+									data-wp-on--mouseenter="pokemon/router::actions.prefetchPage"
+									data-wp-class--nav-link-active="callbacks.isActive"
+									data-wp-bind--aria-current="callbacks.ariaCurrent"
+									class="nav-link font-heading text-2xl uppercase tracking-[0.1em] text-black no-underline"
+								>
+									${label}
+								</a>
+							`,
+						)}
+					</div>
+
+					<!-- Separator -->
+					<div class="h-px w-16 bg-black/20"></div>
+
+					<!-- Tool links -->
+					${TOOL_LINKS.map(
 						({ label, href }) => html`
 							<a
 								href="${href}"

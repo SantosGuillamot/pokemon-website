@@ -37,6 +37,10 @@
 	--color-darker-gray: #666666;
 	--color-fog: #eeeeee;
 
+	/* Shadows */
+	--shadow-nav: 0 4px 14px 0 rgb(from #111111 r g b / 0.09),
+		0 2px 4px 0 rgb(from #111111 r g b / 0.12);
+
 	/* Layout */
 	--container-content: 75rem;
 
@@ -124,9 +128,7 @@
 @layer components {
 	/* Nav header */
 	.nav-header {
-		box-shadow:
-			0 4px 14px 0 rgb(from var(--color-black) r g b / 0.09),
-			0 2px 4px 0 rgb(from var(--color-black) r g b / 0.12);
+		box-shadow: var(--shadow-nav);
 	}
 
 	/* Nav links */
@@ -141,7 +143,7 @@
 		border-radius: 2px;
 	}
 
-	.nav-link-active::after {
+	.nav-link.nav-link-active::after {
 		content: "";
 		position: absolute;
 		left: 0;
@@ -149,6 +151,44 @@
 		bottom: 0;
 		height: 2px;
 		background-color: var(--color-black);
+	}
+
+	/* Nav dropdown — positioning + hover bridge */
+	.nav-dropdown {
+		position: absolute;
+		top: 100%;
+		left: 0;
+	}
+
+	/* Invisible bridge so hover doesn't break between button and panel */
+	.nav-dropdown::before {
+		content: "";
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		height: 1rem;
+	}
+
+	/* Nav dropdown items — focus + active states */
+	.nav-dropdown-item:focus-visible {
+		outline: 2px solid var(--color-black);
+		outline-offset: -2px;
+		border-radius: 2px;
+	}
+
+	.nav-dropdown-item.nav-link-active {
+		background-color: var(--color-fog);
+	}
+
+	/* Nav dropdown chevron */
+	.nav-dropdown-chevron svg {
+		width: 1rem;
+		height: 1rem;
+	}
+
+	.nav-dropdown-chevron-open {
+		transform: rotate(180deg);
 	}
 
 	/* Nav buttons (hamburger, close) */

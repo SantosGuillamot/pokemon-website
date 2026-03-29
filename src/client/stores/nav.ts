@@ -7,6 +7,7 @@ type NavContext = {
 const { state, actions } = store("pokemon/nav", {
 	state: {
 		isMenuOpen: false,
+		isGamesDropdownOpen: false,
 	},
 	actions: {
 		openMenu() {
@@ -17,9 +18,19 @@ const { state, actions } = store("pokemon/nav", {
 			state.isMenuOpen = false;
 			document.body.style.overflow = "";
 		},
+		toggleGamesDropdown() {
+			state.isGamesDropdownOpen = !state.isGamesDropdownOpen;
+		},
+		openGamesDropdown() {
+			state.isGamesDropdownOpen = true;
+		},
+		closeGamesDropdown() {
+			state.isGamesDropdownOpen = false;
+		},
 		handleKeydown(event: KeyboardEvent) {
 			if (event.key === "Escape") {
 				actions.closeMenu();
+				actions.closeGamesDropdown();
 			}
 		},
 	},
