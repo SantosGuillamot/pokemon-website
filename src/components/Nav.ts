@@ -6,7 +6,7 @@ import { githubIcon, twitterIcon } from "../icons.js";
 const NAV_LINKS = [
 	{ label: "TYPES", href: "/types" },
 	{ label: "SPEEDS", href: "/speeds" },
-	{ label: "WILL IT KO", href: "/will-it-ko" },
+	{ label: "WILL IT KO?", href: "/will-it-ko" },
 	{ label: "CALCULATOR", href: "/damage-calculator" },
 	{ label: "TEAM BUILDER", href: "/team-building" },
 ];
@@ -40,7 +40,7 @@ const Nav = () => {
 					href="/"
 					data-wp-on--click="pokemon/router::actions.navigateTo"
 					data-wp-on--mouseenter="pokemon/router::actions.prefetchPage"
-					class="flex items-center gap-2 font-heading text-h4 uppercase tracking-[0.05em] text-black no-underline"
+					class="flex items-center gap-2 font-heading text-h4 uppercase tracking-[0.1em] text-black no-underline"
 				>
 					<img
 						src="/public/icons/logo.svg"
@@ -62,7 +62,7 @@ const Nav = () => {
 								data-wp-on--mouseenter="pokemon/router::actions.prefetchPage"
 								data-wp-class--nav-link-active="callbacks.isActive"
 								data-wp-bind--aria-current="callbacks.ariaCurrent"
-								class="nav-link font-heading text-h4 uppercase tracking-[0.05em] text-black no-underline transition-colors hover:text-black/70"
+								class="nav-link font-heading text-h4 uppercase tracking-[0.1em] text-black no-underline transition-colors hover:text-black/70"
 							>
 								${label}
 							</a>
@@ -132,7 +132,7 @@ const Nav = () => {
 								data-wp-on--mouseenter="pokemon/router::actions.prefetchPage"
 								data-wp-class--nav-link-active="callbacks.isActive"
 								data-wp-bind--aria-current="callbacks.ariaCurrent"
-								class="nav-link font-heading text-2xl uppercase tracking-[0.05em] text-black no-underline"
+								class="nav-link font-heading text-2xl uppercase tracking-[0.1em] text-black no-underline"
 							>
 								${label}
 							</a>

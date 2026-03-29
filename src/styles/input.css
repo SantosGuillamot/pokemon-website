@@ -68,8 +68,8 @@
 	h3,
 	h4 {
 		font-family: var(--font-heading);
-		font-weight: 400;
-		letter-spacing: 0.05em;
+		font-weight: bold;
+		letter-spacing: 0.1em;
 		color: var(--color-black);
 	}
 

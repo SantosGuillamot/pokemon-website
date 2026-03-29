@@ -8,7 +8,7 @@ const FEATURES = [
 		href: "/speeds",
 	},
 	{
-		title: "Will It KO",
+		title: "Will It KO?",
 		description:
 			"Train your damage intuition. Can this move one-hit KO the defender?",
 		href: "/will-it-ko",
@@ -38,7 +38,7 @@ const HomePage = async () => {
 		<main class="space-y-16">
 			<!-- Hero section -->
 			<section class="space-y-4 text-center">
-				<h1>Welcome to Pokemon Champions Hub</h1>
+				<h1>Pokemon Champions Tools</h1>
 				<p class="text-p-lg text-darker-gray mx-auto max-w-2xl">
 					Your competitive companion for Pokemon Champions. Train your
 					battle instincts, learn type matchups, calculate damage, and
@@ -59,7 +59,7 @@ const HomePage = async () => {
 								data-wp-on--mouseenter="actions.prefetchPage"
 								class="block rounded-lg border-2 border-fog bg-white p-6 no-underline transition-shadow hover:shadow-md"
 							>
-								<h3 class="mb-2">${title}</h3>
+								<h4 class="mb-2">${title}</h4>
 								<p class="text-p text-darker-gray">${description}</p>
 							</a>
 						`,
