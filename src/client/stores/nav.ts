@@ -1,7 +1,7 @@
-import { getContext, store } from "@wordpress/interactivity";
+import { getElement, store } from "@wordpress/interactivity";
 
-type NavContext = {
-	navHref: string;
+const routerStore = store("pokemon/router") as {
+	state: { currentPath: string };
 };
 
 const { state, actions } = store("pokemon/nav", {
@@ -36,17 +36,22 @@ const { state, actions } = store("pokemon/nav", {
 	},
 	callbacks: {
 		isActive() {
-			const context = getContext<NavContext>();
-			const path = window.location.pathname;
-			if (context.navHref === "/") return path === "/";
-			return path === context.navHref || path.startsWith(`${context.navHref}/`);
+			const path = routerStore.state.currentPath;
+			const { ref } = getElement();
+			if (!ref) return false;
+			const href = ref.getAttribute("href");
+			if (!href) return false;
+			if (href === "/") return path === "/";
+			return path === href || path.startsWith(`${href}/`);
 		},
 		ariaCurrent() {
-			const context = getContext<NavContext>();
-			const path = window.location.pathname;
-			if (context.navHref === "/") return path === "/" ? "page" : false;
-			const active =
-				path === context.navHref || path.startsWith(`${context.navHref}/`);
+			const path = routerStore.state.currentPath;
+			const { ref } = getElement();
+			if (!ref) return false;
+			const href = ref.getAttribute("href");
+			if (!href) return false;
+			if (href === "/") return path === "/" ? "page" : false;
+			const active = path === href || path.startsWith(`${href}/`);
 			return active ? "page" : false;
 		},
 	},
