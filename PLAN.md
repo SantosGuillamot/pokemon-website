@@ -251,7 +251,7 @@ Depends on resolving open design decisions in `DESIGN_PLAN.md` (brand, colors, t
 | 3.4  | Speed mini-game                                       | ⏸ Deferred |
 | 3.5  | Theory crafting (requires auth)                       | ⏸ Deferred |
 | 3.6  | Damage calculator                                     | ⏸ Deferred |
-| 3.7  | Store all Pokemon images in the DB instead of hardcoding GitHub CDN URLs. Hero images, sprites, and any other Pokemon artwork should be served from DB data (`pokemon.images` jsonb) | ⬜ Todo |
+| 3.7  | Self-host Pokemon images as static files in `public/images/`. Download sprites from PokeAPI, update DB to store local paths, replace hardcoded hero URLs. | ⬜ Todo |
 
 ### 🔜 Phase 4 — Auth UI
 
@@ -271,7 +271,7 @@ Deferred until auth is needed.
 
 | Task | Description                                                                                         | Status     |
 | ---- | --------------------------------------------------------------------------------------------------- | ---------- |
-| 6.1  | Analyze whether to download Pokemon sprites/artwork and self-host instead of using GitHub CDN URLs   | ⬜ Todo    |
+| 6.1  | ~~Analyze whether to download Pokemon sprites/artwork and self-host instead of using GitHub CDN URLs~~ — Decision: self-host as static files in `public/images/`, committed to repo, served by Hono. See `IMAGES_PLAN.md` | ✅ Done    |
 | 6.2  | Explore automating client-side navigation directives on internal `<a>` tags                          | ⬜ Todo    |
 | 6.3  | Review back/forward navigation to the initial page — current workaround prefetches on load, find a proper solution | ⬜ Todo    |
 | 6.4  | Decide i18n/translation strategy (routing, string extraction, Pokemon name translations, DB impact)  | ✅ Done    |

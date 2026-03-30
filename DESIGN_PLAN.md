@@ -18,6 +18,7 @@ Decisions made based on the tech stack (Hono `html` tagged templates, WordPress 
 | Reduced motion | Global `prefers-reduced-motion` media query reset + Tailwind `motion-reduce:` variant | Blanket compliance |
 | Contrast target | WCAG AA (4.5:1 normal text, 3:1 large text) | Design plan best practice |
 | Pokemon type colors | Hardcoded bg + text color pairs in `@theme` (not dynamic from DB) | Works on both server and client, enables Tailwind variants |
+| Image hosting | Self-hosted static files in `public/images/` committed to the repo | No external dependency on GitHub/PokeAPI URLs; ~500MB one-time addition, images won't change; served by Hono static middleware from Hetzner VPS at zero extra cost |
 | Dark mode | ⏸ Deferred | Not needed now; semantic token names keep the door open |
 | Dev component gallery | `/design-system` dev-only route rendering all components with variants | Storybook incompatible with this architecture |
 
@@ -287,6 +288,7 @@ The main repeating element on the index page.
 
 ## 11. Images & Media
 
+- [x] **Image hosting**: Self-hosted static files in `public/images/`, committed to the repo. A one-off download script fetches all sprites from PokeAPI and saves them locally. DB stores local paths (e.g., `/images/pokemon/artwork/25.png`) instead of external GitHub URLs. Hardcoded hero URLs in page files replaced with local paths too. No deploy-time download step — images are part of the repo.
 - [ ] **Pokemon artwork**: Which image from the `images` jsonb to use as primary? (official artwork, front sprite, etc.)
 - [ ] **Image aspect ratio**: Consistent ratio for cards or let images be natural size?
 - [ ] **Loading strategy**: Lazy loading? Blur placeholder? Skeleton?
