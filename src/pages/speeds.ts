@@ -9,8 +9,8 @@ const WhosFasterPage = () => {
 				title: "Who's Faster?",
 				description:
 					"Two Pokemon appear side by side. Guess which one is faster based on their speed stat — or if they're tied. One wrong answer ends your streak!",
-				image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/8.png",
-				imageBg: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/9.png",
+				image: "/public/images/pokemon/artwork/8.png",
+				imageBg: "/public/images/pokemon/artwork/9.png",
 			})}
 
 			${Section({

@@ -1,7 +1,6 @@
 import {
 	boolean,
 	integer,
-	jsonb,
 	numeric,
 	pgTable,
 	primaryKey,
@@ -17,7 +16,7 @@ export const pokemons = pgTable("pokemons", {
 	id: serial("id").primaryKey(),
 	dexNumber: integer("dex_number").notNull().unique(),
 	name: varchar("name", { length: 100 }).notNull().unique(),
-	images: jsonb("images").$type<Record<string, string>>(),
+	imageUrl: varchar("image_url", { length: 500 }),
 	hp: smallint("hp").notNull(),
 	attack: smallint("attack").notNull(),
 	defense: smallint("defense").notNull(),

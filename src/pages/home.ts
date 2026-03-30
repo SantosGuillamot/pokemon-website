@@ -67,9 +67,9 @@ const HomePage = async () => {
 				description:
 					"Your competitive companion for Pokemon Champions. Train your battle instincts, learn type matchups, calculate damage, and build winning teams.",
 				image:
-					"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/8.png",
+					"/public/images/pokemon/artwork/8.png",
 				imageBg:
-					"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/9.png",
+					"/public/images/pokemon/artwork/9.png",
 			})}
 
 			${Section({

@@ -271,7 +271,7 @@ Deferred until auth is needed.
 
 | Task | Description                                                                                         | Status     |
 | ---- | --------------------------------------------------------------------------------------------------- | ---------- |
-| 6.1  | ~~Analyze whether to download Pokemon sprites/artwork and self-host instead of using GitHub CDN URLs~~ — Decision: self-host as static files in `public/images/`, committed to repo, served by Hono. See `IMAGES_PLAN.md` | ✅ Done    |
+| 6.1  | ~~Analyze whether to download Pokemon sprites/artwork and self-host instead of using GitHub CDN URLs~~ — Decision: self-host as static files in `public/images/`, committed to repo, served by Hono. | ✅ Done    |
 | 6.2  | Explore automating client-side navigation directives on internal `<a>` tags                          | ⬜ Todo    |
 | 6.3  | Review back/forward navigation to the initial page — current workaround prefetches on load, find a proper solution | ⬜ Todo    |
 | 6.4  | Decide i18n/translation strategy (routing, string extraction, Pokemon name translations, DB impact)  | ✅ Done    |

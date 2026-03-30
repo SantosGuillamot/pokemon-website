@@ -18,6 +18,16 @@ export function registerMiddleware(app: Hono): void {
 			c.header("Cache-Control", "public, max-age=31536000, immutable");
 		},
 	);
+
+	// Cache images for 1 year — they rarely change and are locally hosted.
+	app.use(
+		"/public/images/*",
+		serveStatic({ root: "./" }),
+		async (c, next) => {
+			await next();
+			c.header("Cache-Control", "public, max-age=31536000, immutable");
+		},
+	);
 	app.use("/public/*", serveStatic({ root: "./" }));
 
 	app.onError((err, c) => {

@@ -16,6 +16,7 @@
 		"db:migrate": "drizzle-kit migrate",
 		"db:studio": "drizzle-kit studio",
 		"db:seed": "node --import tsx/esm scripts/seed.ts",
+		"download:images": "node --import tsx/esm scripts/download-images.ts",
 		"lint": "biome check",
 		"lint:fix": "biome check --write"
 	},

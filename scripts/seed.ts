@@ -343,26 +343,16 @@ async function seedPokemon() {
 			statsRecord[s.stat.name] = s.base_stat;
 		}
 
-		const images: Record<string, string> = {};
-		if (data.sprites.other["official-artwork"].front_default) {
-			images.artwork = data.sprites.other["official-artwork"].front_default;
-		}
-		if (data.sprites.front_default) {
-			images.front = data.sprites.front_default;
-		}
-		if (data.sprites.back_default) {
-			images.back = data.sprites.back_default;
-		}
-		if (data.sprites.front_shiny) {
-			images.shiny = data.sprites.front_shiny;
-		}
+		const imageUrl = data.sprites.other["official-artwork"].front_default
+			? `/public/images/pokemon/artwork/${id}.png`
+			: null;
 
 		const [inserted] = await db
 			.insert(pokemons)
 			.values({
 				dexNumber: data.id,
 				name: data.name,
-				images,
+				imageUrl,
 				hp: statsRecord.hp ?? 0,
 				attack: statsRecord.attack ?? 0,
 				defense: statsRecord.defense ?? 0,
