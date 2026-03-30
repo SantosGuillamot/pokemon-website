@@ -7,14 +7,17 @@ import type { Type } from "@pokemon-website/types/types";
 import { getConfig, getContext, store } from "@wordpress/interactivity";
 
 type PokemonContext = {
-	_pokemonId: string;
+	_pokemonDexNumber: string;
+	_pokemonFormName: string;
 };
 
 export type PokemonStore = {
 	state: {
 		pokemons: Record<string, Pokemon>;
-		_pokemonId: string;
+		_pokemonDexNumber: string;
+		_pokemonFormName: string;
 		pokemon: Pokemon | undefined;
+		pokemonName: string;
 		pokemonTypes: Type[];
 	};
 	actions: {
@@ -24,15 +27,26 @@ export type PokemonStore = {
 
 const { state } = store<PokemonStore>("pokemon", {
 	state: {
-		get _pokemonId(): string {
+		get _pokemonDexNumber(): string {
 			const context = getContext<PokemonContext>("pokemon");
-			return context ? context._pokemonId : state._pokemonId;
+			return context ? context._pokemonDexNumber : state._pokemonDexNumber;
+		},
+		get _pokemonFormName(): string {
+			const context = getContext<PokemonContext>("pokemon");
+			return context ? context._pokemonFormName : state._pokemonFormName;
 		},
 		get pokemon(): Pokemon | undefined {
-			const dexNumber = Number(state._pokemonId);
+			const dexNumber = Number(state._pokemonDexNumber);
+			const formName = state._pokemonFormName || null;
 			return Object.values(state.pokemons).find(
-				(p) => p.dexNumber === dexNumber,
+				(p) =>
+					p.dexNumber === dexNumber && p.formName === formName,
 			);
+		},
+		get pokemonName(): string {
+			const pokemon = state.pokemon;
+			if (!pokemon) return "";
+			return pokemon.name.replaceAll("-", " ");
 		},
 		get pokemonTypes(): Type[] {
 			const pokemon = state.pokemon;

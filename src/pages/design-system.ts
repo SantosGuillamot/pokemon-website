@@ -248,9 +248,9 @@ const DesignSystemPage = () => {
 						<h2 class="mb-8 pb-2 border-b border-fog">Pokemon Cards</h2>
 
 						<div class="flex flex-wrap gap-6">
-							${PokemonCard({ id: 25 })}
-							${PokemonCard({ id: 6 })}
-							${PokemonCard({ id: 3 })}
+							${PokemonCard({ dexNumber: 25 })}
+							${PokemonCard({ dexNumber: 6, formName: "mega-x" })}
+							${PokemonCard({ dexNumber: 3 })}
 						</div>
 					</div>
 				`,
