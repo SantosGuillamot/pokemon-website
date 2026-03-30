@@ -1,4 +1,4 @@
-import { asc, eq, inArray } from "drizzle-orm";
+import { asc, desc, eq, inArray } from "drizzle-orm";
 import { Hono } from "hono";
 import { db } from "../db/client";
 import { pokemons } from "../db/schema";
@@ -28,6 +28,24 @@ const route = app
 			return c.json(list);
 		}
 
+		const dexNumberParam = c.req.query("dex_number");
+
+		if (dexNumberParam) {
+			const dexNumber = Number(dexNumberParam);
+
+			if (Number.isNaN(dexNumber)) {
+				return c.json({ error: "Invalid dex_number" }, 400);
+			}
+
+			const list = await db
+				.select()
+				.from(pokemons)
+				.where(eq(pokemons.dexNumber, dexNumber))
+				.orderBy(asc(pokemons.dexNumber), desc(pokemons.isDefault));
+
+			return c.json(list);
+		}
+
 		const rawLimit = Number(c.req.query("limit"));
 		const limit = Number.isNaN(rawLimit)
 			? 20
@@ -38,7 +56,11 @@ const route = app
 		const list = await db
 			.select()
 			.from(pokemons)
-			.orderBy(asc(pokemons.id))
+			.orderBy(
+				asc(pokemons.dexNumber),
+				desc(pokemons.isDefault),
+				asc(pokemons.id),
+			)
 			.limit(limit)
 			.offset(offset);
 

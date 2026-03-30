@@ -14,8 +14,12 @@ import { types } from "./types";
 
 export const pokemons = pgTable("pokemons", {
 	id: serial("id").primaryKey(),
-	dexNumber: integer("dex_number").notNull().unique(),
+	dexNumber: integer("dex_number").notNull(),
 	name: varchar("name", { length: 100 }).notNull().unique(),
+	formName: varchar("form_name", { length: 100 }),
+	isDefault: boolean("is_default").notNull().default(true),
+	isMega: boolean("is_mega").notNull().default(false),
+	apiId: integer("api_id").notNull().unique(),
 	imageUrl: varchar("image_url", { length: 500 }),
 	hp: smallint("hp").notNull(),
 	attack: smallint("attack").notNull(),
@@ -25,6 +29,7 @@ export const pokemons = pgTable("pokemons", {
 	speed: smallint("speed").notNull(),
 	weight: numeric("weight").notNull(),
 	height: numeric("height").notNull(),
+	inChampions: boolean("in_champions").notNull().default(false),
 });
 
 export const pokemonTypes = pgTable(

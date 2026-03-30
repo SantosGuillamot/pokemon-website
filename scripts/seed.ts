@@ -5,9 +5,9 @@ import {
 	abilities,
 	moves,
 	natures,
-	pokemons,
 	pokemonAbilities,
 	pokemonMoves,
+	pokemons,
 	pokemonTypes,
 	types,
 } from "../src/db/schema/index";
@@ -302,7 +302,7 @@ async function seedMoves() {
 // ─── Pokemon ──────────────────────────────────────────────────────────────────
 
 async function seedPokemon() {
-	console.log("Seeding first 151 Pokemon...");
+	console.log("Seeding all Pokemon (all species + forms)...");
 
 	const allTypes = await db.select().from(types);
 	const typeIdByName = Object.fromEntries(allTypes.map((t) => [t.name, t.id]));
@@ -315,115 +315,206 @@ async function seedPokemon() {
 	const allMoves = await db.select().from(moves);
 	const moveIdByName = Object.fromEntries(allMoves.map((m) => [m.name, m.id]));
 
-	for (let id = 1; id <= 151; id++) {
-		const res = await fetch(`${BASE_URL}/pokemon/${id}`);
-		const data = (await res.json()) as {
+	// Step 1: Fetch the full species list
+	console.log("  Fetching species list...");
+	const speciesListRes = await fetch(
+		`${BASE_URL}/pokemon-species?limit=100000`,
+	);
+	if (!speciesListRes.ok) {
+		console.warn(
+			`  Warning: Failed to fetch species list (HTTP ${speciesListRes.status}). Skipping Pokemon seeding.`,
+		);
+		return;
+	}
+	const speciesListData = (await speciesListRes.json()) as {
+		count: number;
+		results: { name: string; url: string }[];
+	};
+	const speciesList = speciesListData.results;
+	console.log(`  Found ${speciesList.length} species.`);
+
+	let totalVarieties = 0;
+
+	// Step 2: For each species, fetch its varieties
+	for (let i = 0; i < speciesList.length; i++) {
+		const speciesUrl = speciesList[i].url;
+		const speciesRes = await fetch(speciesUrl);
+		if (!speciesRes.ok) {
+			console.warn(
+				`  Warning: Failed to fetch species at ${speciesUrl} (HTTP ${speciesRes.status}). Skipping.`,
+			);
+			continue;
+		}
+		const speciesData = (await speciesRes.json()) as {
 			id: number;
 			name: string;
-			sprites: {
-				front_default: string | null;
-				back_default: string | null;
-				front_shiny: string | null;
-				other: { "official-artwork": { front_default: string | null } };
-			};
-			stats: { base_stat: number; stat: { name: string } }[];
-			types: { slot: number; type: { name: string } }[];
-			abilities: {
-				is_hidden: boolean;
-				slot: number;
-				ability: { name: string };
+			varieties: {
+				is_default: boolean;
+				pokemon: { name: string; url: string };
 			}[];
-			moves: { move: { name: string } }[];
-			weight: number;
-			height: number;
 		};
 
-		const statsRecord: Record<string, number> = {};
-		for (const s of data.stats) {
-			statsRecord[s.stat.name] = s.base_stat;
-		}
-
-		const imageUrl = data.sprites.other["official-artwork"].front_default
-			? `/public/images/pokemon/artwork/${id}.png`
-			: null;
-
-		const [inserted] = await db
-			.insert(pokemons)
-			.values({
-				dexNumber: data.id,
-				name: data.name,
-				imageUrl,
-				hp: statsRecord.hp ?? 0,
-				attack: statsRecord.attack ?? 0,
-				defense: statsRecord.defense ?? 0,
-				spAttack: statsRecord["special-attack"] ?? 0,
-				spDefense: statsRecord["special-defense"] ?? 0,
-				speed: statsRecord.speed ?? 0,
-				weight: String(data.weight),
-				height: String(data.height),
-			})
-			.onConflictDoNothing()
-			.returning({ id: pokemons.id });
-
-		// If the row already existed, look it up
-		let pokemonId: number;
-		if (inserted) {
-			pokemonId = inserted.id;
-		} else {
-			const existing = await db
-				.select({ id: pokemons.id })
-				.from(pokemons)
-				.where(eq(pokemons.dexNumber, data.id))
-				.limit(1);
-			pokemonId = existing[0].id;
-		}
-
-		// Pokemon types
-		for (const t of data.types) {
-			const typeId = typeIdByName[t.type.name];
-			if (typeId !== undefined) {
-				await db
-					.insert(pokemonTypes)
-					.values({ pokemonId, typeId, slot: t.slot })
-					.onConflictDoNothing();
-			}
-		}
-
-		// Pokemon abilities
-		for (const a of data.abilities) {
-			const abilityId = abilityIdByName[a.ability.name];
-			if (abilityId !== undefined) {
-				await db
-					.insert(pokemonAbilities)
-					.values({
-						pokemonId,
-						abilityId,
-						isHidden: a.is_hidden,
-						slot: a.slot,
-					})
-					.onConflictDoNothing();
-			}
-		}
-
-		// Pokemon moves
-		for (const m of data.moves) {
-			const moveId = moveIdByName[m.move.name];
-			if (moveId !== undefined) {
-				await db
-					.insert(pokemonMoves)
-					.values({ pokemonId, moveId })
-					.onConflictDoNothing();
-			}
-		}
-
-		if (id % 25 === 0) {
-			console.log(`  Processed ${id}/151 Pokemon...`);
-		}
+		const dexNumber = speciesData.id;
+		const speciesName = speciesData.name;
 
 		await sleep(100);
+
+		// Step 3: For each variety, fetch the pokemon data
+		for (const variety of speciesData.varieties) {
+			try {
+				const varietyName = variety.pokemon.name;
+				const varietyUrl = variety.pokemon.url;
+				const isDefault = variety.is_default;
+
+				// Extract apiId from the variety URL: ".../pokemon/10034/" → 10034
+				const apiId = Number(varietyUrl.split("/").filter(Boolean).pop());
+
+				// Validate apiId
+				if (!Number.isFinite(apiId) || apiId <= 0) {
+					console.warn(
+						`  Warning: Invalid apiId "${apiId}" extracted from URL ${varietyUrl}. Skipping variety "${varietyName}".`,
+					);
+					continue;
+				}
+
+				// Derive formName by stripping species name prefix
+				const formName =
+					varietyName === speciesName
+						? null
+						: varietyName.startsWith(`${speciesName}-`)
+							? varietyName.slice(speciesName.length + 1)
+							: varietyName;
+
+				// Fetch the pokemon endpoint for stats, types, abilities, moves
+				const pokemonRes = await fetch(`${BASE_URL}/pokemon/${apiId}`);
+				if (!pokemonRes.ok) {
+					console.warn(
+						`  Warning: Failed to fetch pokemon ${apiId} (HTTP ${pokemonRes.status}). Skipping variety "${varietyName}".`,
+					);
+					continue;
+				}
+				const data = (await pokemonRes.json()) as {
+					id: number;
+					name: string;
+					sprites: {
+						front_default: string | null;
+						back_default: string | null;
+						front_shiny: string | null;
+						other: {
+							"official-artwork": { front_default: string | null };
+						};
+					};
+					stats: { base_stat: number; stat: { name: string } }[];
+					types: { slot: number; type: { name: string } }[];
+					abilities: {
+						is_hidden: boolean;
+						slot: number;
+						ability: { name: string };
+					}[];
+					moves: { move: { name: string } }[];
+					weight: number;
+					height: number;
+				};
+
+				const statsRecord: Record<string, number> = {};
+				for (const s of data.stats) {
+					statsRecord[s.stat.name] = s.base_stat;
+				}
+
+				const imageUrl = `/images/pokemon/artwork/${apiId}.png`;
+
+				const [inserted] = await db
+					.insert(pokemons)
+					.values({
+						dexNumber,
+						name: varietyName,
+						formName,
+						isDefault,
+						apiId,
+						imageUrl,
+						hp: statsRecord.hp ?? 0,
+						attack: statsRecord.attack ?? 0,
+						defense: statsRecord.defense ?? 0,
+						spAttack: statsRecord["special-attack"] ?? 0,
+						spDefense: statsRecord["special-defense"] ?? 0,
+						speed: statsRecord.speed ?? 0,
+						weight: String(data.weight),
+						height: String(data.height),
+					})
+					.onConflictDoNothing()
+					.returning({ id: pokemons.id });
+
+				// If the row already existed, look it up by name
+				let pokemonId: number;
+				if (inserted) {
+					pokemonId = inserted.id;
+				} else {
+					const existing = await db
+						.select({ id: pokemons.id })
+						.from(pokemons)
+						.where(eq(pokemons.name, varietyName))
+						.limit(1);
+					pokemonId = existing[0].id;
+				}
+
+				// Pokemon types
+				for (const t of data.types) {
+					const typeId = typeIdByName[t.type.name];
+					if (typeId !== undefined) {
+						await db
+							.insert(pokemonTypes)
+							.values({ pokemonId, typeId, slot: t.slot })
+							.onConflictDoNothing();
+					}
+				}
+
+				// Pokemon abilities
+				for (const a of data.abilities) {
+					const abilityId = abilityIdByName[a.ability.name];
+					if (abilityId !== undefined) {
+						await db
+							.insert(pokemonAbilities)
+							.values({
+								pokemonId,
+								abilityId,
+								isHidden: a.is_hidden,
+								slot: a.slot,
+							})
+							.onConflictDoNothing();
+					}
+				}
+
+				// Pokemon moves
+				for (const m of data.moves) {
+					const moveId = moveIdByName[m.move.name];
+					if (moveId !== undefined) {
+						await db
+							.insert(pokemonMoves)
+							.values({ pokemonId, moveId })
+							.onConflictDoNothing();
+					}
+				}
+
+				totalVarieties++;
+				await sleep(100);
+			} catch (error) {
+				console.error(
+					`  Error processing variety "${variety.pokemon.name}" for species "${speciesName}":`,
+					error,
+				);
+			}
+		}
+
+		if ((i + 1) % 50 === 0) {
+			console.log(
+				`  Processed ${i + 1}/${speciesList.length} species (${totalVarieties} varieties so far)...`,
+			);
+		}
 	}
 
-	console.log("  Inserted up to 151 Pokemon with types, abilities, and moves.");
+	console.log(
+		`  Inserted ${totalVarieties} Pokemon varieties across ${speciesList.length} species.`,
+	);
 }
 
 // ─── Main ─────────────────────────────────────────────────────────────────────
