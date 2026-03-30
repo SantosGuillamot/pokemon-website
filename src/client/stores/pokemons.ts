@@ -8,14 +8,14 @@ import { getConfig, getContext, store } from "@wordpress/interactivity";
 
 type PokemonContext = {
 	_pokemonDexNumber: string;
-	_pokemonFormName: string;
+	_pokemonFormName: string | null;
 };
 
 export type PokemonStore = {
 	state: {
 		pokemons: Record<string, Pokemon>;
 		_pokemonDexNumber: string;
-		_pokemonFormName: string;
+		_pokemonFormName: string | null;
 		pokemon: Pokemon | undefined;
 		pokemonName: string;
 		pokemonTypes: Type[];
@@ -29,9 +29,11 @@ const { state } = store<PokemonStore>("pokemon", {
 	state: {
 		get _pokemonDexNumber(): string {
 			const context = getContext<PokemonContext>("pokemon");
+			console.log("Context", context);
+
 			return context ? context._pokemonDexNumber : state._pokemonDexNumber;
 		},
-		get _pokemonFormName(): string {
+		get _pokemonFormName(): string | null {
 			const context = getContext<PokemonContext>("pokemon");
 			return context ? context._pokemonFormName : state._pokemonFormName;
 		},
@@ -39,8 +41,7 @@ const { state } = store<PokemonStore>("pokemon", {
 			const dexNumber = Number(state._pokemonDexNumber);
 			const formName = state._pokemonFormName || null;
 			return Object.values(state.pokemons).find(
-				(p) =>
-					p.dexNumber === dexNumber && p.formName === formName,
+				(p) => p.dexNumber === dexNumber && p.formName === formName,
 			);
 		},
 		get pokemonName(): string {

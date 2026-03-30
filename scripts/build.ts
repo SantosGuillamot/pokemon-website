@@ -7,6 +7,7 @@ const entryPoints = [
 	"src/client/stores/router.ts",
 	"src/client/stores/nav.ts",
 	"src/client/stores/pages/about.ts",
+	"src/client/stores/pages/speeds.ts",
 ];
 
 const buildOptions: esbuild.BuildOptions = {

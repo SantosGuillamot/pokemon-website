@@ -19,7 +19,12 @@ const app = new Hono();
 const pages = [
 	{ path: "/", title: undefined, render: HomePage },
 	{ path: "/types", title: "Types", render: TypesPage },
-	{ path: "/speeds", title: "Speeds", render: SpeedsPage },
+	{
+		path: "/speeds",
+		title: "Speeds",
+		render: SpeedsPage,
+		scripts: ["/js/stores/pages/speeds.js"],
+	},
 	{ path: "/roles", title: "Roles", render: RolesPage },
 	{ path: "/will-it-ko", title: "Will It KO", render: WillItKoPage },
 	{
@@ -29,14 +34,14 @@ const pages = [
 	},
 	{ path: "/team-building", title: "Team Building", render: TeamBuildingPage },
 	{ path: "/design-system", title: "Design System", render: DesignSystemPage },
-] as const;
+];
 
-for (const { path, title, render } of pages) {
+for (const { path, title, render, scripts } of pages) {
 	app.get(path, async (c) => {
 		resetServerState();
 		await loadTypes();
 		await loadPokemons({ inChampions: true });
-		return c.html(Layout({ title, children: await render() }));
+		return c.html(Layout({ title, scripts, children: await render() }));
 	});
 }
 

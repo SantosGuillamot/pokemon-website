@@ -1,8 +1,11 @@
 import { html } from "hono/html";
+import PokemonCard from "../components/PokemonCard.js";
 import Hero from "../sections/Hero.js";
 import Section from "../sections/Section.js";
 
 const WhosFasterPage = () => {
+	// Get pokemons from server.
+	// set server state with
 	return html`
 		<main>
 			${Hero({
@@ -15,29 +18,33 @@ const WhosFasterPage = () => {
 
 			${Section({
 				children: html`
-					<!-- Placeholder game area -->
-					<div class="rounded-lg border-2 border-fog bg-white p-8">
-						<div class="flex flex-col items-center gap-8 sm:flex-row sm:justify-center">
-							<div class="flex flex-col items-center gap-2">
-								<div class="flex h-40 w-40 items-center justify-center rounded-lg bg-fog">
-									<span class="text-darker-gray">Pokemon A</span>
-								</div>
-								<p class="font-heading text-h4 uppercase">Pikachu</p>
+					<p>Buttons to select the mode</p>
+				`,
+			})}
+
+			${Section({
+				children: html`
+					<div
+						data-wp-context='{"randomPokemons":[{"dexNumber":9,"formName":null},{"dexNumber":6,"formName":null}]}'
+					>
+						<div>
+							<div
+								data-wp-context='{"_pokemonDexNumber": "9","pokemonIndex": "0"}'
+								data-wp-watch="callbacks.updateContext"
+							>
+								${PokemonCard()}
 							</div>
-
-							<p class="font-heading text-h2">VS</p>
-
-							<div class="flex flex-col items-center gap-2">
-								<div class="flex h-40 w-40 items-center justify-center rounded-lg bg-fog">
-									<span class="text-darker-gray">Pokemon B</span>
-								</div>
-								<p class="font-heading text-h4 uppercase">Bulbasaur</p>
+							<p>VS</p>
+							<div
+								data-wp-context='{"_pokemonDexNumber": "6","pokemonIndex": "1"}'
+								data-wp-watch="callbacks.updateContext"
+							>
+								${PokemonCard()}
 							</div>
 						</div>
-
-						<div class="mt-8 flex flex-wrap justify-center gap-4">
-							<button type="button" class="btn btn-primary" disabled>
-								Pokemon A is faster
+						<div>
+							<button type="button" class="btn btn-primary" data-wp-on--click="actions.randomizePokemons">
+								Change Pokemons
 							</button>
 							<button type="button" class="btn btn-secondary" disabled>
 								They're equal
@@ -46,10 +53,7 @@ const WhosFasterPage = () => {
 								Pokemon B is faster
 							</button>
 						</div>
-
-						<p class="mt-6 text-center text-p text-darker-gray">
-							Current streak: <strong>0</strong>
-						</p>
+						<p>Current streak: <strong>0</strong></p>
 					</div>
 				`,
 			})}

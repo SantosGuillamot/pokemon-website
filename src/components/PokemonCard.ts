@@ -1,18 +1,12 @@
 import { html } from "hono/html";
 
-const PokemonCard = ({
-	dexNumber,
-	formName,
-}: { dexNumber: number; formName?: string | null }) => {
+const PokemonCard = () => {
 	return html`
-		<div
-			class="pokemon-card"
-			data-wp-context='{"_pokemonDexNumber": "${dexNumber}", "_pokemonFormName": "${formName ?? ""}"}'
-		>
+		<div class="pokemon-card">
 			<div class="pokemon-card-image">
 				<img
 					data-wp-bind--src="state.pokemon.imageUrl"
-					data-wp-bind--alt="state.pokemon.name"
+					data-wp-bind--alt="state.pokemonName"
 					width="400"
 					height="400"
 				/>

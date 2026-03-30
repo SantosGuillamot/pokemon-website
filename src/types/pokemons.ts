@@ -3,6 +3,11 @@ import type { pokemons } from "../db/schema";
 
 export type Pokemon = InferSelectModel<typeof pokemons>;
 
+export type PokemonContext = {
+	_pokemonDexNumber: string;
+	_pokemonFormName: string | null;
+};
+
 export type LoadPokemonsParams = {
 	ids?: number[];
 	dexNumbers?: number[];
