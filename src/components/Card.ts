@@ -12,7 +12,7 @@ type CardProps = {
 const Card = ({ title, href, icon, description, children }: CardProps) => {
 	const content = html`
 		${icon ? html`<div class="card-icon" aria-hidden="true">${raw(icon)}</div>` : ""}
-		<h4>${title}</h4>
+		<h4 class="mb-2">${title}</h4>
 		${description ? html`<p class="text-paragraph text-darker-gray">${description}</p>` : ""}
 		${children}
 	`;
