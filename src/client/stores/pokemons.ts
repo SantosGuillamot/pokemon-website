@@ -2,17 +2,20 @@ import type {
 	LoadPokemonsParams,
 	Pokemon,
 } from "@pokemon-website/types/pokemons";
-import { store } from "@wordpress/interactivity";
+import { getContext, store } from "@wordpress/interactivity";
+
+type PokemonContext = {
+	_pokemonId: string;
+};
 
 export type PokemonStore = {
 	state: {
 		pokemons: Record<string, Pokemon>;
-		pokemonId: string;
+		_pokemonId: string;
 		pokemon: Pokemon | undefined;
 	};
 	actions: {
 		loadPokemons: (params?: LoadPokemonsParams) => void;
-		changePokemonId: (event: Event) => void;
 	};
 };
 
@@ -32,22 +35,15 @@ function buildSearchParams(params?: LoadPokemonsParams): URLSearchParams {
 
 const { state } = store<PokemonStore>("pokemon", {
 	state: {
+		get _pokemonId(): string {
+			const context = getContext<PokemonContext>("pokemon");
+			return context ? context._pokemonId : state._pokemonId;
+		},
 		get pokemon(): Pokemon | undefined {
-			return state.pokemons[state.pokemonId];
+			return state.pokemons[state._pokemonId];
 		},
 	},
 	actions: {
-		*changePokemonId(event: Event): Generator {
-			const value = (event.target as HTMLInputElement).value;
-			if (!value) return;
-			const id = Number(value);
-			if (!state.pokemons[value]) {
-				yield store<PokemonStore>("pokemon").actions.loadPokemons({
-					ids: [id],
-				});
-			}
-			state.pokemonId = value;
-		},
 		*loadPokemons(params?: LoadPokemonsParams): Generator {
 			const searchParams = buildSearchParams(params);
 			const url = searchParams.toString()
