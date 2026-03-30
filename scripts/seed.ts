@@ -5,10 +5,7 @@ import {
 	abilities,
 	moves,
 	natures,
-	pokemonAbilities,
-	pokemonMoves,
 	pokemons,
-	pokemonTypes,
 	types,
 } from "../src/db/schema/index";
 
@@ -117,6 +114,8 @@ async function seedTypes() {
 				defenseNoEffect,
 				defenseNotVeryEffective,
 				defenseVeryEffective,
+				imageSmall: `/images/types/small/${t.id}.png`,
+				imageLarge: `/images/types/large/${t.id}.png`,
 			})
 			.where(eq(types.id, t.id));
 
@@ -458,42 +457,26 @@ async function seedPokemon() {
 				}
 
 				// Pokemon types
-				for (const t of data.types) {
-					const typeId = typeIdByName[t.type.name];
-					if (typeId !== undefined) {
-						await db
-							.insert(pokemonTypes)
-							.values({ pokemonId, typeId, slot: t.slot })
-							.onConflictDoNothing();
-					}
-				}
+				const typeIds = data.types
+					.sort((a, b) => a.slot - b.slot)
+					.map((t) => typeIdByName[t.type.name])
+					.filter((id): id is number => id !== undefined);
 
 				// Pokemon abilities
-				for (const a of data.abilities) {
-					const abilityId = abilityIdByName[a.ability.name];
-					if (abilityId !== undefined) {
-						await db
-							.insert(pokemonAbilities)
-							.values({
-								pokemonId,
-								abilityId,
-								isHidden: a.is_hidden,
-								slot: a.slot,
-							})
-							.onConflictDoNothing();
-					}
-				}
+				const abilityIds = data.abilities
+					.sort((a, b) => a.slot - b.slot)
+					.map((a) => abilityIdByName[a.ability.name])
+					.filter((id): id is number => id !== undefined);
 
 				// Pokemon moves
-				for (const m of data.moves) {
-					const moveId = moveIdByName[m.move.name];
-					if (moveId !== undefined) {
-						await db
-							.insert(pokemonMoves)
-							.values({ pokemonId, moveId })
-							.onConflictDoNothing();
-					}
-				}
+				const moveIds = data.moves
+					.map((m) => moveIdByName[m.move.name])
+					.filter((id): id is number => id !== undefined);
+
+				await db
+					.update(pokemons)
+					.set({ typeIds, abilityIds, moveIds })
+					.where(eq(pokemons.id, pokemonId));
 
 				totalVarieties++;
 				await sleep(100);

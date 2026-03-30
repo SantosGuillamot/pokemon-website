@@ -4,6 +4,8 @@ export const types = pgTable("types", {
 	id: serial("id").primaryKey(),
 	name: varchar("name", { length: 50 }).notNull().unique(),
 	color: varchar("color", { length: 7 }).notNull(),
+	imageSmall: varchar("image_small", { length: 500 }),
+	imageLarge: varchar("image_large", { length: 500 }),
 	attackNoEffect: jsonb("attack_no_effect")
 		.$type<number[]>()
 		.notNull()
