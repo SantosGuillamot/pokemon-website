@@ -2,7 +2,8 @@ import type {
 	LoadPokemonsParams,
 	Pokemon,
 } from "@pokemon-website/types/pokemons";
-import { getContext, store } from "@wordpress/interactivity";
+import type { Type } from "@pokemon-website/types/types";
+import { getConfig, getContext, store } from "@wordpress/interactivity";
 
 type PokemonContext = {
 	_pokemonId: string;
@@ -13,6 +14,7 @@ export type PokemonStore = {
 		pokemons: Record<string, Pokemon>;
 		_pokemonId: string;
 		pokemon: Pokemon | undefined;
+		pokemonTypes: Type[];
 	};
 	actions: {
 		loadPokemons: (params?: LoadPokemonsParams) => void;
@@ -41,6 +43,16 @@ const { state } = store<PokemonStore>("pokemon", {
 		},
 		get pokemon(): Pokemon | undefined {
 			return state.pokemons[state._pokemonId];
+		},
+		get pokemonTypes(): Type[] {
+			const pokemon = state.pokemon;
+			if (!pokemon) return [];
+			const config = getConfig("pokemon") as {
+				types: Record<string, Type>;
+			};
+			return pokemon.typeIds
+				.map((id) => config.types[String(id)])
+				.filter((t): t is Type => t !== undefined);
 		},
 	},
 	actions: {

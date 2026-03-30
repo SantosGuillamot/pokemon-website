@@ -248,27 +248,9 @@ const DesignSystemPage = () => {
 						<h2 class="mb-8 pb-2 border-b border-fog">Pokemon Cards</h2>
 
 						<div class="flex flex-wrap gap-6">
-							${PokemonCard({
-								name: "Pikachu",
-								imageUrl: "/public/images/pokemon/artwork/25.png",
-								types: [{ id: 13, name: "Electric" }],
-							})}
-							${PokemonCard({
-								name: "Charizard",
-								imageUrl: "/public/images/pokemon/artwork/6.png",
-								types: [
-									{ id: 10, name: "Fire" },
-									{ id: 3, name: "Flying" },
-								],
-							})}
-							${PokemonCard({
-								name: "Bulbasaur",
-								imageUrl: "/public/images/pokemon/artwork/1.png",
-								types: [
-									{ id: 12, name: "Grass" },
-									{ id: 4, name: "Poison" },
-								],
-							})}
+							${PokemonCard({ id: 25 })}
+							${PokemonCard({ id: 6 })}
+							${PokemonCard({ id: 1 })}
 						</div>
 					</div>
 				`,
