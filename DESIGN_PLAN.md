@@ -29,8 +29,8 @@ Suggested order to resolve these decisions:
 2. **Color Palette** — needed before any visual work.
 3. **Typography** — needed before any visual work.
 4. **Layout System** — structural foundation.
-5. **Element Styles** — headings, text, links.
-6. **Components** — buttons, cards, forms.
+5. **Generic Elements & Components** — headings, text, links, buttons, cards, forms.
+6. **Project-Specific Components** — Pokemon cards, type badges, filters.
 7. **Logo** — can iterate while building.
 8. **Navigation Header** — needs logo + colors + typography decided first.
 9. **Footer** — low priority, simple.
@@ -102,17 +102,17 @@ Personal / for-fun project — no commercial goals. The primary user is the auth
 ## 4. Typography ✅
 
 - [x] **Font families**:
-  - **Heading**: DotGothic16 — pixel/dot-matrix Gothic font. Evokes Game Boy-era Pokemon. Used for headings and display text only.
-  - **Body**: Space Mono — monospaced font. Reinforces the retro/terminal aesthetic across paragraphs and UI text.
-  - **Fallback**: Karla — humanist sans-serif. Available as a swap if DotGothic16 or Space Mono feel too restrictive in practice.
+  - **Display heading (H1)**: DotGothic16 — pixel/dot-matrix Gothic font. Evokes Game Boy-era Pokemon. Used for H1 display text only.
+  - **Heading (H2–H4)**: Space Mono — monospaced font. Reinforces the retro/terminal aesthetic for section and subsection headings.
+  - **Body**: Karla — humanist sans-serif. Clean and readable for paragraphs and UI text.
   - All three available on Google Fonts (SIL Open Font License).
 - [x] **Font source**: Self-hosted woff2 files in `public/fonts/`. ✅ Resolved in tooling decisions.
 - [x] **Font format**: `woff2` only. ✅ Resolved in tooling decisions.
 - [x] **Font weights needed**:
-  - DotGothic16: 400 (only available weight — hierarchy via size, not weight).
-  - Space Mono: 400 (body text, table data), 700 (bold emphasis, table headers, labels).
-  - Karla (fallback): 400, 700.
-  - 3 woff2 files to self-host: DotGothic16-400, SpaceMono-400, SpaceMono-700.
+  - DotGothic16: 400 (only available weight).
+  - Space Mono: 400 (UI text, tables), 700 (headings H2–H4, bold emphasis, labels).
+  - Karla: 400 (body text), 700 (bold emphasis).
+  - 4 woff2 files self-hosted: DotGothic16-400, SpaceMono-400, SpaceMono-700, Karla-400.
 - [x] **Base font size**: `16px`.
 - [x] **Type scale**: Custom values (defined per element in the Element Styles section).
 
@@ -120,7 +120,7 @@ Personal / for-fun project — no commercial goals. The primary user is the auth
 
 ## 5. Layout System ✅
 
-- [x] **Max content width**: `1280px`. Enough room for the type chart and damage calculator side-by-side layout without feeling stretched on simpler pages.
+- [x] **Max content width**: `1200px` (`75rem`). Enough room for the type chart and damage calculator side-by-side layout without feeling stretched on simpler pages.
 - [x] **Spacing unit**: 4px grid (Tailwind v4 default `--spacing: 0.25rem`). ✅ Resolved in tooling decisions.
 - [x] **Default page padding** (horizontal gutters): `24px` at all breakpoints. Monospaced body font needs a bit more breathing room.
 - [x] **Section spacing**: `64px` desktop (`lg`+), `48px` mobile. Keeps the spacious feel without disconnecting sections.
@@ -136,18 +136,18 @@ Personal / for-fun project — no commercial goals. The primary user is the auth
 
 ---
 
-## 6. Element Styles
+## 6. Generic Elements & Components
 
-Define the base styles for core HTML elements. Each one needs: font-family, font-size, font-weight, line-height, color, letter-spacing, margins.
+Reusable building blocks common to any website.
 
 ### Headings ✅
 
-- [x] **Shared**: DotGothic16, weight 400 (only available weight), `0.05em` letter-spacing, `--color-black`. Hierarchy via size only.
+- [x] **Shared**: `font-weight: bold`, `0.1em` letter-spacing, `--color-black`.
 - [x] **H1**: `3rem/4.5rem`, `mb: 1.5rem`. Responsive: `2rem/2.5rem` below `sm`.
 - [x] **H2**: `2rem/2.5rem`, `mb: 1rem`. Responsive: `1.5rem/2rem` below `sm`.
 - [x] **H3**: `1.5rem/2rem`, `mb: 0.75rem`. No responsive override.
 - [x] **H4**: `1rem/1.25rem`, `mb: 0.5rem`, uppercase. Used for labels/subsections.
-- [x] **Heading font**: Different from body — DotGothic16 (headings) vs Space Mono (body).
+- [x] **Heading fonts**: DotGothic16 for H1, Space Mono bold for H2–H4. Body uses Karla.
 
 ### Body Text ✅
 
@@ -161,28 +161,6 @@ Define the base styles for core HTML elements. Each one needs: font-family, font
 - [x] **Nav links vs inline links**: Different treatment. Nav links are plain text with `transition-colors`; inline links use the `.link` class with underline + color.
 - [x] **Focus-visible style**: `2px solid --color-secondary` outline with `2px` offset and `2px` border-radius. Applied consistently to links, buttons, and text buttons.
 
-### Tables
-
-Used for move selection, Pokemon selection in team builder, type matchup charts, stat displays.
-
-- [ ] **Header style**: Background, font weight, border, sticky header for long tables?
-- [ ] **Row style**: Striped or plain? Hover highlight?
-- [ ] **Cell padding**: Consistent or compact variant for dense data (move lists)?
-- [ ] **Responsive behavior**: Horizontal scroll, stacked layout on mobile, or hide less important columns?
-
----
-
-## 7. Components
-
-### Section / Container
-
-Reusable wrappers that provide consistent structure and visual rhythm across all pages.
-
-- [ ] **Container**: Max-width + horizontal padding. Same as layout max-width or a separate narrower variant for text-heavy content?
-- [ ] **Section backgrounds**: Define variants — e.g., default (white/light), muted (subtle gray), accent (brand color), dark (inverted).
-- [ ] **Section vertical padding**: Consistent top/bottom padding for all sections, or small/medium/large sizes?
-- [ ] **Section separators**: Divided by background contrast alone, subtle border, or spacing only?
-
 ### Buttons ✅
 
 - [x] **Shared base** (`.btn`): `inline-flex`, centered, DotGothic16 heading font, `12px 16px` padding, `1px solid --color-black` border, `3px 3px 0` box-shadow. Pokeball SVG icon via `::before` pseudo-element with 360° spin on hover. Active state: `translateY(2px)` with reduced shadow. Disabled: `not-allowed` cursor, `0.6` opacity, muted background.
@@ -191,6 +169,50 @@ Reusable wrappers that provide consistent structure and visual rhythm across all
 - [x] **Text** (`.btn-text`): Standalone component (not extending `.btn`). `--color-secondary` red text, no border/shadow. Pokeball icon via `mask-image` inheriting `currentColor`. Animated underline on hover (0% → 100% `background-size`). Active: `translateY(2px)`. Focus-visible matches link style.
 - [x] **Sizes**: One size only. Revisit if needed.
 - [x] **Icon buttons**: Not needed yet. Revisit during component build.
+
+### Card ✅
+
+Generic card component (`Card.ts`) used as a base for all card-like elements.
+
+- [x] **Shared style** (`.card-squared`): `max-width: 30rem`, `1.5rem 2rem` padding, white background, `1px solid --color-black` border, `--shadow-card` (`4px 4px 0`).
+- [x] **Variants**: Static (info display) vs interactive (linked via `<a>`). Interactive cards: hover `translateY(-2px)` + subtle fog background, active `translateY(2px)` + `--shadow-card-pressed`. Focus-visible: `2px solid --color-secondary`.
+- [x] **Icon slot** (`.card-icon`): `3.5rem` square, `--color-primary` at 0.8 opacity background, `12px` border-radius. SVG icon `1.5rem` in `--color-black`.
+
+### Section / Container ✅
+
+Reusable wrappers that provide consistent structure and visual rhythm across all pages.
+
+- [x] **Container**: `Section.ts` component — `px-6` horizontal padding, `py-12` vertical padding. Inner `div` constrained to `max-w-content` (`--container-content: 75rem`) and centered. Accepts a `class` prop for per-instance overrides.
+- [x] **Section backgrounds**: Controlled via the `class` prop (e.g., passing a background utility). Default is transparent (inherits page background).
+- [x] **Section separators**: Spacing only — no borders or decorative dividers between sections. May add new variants in the future.
+
+### Hero ✅
+
+Full-width banner at the top of each page (`Hero.ts`). Distinct from regular sections — diagonal clip-path, layered background, and overlapping image composition.
+
+- [x] **Layout**: Two-column on `md`+ (text left, image right), stacked on mobile. Inner container constrained to `max-w-content`, centered. Props: `title` (H1), `description` (large paragraph in `--color-darker-gray`), `image` (foreground), optional `imageBg` (background), optional `children` (e.g., CTA buttons).
+- [x] **Background**: Three layers via `isolation: isolate`. Base (`.hero::before`, z-index -2): solid white with diagonal clip `polygon(0 0, 100% 0, 100% 80%, 0 100%)`. Accent (`.hero::after`, z-index -1): `--color-primary` at 0.8 opacity filling the bottom wedge. Outer `.hero`: clips everything at `polygon(0 0, 100% 0, 100% 92%, 0 100%)`.
+- [x] **Image composition** (`.hero-image-stack`): Relative container, `16rem` square (mobile) / `26rem` square (`md`+). Foreground image offset `translate(-4rem, 4.5rem)` at z-index 1. Optional background image offset `translate(5rem, 1.5rem)` at z-index 0. Both absolutely positioned, `object-fit: contain`. Container has `margin-bottom: -5rem` to overlap the next section.
+
+### Tables
+
+- [ ] **Header style**: Background, font weight, border, sticky header for long tables?
+- [ ] **Row style**: Striped or plain? Hover highlight?
+- [ ] **Cell padding**: Consistent or compact variant for dense data?
+- [ ] **Responsive behavior**: Horizontal scroll, stacked layout on mobile, or hide less important columns?
+
+### Form Elements
+
+- [ ] **Text input**: Border, padding, border-radius, focus ring style.
+- [ ] **Select / dropdown**: Native or custom styled?
+- [ ] **Search bar**: Special treatment (icon inside, rounded)?
+- [ ] **Checkbox / toggle**: Style, size, checked state.
+
+---
+
+## 7. Project-Specific Components
+
+Components unique to this Pokemon website. Built on top of the generic elements above.
 
 ### Pokemon Card
 
@@ -203,26 +225,27 @@ The main repeating element on the index page.
 - [ ] **Size**: Fixed width or fluid within grid?
 - [ ] **Responsive behavior**: Cards per row at each breakpoint?
 
-### Other Cards
+### Type Badge / Pill
 
-- [ ] **Generic card style**: Shared border-radius, shadow, padding across all card types.
+- [ ] **Shape and size**: Pill, rounded rect? Text style?
+- [ ] **Color mapping**: Both bg and text colors hardcoded per type in `@theme` (e.g., `--color-type-fire-bg`, `--color-type-fire-text`). ✅ Color approach resolved in tooling decisions.
+- [ ] **Dual-type rendering**: Two separate pills, a split pill, primary-dominant with smaller secondary? This pattern appears in cards, detail views, and anywhere types are displayed.
+
+### Stat Badge
+
+- [ ] **Base stats display**: Shape, size, color coding?
+
+### Damage Class Badge
+
+- [ ] **Physical / Special / Status indicators**: Icon, color, shape?
+
+### Other Project Cards
+
 - [ ] **Specific cards needed**: Move cards? Ability cards? Type matchup cards?
 
-### Form Elements
+### Filter Chips
 
-Needed for search and filters on the index page.
-
-- [ ] **Text input**: Border, padding, border-radius, focus ring style.
-- [ ] **Select / dropdown**: Native or custom styled?
-- [ ] **Search bar**: Special treatment (icon inside, rounded)?
-- [ ] **Filter chips / toggles**: For type filtering — pill buttons? Checkboxes?
-
-### Badges / Pills
-
-- [ ] **Type badge**: Shape, size, text style. Color mapping: both bg and text colors hardcoded per type in `@theme` (e.g., `--color-type-fire-bg`, `--color-type-fire-text`). ✅ Color approach resolved in tooling decisions.
-- [ ] **Dual-type rendering**: Two separate pills, a split pill, primary-dominant with smaller secondary? This pattern appears in cards, detail views, and anywhere types are displayed.
-- [ ] **Stat badge**: For base stats display?
-- [ ] **Damage class badge**: Physical/Special/Status indicators?
+- [ ] **Type filtering**: Pill buttons? Checkboxes? Use type colors?
 
 ---
 
@@ -232,13 +255,14 @@ Needed for search and filters on the index page.
 - [x] **Height**: `80px` at all breakpoints.
 - [x] **Background**: Solid `--color-primary` yellow (`#FFDE00`). All text and icons use `--color-black` (`#111111`). Soft box-shadow using `--color-black` at low opacity.
 - [x] **Layout (desktop)**:
-  - **Left**: Logo (`logo.svg`, 40px) + "POKEMON" text. Same style as H4 (DotGothic16, uppercase, `1rem/1.25rem`, `0.05em` tracking). Links to `/`.
-  - **Center-right**: Page links — HOME, ABOUT, TYPES. Same H4 style. Spaced with a comfortable gap (~`2rem`).
-  - **Far right**: Social icons (Twitter/X, GitHub) inline SVGs, `20px`. Separated from nav links by a subtle left border. Link to personal accounts.
-- [x] **Layout (mobile)**: Logo + "POKEMON" text on the left (always visible). Hamburger icon (`menu` from Lucide) on the right.
-- [x] **Mobile menu**: Full-screen overlay on white (`#FFFFFF`) background. X close button (`x` from Lucide) top-right. Nav links stacked vertically, centered, DotGothic16 uppercase, larger size (~`1.5rem`). Social icons grouped at the bottom.
+  - **Left**: Logo (`logo.svg`, 40px) + "POKEMON" text. Space Mono bold, uppercase, `0.1em` tracking. Links to `/`.
+  - **Center-right**: Tool links (CALCULATOR, TEAM BUILDER) as direct links + GAMES dropdown (TYPES, SPEEDS, ROLES, WILL IT KO?). Same H4 style. Spaced with `2rem` gap.
+  - **Games dropdown**: Button with Lucide `ChevronDown` (rotates 180° on open). Panel: white background, `--shadow-nav`, rounded. Items: Space Mono uppercase, `fog` hover. Opens on hover (desktop) or click. Managed via IAPI state (`isGamesDropdownOpen`).
+  - **Far right**: Social icons (Website/Globe, X/Twitter, GitHub) inline SVGs, `20px`. Separated from nav links by a subtle left border (`border-black/20`). Open in new tab.
+- [x] **Layout (mobile)**: Logo + "POKEMON" text on the left (always visible). Hamburger icon (`Menu` from Lucide) on the right.
+- [x] **Mobile menu**: Full-screen overlay on white (`#FFFFFF`) background. X close button (`X` from Lucide) top-right. Links stacked vertically and centered: Games group (with "Games" label in small uppercase `--color-darker-gray`) then separator (`h-px w-16 bg-black/20`) then Tool links. Font: Space Mono bold, `text-2xl`, uppercase. Social icons grouped at the bottom.
 - [x] **Active page indicator**: `2px` underline offset below the link text using `--color-black`. Driven client-side via IAPI `callbacks.isActive` reading `window.location.pathname` — no server-side path passing needed. Applied on both desktop and mobile.
-- [x] **Nav items**: HOME (`/`), ABOUT (`/about`), TYPES (`/types`). Design system route excluded (dev-only).
+- [x] **Nav items**: Tool links — CALCULATOR (`/damage-calculator`), TEAM BUILDER (`/team-building`). Games dropdown — TYPES (`/types`), SPEEDS (`/speeds`), ROLES (`/roles`), WILL IT KO? (`/will-it-ko`). Design system route excluded (dev-only).
 - [x] **Nav link hover**: Subtle opacity reduction or `color-mix()` lighten on hover, with `transition-colors`. No underline on hover (reserved for active state).
 - [x] **Breakpoint**: Nav links + social icons visible on `md` (768px) and up. Below `md`, collapse to hamburger.
 - [ ] **Mobile menu accessibility**: Review focus management — focus the close button (or first focusable element) on open, trap Tab/Shift+Tab within the overlay, return focus to the hamburger on close.
@@ -257,8 +281,7 @@ Needed for search and filters on the index page.
 ## 10. Icons
 
 - [x] **Icon set**: Lucide via `lucide-static` for generic UI icons (inline SVGs, `currentColor` inheritance). Custom SVGs for Pokemon-specific icons (type symbols, Pokeball, etc.). ✅ Resolved in tooling decisions.
-- [ ] **Size convention**: e.g., `16px`, `20px`, `24px`.
-- [ ] **Usage**: Where are icons needed? (nav, search, type indicators, stats?)
+- [x] **Size convention**: `24px` standard.
 
 ---
 
