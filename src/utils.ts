@@ -2,6 +2,7 @@ import type {
 	LoadPokemonsParams,
 	Pokemon,
 } from "@pokemon-website/types/pokemons";
+import { buildPokemonsSearchParams } from "@pokemon-website/types/pokemons";
 import { setServerState } from "iapi-ssr-processor";
 import api from "./api/index.js";
 
@@ -15,18 +16,7 @@ export async function loadPokemons(params?: LoadPokemonsParams): Promise<void> {
 		},
 	}) as { pokemons: Record<string, Pokemon>; pokemonId: string };
 
-	const searchParams = new URLSearchParams();
-	if (params?.ids?.length) {
-		searchParams.set("ids", params.ids.join(","));
-	}
-	if (params?.limit !== undefined) {
-		searchParams.set("limit", String(params.limit));
-	}
-	if (params?.offset !== undefined) {
-		searchParams.set("offset", String(params.offset));
-	}
-
-	const query = searchParams.toString();
+	const query = buildPokemonsSearchParams(params).toString();
 	const url = query ? `/api/pokemons?${query}` : "/api/pokemons";
 	const res = await api.request(url);
 	if (res.ok) {

@@ -2,6 +2,7 @@ import type {
 	LoadPokemonsParams,
 	Pokemon,
 } from "@pokemon-website/types/pokemons";
+import { buildPokemonsSearchParams } from "@pokemon-website/types/pokemons";
 import type { Type } from "@pokemon-website/types/types";
 import { getConfig, getContext, store } from "@wordpress/interactivity";
 
@@ -20,20 +21,6 @@ export type PokemonStore = {
 		loadPokemons: (params?: LoadPokemonsParams) => void;
 	};
 };
-
-function buildSearchParams(params?: LoadPokemonsParams): URLSearchParams {
-	const searchParams = new URLSearchParams();
-	if (params?.ids?.length) {
-		searchParams.set("ids", params.ids.join(","));
-	}
-	if (params?.limit !== undefined) {
-		searchParams.set("limit", String(params.limit));
-	}
-	if (params?.offset !== undefined) {
-		searchParams.set("offset", String(params.offset));
-	}
-	return searchParams;
-}
 
 const { state } = store<PokemonStore>("pokemon", {
 	state: {
@@ -57,7 +44,7 @@ const { state } = store<PokemonStore>("pokemon", {
 	},
 	actions: {
 		*loadPokemons(params?: LoadPokemonsParams): Generator {
-			const searchParams = buildSearchParams(params);
+			const searchParams = buildPokemonsSearchParams(params);
 			const url = searchParams.toString()
 				? `/api/pokemons?${searchParams}`
 				: "/api/pokemons";

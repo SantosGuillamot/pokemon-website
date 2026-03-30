@@ -1,4 +1,4 @@
-import { asc, desc, eq, inArray } from "drizzle-orm";
+import { and, asc, desc, eq, inArray } from "drizzle-orm";
 import { Hono } from "hono";
 import { db } from "../db/client";
 import { pokemons } from "../db/schema";
@@ -8,43 +8,8 @@ const app = new Hono();
 const route = app
 	.get("/", async (c) => {
 		const idsParam = c.req.query("ids");
-
-		if (idsParam) {
-			const ids = idsParam
-				.split(",")
-				.map(Number)
-				.filter((n) => !Number.isNaN(n));
-
-			if (ids.length === 0) {
-				return c.json([]);
-			}
-
-			const list = await db
-				.select()
-				.from(pokemons)
-				.where(inArray(pokemons.id, ids))
-				.orderBy(asc(pokemons.id));
-
-			return c.json(list);
-		}
-
-		const dexNumberParam = c.req.query("dex_number");
-
-		if (dexNumberParam) {
-			const dexNumber = Number(dexNumberParam);
-
-			if (Number.isNaN(dexNumber)) {
-				return c.json({ error: "Invalid dex_number" }, 400);
-			}
-
-			const list = await db
-				.select()
-				.from(pokemons)
-				.where(eq(pokemons.dexNumber, dexNumber))
-				.orderBy(asc(pokemons.dexNumber), desc(pokemons.isDefault));
-
-			return c.json(list);
-		}
+		const dexNumbersParam = c.req.query("dex_numbers");
+		const inChampionsParam = c.req.query("in_champions");
 
 		const rawLimit = Number(c.req.query("limit"));
 		const limit = Number.isNaN(rawLimit)
@@ -53,9 +18,50 @@ const route = app
 		const rawOffset = Number(c.req.query("offset"));
 		const offset = Number.isNaN(rawOffset) ? 0 : Math.max(0, rawOffset);
 
+		const conditions = [];
+
+		if (idsParam) {
+			const ids = idsParam
+				.split(",")
+				.map(Number)
+				.filter((n) => !Number.isNaN(n));
+
+			if (ids.length === 0) {
+				return c.json({ error: "Invalid ids" }, 400);
+			}
+
+			if (ids.length > 100) {
+				return c.json({ error: "Too many ids (max 100)" }, 400);
+			}
+
+			conditions.push(inArray(pokemons.id, ids));
+		}
+
+		if (dexNumbersParam) {
+			const dexNumbers = dexNumbersParam
+				.split(",")
+				.map(Number)
+				.filter((n) => !Number.isNaN(n));
+
+			if (dexNumbers.length === 0) {
+				return c.json({ error: "Invalid dex_numbers" }, 400);
+			}
+
+			if (dexNumbers.length > 100) {
+				return c.json({ error: "Too many dex_numbers (max 100)" }, 400);
+			}
+
+			conditions.push(inArray(pokemons.dexNumber, dexNumbers));
+		}
+
+		if (inChampionsParam === "true") {
+			conditions.push(eq(pokemons.inChampions, true));
+		}
+
 		const list = await db
 			.select()
 			.from(pokemons)
+			.where(conditions.length > 0 ? and(...conditions) : undefined)
 			.orderBy(
 				asc(pokemons.dexNumber),
 				desc(pokemons.isDefault),
@@ -66,20 +72,31 @@ const route = app
 
 		return c.json(list);
 	})
-	.get("/:id", async (c) => {
-		const id = Number(c.req.param("id"));
+	.get("/:dexNumber", async (c) => {
+		const dexNumber = Number(c.req.param("dexNumber"));
+		const inChampionsParam = c.req.query("in_champions");
 
-		if (Number.isNaN(id)) {
-			return c.json({ error: "Invalid ID" }, 400);
+		if (Number.isNaN(dexNumber)) {
+			return c.json({ error: "Invalid dex number" }, 400);
 		}
 
-		const [found] = await db.select().from(pokemons).where(eq(pokemons.id, id));
+		const conditions = [eq(pokemons.dexNumber, dexNumber)];
 
-		if (!found) {
+		if (inChampionsParam === "true") {
+			conditions.push(eq(pokemons.inChampions, true));
+		}
+
+		const list = await db
+			.select()
+			.from(pokemons)
+			.where(and(...conditions))
+			.orderBy(asc(pokemons.dexNumber), desc(pokemons.isDefault));
+
+		if (list.length === 0) {
 			return c.json({ error: "Pokemon not found" }, 404);
 		}
 
-		return c.json(found);
+		return c.json(list);
 	});
 
 export type PokemonRouteType = typeof route;

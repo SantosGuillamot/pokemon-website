@@ -5,6 +5,30 @@ export type Pokemon = InferSelectModel<typeof pokemons>;
 
 export type LoadPokemonsParams = {
 	ids?: number[];
+	dexNumbers?: number[];
+	inChampions?: boolean;
 	limit?: number;
 	offset?: number;
 };
+
+export function buildPokemonsSearchParams(
+	params?: LoadPokemonsParams,
+): URLSearchParams {
+	const searchParams = new URLSearchParams();
+	if (params?.ids?.length) {
+		searchParams.set("ids", params.ids.join(","));
+	}
+	if (params?.dexNumbers?.length) {
+		searchParams.set("dex_numbers", params.dexNumbers.join(","));
+	}
+	if (params?.inChampions !== undefined) {
+		searchParams.set("in_champions", String(params.inChampions));
+	}
+	if (params?.limit !== undefined) {
+		searchParams.set("limit", String(params.limit));
+	}
+	if (params?.offset !== undefined) {
+		searchParams.set("offset", String(params.offset));
+	}
+	return searchParams;
+}
