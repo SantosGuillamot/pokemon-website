@@ -2,7 +2,7 @@
 
 @font-face {
 	font-family: "DotGothic16";
-	src: url("/public/fonts/dotgothic16.woff2") format("woff2");
+	src: url("/fonts/dotgothic16.woff2") format("woff2");
 	font-weight: 400;
 	font-style: normal;
 	font-display: swap;
@@ -10,7 +10,7 @@
 
 @font-face {
 	font-family: "Space Mono";
-	src: url("/public/fonts/space-mono.woff2") format("woff2");
+	src: url("/fonts/space-mono.woff2") format("woff2");
 	font-weight: 400;
 	font-style: normal;
 	font-display: swap;
@@ -18,7 +18,7 @@
 
 @font-face {
 	font-family: "Space Mono";
-	src: url("/public/fonts/space-mono700.woff2") format("woff2");
+	src: url("/fonts/space-mono700.woff2") format("woff2");
 	font-weight: 700;
 	font-style: normal;
 	font-display: swap;
@@ -26,7 +26,7 @@
 
 @font-face {
 	font-family: "Karla";
-	src: url("/public/fonts/karla-regular.woff2") format("woff2");
+	src: url("/fonts/karla-regular.woff2") format("woff2");
 	font-weight: 400;
 	font-style: normal;
 	font-display: swap;
@@ -275,7 +275,7 @@
 		width: 1rem;
 		height: 1rem;
 		margin-right: 0.5rem;
-		background: url("/public/icons/Pokeball.svg") no-repeat center / contain;
+		background: url("/icons/Pokeball.svg") no-repeat center / contain;
 		transform: translateY(1px);
 		transition: transform 0.4s ease;
 	}
@@ -334,7 +334,7 @@
 		height: 1rem;
 		margin-right: 0.5rem;
 		background-color: currentColor;
-		mask-image: url("/public/icons/Pokeball.svg");
+		mask-image: url("/icons/Pokeball.svg");
 		mask-size: contain;
 		mask-repeat: no-repeat;
 		mask-position: center;

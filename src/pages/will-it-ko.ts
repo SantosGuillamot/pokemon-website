@@ -9,8 +9,8 @@ const KoOrNotPage = () => {
 				title: "Will it KO?",
 				description:
 					"A battle scenario appears — attacker, defender, move, and field conditions. Does this attack one-hit KO the defender? One wrong answer ends your streak!",
-				image: "/public/images/pokemon/artwork/8.png",
-				imageBg: "/public/images/pokemon/artwork/9.png",
+				image: "/images/pokemon/artwork/8.png",
+				imageBg: "/images/pokemon/artwork/9.png",
 			})}
 
 			${Section({

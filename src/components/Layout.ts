@@ -23,26 +23,27 @@ const Layout = ({
 				<meta charset="UTF-8" />
 				<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 				<title>${title}</title>
-				<link rel="preload" as="font" href="/public/fonts/dotgothic16.woff2" type="font/woff2" crossorigin />
-				<link rel="preload" as="font" href="/public/fonts/space-mono.woff2" type="font/woff2" crossorigin />
-				<link rel="preload" as="font" href="/public/fonts/karla-regular.woff2" type="font/woff2" crossorigin />
-				<link rel="icon" href="/public/icons/logo.svg" type="image/svg+xml" />
-				<link rel="stylesheet" href="/public/css/app.css" />
+				<link rel="preload" as="font" href="/fonts/dotgothic16.woff2" type="font/woff2" crossorigin />
+				<link rel="preload" as="font" href="/fonts/space-mono.woff2" type="font/woff2" crossorigin />
+				<link rel="preload" as="font" href="/fonts/karla-regular.woff2" type="font/woff2" crossorigin />
+				<link rel="icon" href="/icons/logo.svg" type="image/svg+xml" />
+				<link rel="stylesheet" href="/css/app.css" />
 				<script type="application/json" id="wp-interactivity-data">${raw(serverData)}</script>
 				<script type="importmap" id="wp-importmap">
 					{
 						"imports": {
-							"@wordpress/interactivity": "/public/js/@wordpress/interactivity.js",
-							"@wordpress/interactivity-router": "/public/js/@wordpress/interactivity-router.js",
-							"@pokemon-website/stores/pokemons": "/public/js/stores/pokemons.js",
-							"@pokemon-website/stores/router": "/public/js/stores/router.js",
-							"@pokemon-website/stores/nav": "/public/js/stores/nav.js"
+							"@wordpress/interactivity": "/js/@wordpress/interactivity.js",
+							"@wordpress/interactivity-router": "/js/@wordpress/interactivity-router.js",
+							"@pokemon-website/stores/pokemons": "/js/stores/pokemons.js",
+							"@pokemon-website/stores/router": "/js/stores/router.js",
+							"@pokemon-website/stores/nav": "/js/stores/nav.js"
 						}
 					}
 				</script>
-				<script type="module" src="/public/js/@wordpress/interactivity.js"></script>
-				<script type="module" src="/public/js/stores/router.js" data-wp-router-options='{"loadOnClientNavigation":true}'></script>
-				<script type="module" src="/public/js/stores/nav.js" data-wp-router-options='{"loadOnClientNavigation":true}'></script>
+				<script type="module" src="/js/@wordpress/interactivity.js"></script>
+				<script type="module" src="/js/stores/router.js" data-wp-router-options='{"loadOnClientNavigation":true}'></script>
+				<script type="module" src="/js/stores/nav.js" data-wp-router-options='{"loadOnClientNavigation":true}'></script>
+				<script type="module" src="/js/stores/pokemons.js" data-wp-router-options='{"loadOnClientNavigation":true}'></script>
 				${scripts?.map((src) => html`<script type="module" src="${src}" data-wp-router-options='{"loadOnClientNavigation":true}'></script>`)}
 			</head>
 			<body data-wp-interactive="pokemon" data-wp-router-region="full-page-csn" class="min-h-screen font-body antialiased">

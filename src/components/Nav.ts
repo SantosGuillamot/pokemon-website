@@ -53,7 +53,7 @@ const Nav = () => {
 					class="flex items-center gap-2 font-heading text-h4 uppercase tracking-[0.1em] text-black no-underline"
 				>
 					<img
-						src="/public/icons/logo.svg"
+						src="/icons/logo.svg"
 						alt="Pokemon Website logo"
 						width="40"
 						height="40"

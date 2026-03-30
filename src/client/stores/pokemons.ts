@@ -29,7 +29,10 @@ const { state } = store<PokemonStore>("pokemon", {
 			return context ? context._pokemonId : state._pokemonId;
 		},
 		get pokemon(): Pokemon | undefined {
-			return state.pokemons[state._pokemonId];
+			const dexNumber = Number(state._pokemonId);
+			return Object.values(state.pokemons).find(
+				(p) => p.dexNumber === dexNumber,
+			);
 		},
 		get pokemonTypes(): Type[] {
 			const pokemon = state.pokemon;

@@ -9,8 +9,8 @@ const LearnTypesPage = () => {
 				title: "Learn Types",
 				description:
 					"Master type effectiveness with two different modes. Fill in the full type chart or guess a Pokemon's weaknesses in a streak challenge.",
-				image: "/public/images/pokemon/artwork/8.png",
-				imageBg: "/public/images/pokemon/artwork/9.png",
+				image: "/images/pokemon/artwork/8.png",
+				imageBg: "/images/pokemon/artwork/9.png",
 			})}
 
 			${Section({

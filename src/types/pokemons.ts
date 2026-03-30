@@ -7,8 +7,6 @@ export type LoadPokemonsParams = {
 	ids?: number[];
 	dexNumbers?: number[];
 	inChampions?: boolean;
-	limit?: number;
-	offset?: number;
 };
 
 export function buildPokemonsSearchParams(
@@ -23,12 +21,6 @@ export function buildPokemonsSearchParams(
 	}
 	if (params?.inChampions !== undefined) {
 		searchParams.set("in_champions", String(params.inChampions));
-	}
-	if (params?.limit !== undefined) {
-		searchParams.set("limit", String(params.limit));
-	}
-	if (params?.offset !== undefined) {
-		searchParams.set("offset", String(params.offset));
 	}
 	return searchParams;
 }

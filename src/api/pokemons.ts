@@ -11,13 +11,6 @@ const route = app
 		const dexNumbersParam = c.req.query("dex_numbers");
 		const inChampionsParam = c.req.query("in_champions");
 
-		const rawLimit = Number(c.req.query("limit"));
-		const limit = Number.isNaN(rawLimit)
-			? 20
-			: Math.max(0, Math.min(100, rawLimit));
-		const rawOffset = Number(c.req.query("offset"));
-		const offset = Number.isNaN(rawOffset) ? 0 : Math.max(0, rawOffset);
-
 		const conditions = [];
 
 		if (idsParam) {
@@ -67,8 +60,7 @@ const route = app
 				desc(pokemons.isDefault),
 				asc(pokemons.id),
 			)
-			.limit(limit)
-			.offset(offset);
+;
 
 		return c.json(list);
 	})

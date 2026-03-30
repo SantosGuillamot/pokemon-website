@@ -1,5 +1,5 @@
 import { html } from "hono/html";
-import { Gauge, Crosshair, Grid2x2 } from "lucide-static";
+import { Crosshair, Gauge, Grid2x2 } from "lucide-static";
 import Card from "../components/Card.js";
 import PokemonCard from "../components/PokemonCard.js";
 import Hero from "../sections/Hero.js";
@@ -12,8 +12,8 @@ const DesignSystemPage = () => {
 				title: "Design System",
 				description:
 					"A living reference of all design elements. Use this page to test, compare, and make decisions.",
-				image: "/public/images/pokemon/artwork/8.png",
-				imageBg: "/public/images/pokemon/artwork/9.png",
+				image: "/images/pokemon/artwork/8.png",
+				imageBg: "/images/pokemon/artwork/9.png",
 			})}
 
 			<!-- Typography -->
@@ -250,7 +250,7 @@ const DesignSystemPage = () => {
 						<div class="flex flex-wrap gap-6">
 							${PokemonCard({ id: 25 })}
 							${PokemonCard({ id: 6 })}
-							${PokemonCard({ id: 1 })}
+							${PokemonCard({ id: 3 })}
 						</div>
 					</div>
 				`,
