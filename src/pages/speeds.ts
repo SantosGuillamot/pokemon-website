@@ -1,13 +1,31 @@
+import type { Pokemon } from "@pokemon-website/types/pokemons";
 import { html } from "hono/html";
 import { getServerData } from "iapi-ssr-processor";
 import PokemonCard from "../components/PokemonCard.js";
 import Hero from "../sections/Hero.js";
 import Section from "../sections/Section.js";
 
+function pickTwo(arr: Pokemon[]): [Pokemon, Pokemon] {
+	const i = Math.floor(Math.random() * arr.length);
+	let j: number;
+	do {
+		j = Math.floor(Math.random() * arr.length);
+	} while (j === i);
+	return [arr[i], arr[j]];
+}
+
 const WhosFasterPage = () => {
 	// Get pokemons from server.
 	// Randomize two pokemons on page load.
-	const { state } = getServerData();
+	const { state } = getServerData() as unknown as {
+		state: { pokemon: { pokemons: Record<string, Pokemon> } };
+	};
+	const pokemons = Object.values(state.pokemon.pokemons);
+	const [pokemonA, pokemonB] = pickTwo(pokemons);
+	const randomPokemons = [
+		{ dexNumber: pokemonA.dexNumber, formName: pokemonA.formName },
+		{ dexNumber: pokemonB.dexNumber, formName: pokemonB.formName },
+	];
 	return html`
 		<main>
 			${Hero({
@@ -28,12 +46,12 @@ const WhosFasterPage = () => {
 				children: html`
 					<div
 						data-wp-interactive="pokemon/speeds"
-						data-wp-context='{"randomPokemons":[{"dexNumber":9,"formName":null},{"dexNumber":6,"formName":null}]}'
+						data-wp-context='${JSON.stringify({ randomPokemons })}'
 					>
 						<div>
 							<div
 								data-wp-context='{"pokemonIndex": 0}'
-								data-wp-context---pokemon='pokemon::{"_pokemonDexNumber": "9"}'
+								data-wp-context---pokemon='pokemon::${JSON.stringify({ _pokemonDexNumber: String(pokemonA.dexNumber), _pokemonFormName: pokemonA.formName })}'
 								data-wp-watch="callbacks.updateContext"
 							>
 								${PokemonCard()}
@@ -41,7 +59,7 @@ const WhosFasterPage = () => {
 							<p>VS</p>
 							<div
 								data-wp-context='{"pokemonIndex": 1}'
-								data-wp-context---pokemon='pokemon::{"_pokemonDexNumber": "6"}'
+								data-wp-context---pokemon='pokemon::${JSON.stringify({ _pokemonDexNumber: String(pokemonB.dexNumber), _pokemonFormName: pokemonB.formName })}'
 								data-wp-watch="callbacks.updateContext"
 							>
 								${PokemonCard()}
