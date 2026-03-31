@@ -1,5 +1,5 @@
 import type { PokemonStore } from "@pokemon-website/stores/pokemons";
-import type { Pokemon } from "@pokemon-website/types/pokemons";
+import type { Pokemon, PokemonContext } from "@pokemon-website/types/pokemons";
 import { getContext, store } from "@wordpress/interactivity";
 import "@pokemon-website/stores/pokemons";
 
@@ -8,9 +8,7 @@ type SpeedsPokemon = {
 	formName: string | null;
 };
 
-type PokemonContext = {
-	_pokemonDexNumber: string;
-	_pokemonFormName: string | null;
+type PokemonSpeedsContext = {
 	pokemonIndex: number;
 	randomPokemons: SpeedsPokemon[];
 };
@@ -26,13 +24,12 @@ function pickTwo(arr: Pokemon[]): [Pokemon, Pokemon] {
 	return [arr[i], arr[j]];
 }
 
-store("pokemon", {
+store("pokemon/speeds", {
 	actions: {
 		randomizePokemons() {
-			console.log("Hola");
-			const context = getContext<PokemonContext>("pokemon");
+			const context = getContext<PokemonSpeedsContext>("pokemon/speeds");
 			const pokemons = Object.values(pokemonState.pokemons);
-			if (pokemons.length === 0) return;
+			if (pokemons.length < 2) return;
 			const [pokemonA, pokemonB] = pickTwo(pokemons);
 			context.randomPokemons = [
 				{ dexNumber: pokemonA.dexNumber, formName: pokemonA.formName },
@@ -42,12 +39,13 @@ store("pokemon", {
 	},
 	callbacks: {
 		updateContext() {
-			const context = getContext<PokemonContext>("pokemon");
+			const context = getContext<PokemonSpeedsContext>("pokemon/speeds");
 			if (!context || !context.randomPokemons?.length) return;
-			context._pokemonDexNumber =
-				context.randomPokemons[context.pokemonIndex].dexNumber.toString();
-			context._pokemonFormName =
-				context.randomPokemons[context.pokemonIndex].formName;
+			const pokemon = context.randomPokemons[context.pokemonIndex];
+			if (!pokemon) return;
+			const pokemonContext = getContext<PokemonContext>("pokemon");
+			pokemonContext._pokemonDexNumber = pokemon.dexNumber.toString();
+			pokemonContext._pokemonFormName = pokemon.formName;
 		},
 	},
 });

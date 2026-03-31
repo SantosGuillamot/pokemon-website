@@ -1,11 +1,13 @@
 import { html } from "hono/html";
+import { getServerData } from "iapi-ssr-processor";
 import PokemonCard from "../components/PokemonCard.js";
 import Hero from "../sections/Hero.js";
 import Section from "../sections/Section.js";
 
 const WhosFasterPage = () => {
 	// Get pokemons from server.
-	// set server state with
+	// Randomize two pokemons on page load.
+	const { state } = getServerData();
 	return html`
 		<main>
 			${Hero({
@@ -25,18 +27,21 @@ const WhosFasterPage = () => {
 			${Section({
 				children: html`
 					<div
+						data-wp-interactive="pokemon/speeds"
 						data-wp-context='{"randomPokemons":[{"dexNumber":9,"formName":null},{"dexNumber":6,"formName":null}]}'
 					>
 						<div>
 							<div
-								data-wp-context='{"_pokemonDexNumber": "9","pokemonIndex": "0"}'
+								data-wp-context='{"pokemonIndex": 0}'
+								data-wp-context---pokemon='pokemon::{"_pokemonDexNumber": "9"}'
 								data-wp-watch="callbacks.updateContext"
 							>
 								${PokemonCard()}
 							</div>
 							<p>VS</p>
 							<div
-								data-wp-context='{"_pokemonDexNumber": "6","pokemonIndex": "1"}'
+								data-wp-context='{"pokemonIndex": 1}'
+								data-wp-context---pokemon='pokemon::{"_pokemonDexNumber": "6"}'
 								data-wp-watch="callbacks.updateContext"
 							>
 								${PokemonCard()}

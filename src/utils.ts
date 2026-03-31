@@ -10,7 +10,7 @@ import { getContext, getServerData, setServerState } from "iapi-ssr-processor";
 import api from "./api/index.js";
 
 type PokemonState = {
-	pokemons: Pokemon[];
+	pokemons: Record<string, Pokemon>;
 	_pokemonDexNumber: string;
 	_pokemonFormName: string | null;
 	pokemon: Pokemon | undefined;
@@ -23,7 +23,11 @@ export async function loadPokemons(params?: LoadPokemonsParams): Promise<void> {
 	const url = query ? `/api/pokemons?${query}` : "/api/pokemons";
 	const res = await api.request(url);
 	if (res.ok) {
-		const pokemons = (await res.json()) as Pokemon[];
+		const pokemonsArray = (await res.json()) as Pokemon[];
+		const pokemons: Record<string, Pokemon> = {};
+		for (const p of pokemonsArray) {
+			pokemons[String(p.id)] = p;
+		}
 		const state = setServerState("pokemon", {
 			pokemons,
 			get _pokemonDexNumber(): string {
@@ -50,7 +54,6 @@ export async function loadPokemons(params?: LoadPokemonsParams): Promise<void> {
 				const pokemon = state.pokemon;
 				if (!pokemon) return [];
 				const { config } = getServerData();
-				console.log("Config in pokemonTypes getter:", config);
 				return pokemon.typeIds
 					.map((id) => config.pokemon.types[String(id)])
 					.filter((t): t is Type => t !== undefined);

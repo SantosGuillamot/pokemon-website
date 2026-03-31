@@ -1,15 +1,11 @@
 import type {
 	LoadPokemonsParams,
 	Pokemon,
+	PokemonContext,
 } from "@pokemon-website/types/pokemons";
 import { buildPokemonsSearchParams } from "@pokemon-website/types/pokemons";
 import type { Type } from "@pokemon-website/types/types";
 import { getConfig, getContext, store } from "@wordpress/interactivity";
-
-type PokemonContext = {
-	_pokemonDexNumber: string;
-	_pokemonFormName: string | null;
-};
 
 export type PokemonStore = {
 	state: {
@@ -29,8 +25,6 @@ const { state } = store<PokemonStore>("pokemon", {
 	state: {
 		get _pokemonDexNumber(): string {
 			const context = getContext<PokemonContext>("pokemon");
-			console.log("Context", context);
-
 			return context ? context._pokemonDexNumber : state._pokemonDexNumber;
 		},
 		get _pokemonFormName(): string | null {
@@ -50,7 +44,7 @@ const { state } = store<PokemonStore>("pokemon", {
 			return pokemon.name.replaceAll("-", " ");
 		},
 		get pokemonTypes(): Type[] {
-			const pokemon = state.pokemon;
+			const { pokemon } = state;
 			if (!pokemon) return [];
 			const config = getConfig("pokemon") as {
 				types: Record<string, Type>;
