@@ -9,7 +9,7 @@ import {
 	randomizeSingle,
 	selectSection,
 	syncPokemonContext,
-} from "../quiz-utils";
+} from "@pokemon-website/stores/quiz-utils";
 
 type PokemonSpeedsContext = {
 	correctAnswer: number | "tie" | null;

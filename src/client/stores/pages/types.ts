@@ -15,7 +15,7 @@ import {
 	randomizeSingle,
 	selectSection,
 	syncPokemonContext,
-} from "../quiz-utils";
+} from "@pokemon-website/stores/quiz-utils";
 
 type PokemonTypesContext = {
 	currentSection: string;

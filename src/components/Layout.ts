@@ -36,7 +36,8 @@ const Layout = ({
 							"@wordpress/interactivity-router": "/js/@wordpress/interactivity-router.js",
 							"@pokemon-website/stores/pokemons": "/js/stores/pokemons.js",
 							"@pokemon-website/stores/router": "/js/stores/router.js",
-							"@pokemon-website/stores/nav": "/js/stores/nav.js"
+							"@pokemon-website/stores/nav": "/js/stores/nav.js",
+							"@pokemon-website/stores/quiz-utils": "/js/stores/quiz-utils.js"
 						}
 					}
 				</script>
