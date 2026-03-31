@@ -463,27 +463,39 @@
 			box-shadow 0.1s ease;
 	}
 
-	a.card-squared {
+	a.card-squared,
+	button.card-squared {
 		display: block;
 		text-decoration: none;
 		color: inherit;
 		cursor: pointer;
 	}
 
-	a.card-squared:hover {
+	a.card-squared:hover,
+	button.card-squared:hover {
 		transform: translateY(-2px);
 		background-color: color-mix(in srgb, var(--color-fog) 40%, white);
 	}
 
-	a.card-squared:active {
+	a.card-squared:active,
+	button.card-squared:active {
 		transform: translateY(2px);
 		box-shadow: var(--shadow-card-pressed);
 	}
 
-	a.card-squared:focus-visible {
+	a.card-squared:focus-visible,
+	button.card-squared:focus-visible {
 		outline: 2px solid var(--color-secondary);
 		outline-offset: 2px;
 		border-radius: 2px;
+	}
+
+	.card-squared.card-squared-active {
+		background-color: var(--color-primary);
+	}
+
+	.card-squared.card-squared-active:hover {
+		background-color: rgb(from var(--color-primary) r g b / 0.8);
 	}
 
 	/* Pokemon Card */

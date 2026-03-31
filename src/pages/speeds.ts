@@ -1,6 +1,7 @@
 import type { Pokemon } from "@pokemon-website/types/pokemons";
 import { html } from "hono/html";
 import { getServerData } from "iapi-ssr-processor";
+import Card from "../components/Card.js";
 import PokemonCard from "../components/PokemonCard.js";
 import Hero from "../sections/Hero.js";
 import Section from "../sections/Section.js";
@@ -36,17 +37,44 @@ const WhosFasterPage = () => {
 				imageBg: "/images/pokemon/artwork/9.png",
 			})}
 
-			${Section({
-				children: html`
-					<p>Buttons to select the mode</p>
-				`,
-			})}
+			<div
+				data-wp-interactive="pokemon/speeds"
+				data-wp-context='{"currentSection": "whos-faster"}'
+			>
+				${Section({
+					children: html`
+						<h2 class="text-center mb-8">Learn Speeds</h2>
+						<div class="flex flex-wrap gap-4">
+							${Card({
+								title: "Who's Faster?",
+								description: "Guess which Pokemon has the higher speed stat.",
+								element: "button",
+								className: "flex-1 min-w-48",
+								attrs: `type="button" data-wp-context='${JSON.stringify({ sectionId: "whos-faster" })}' data-wp-class--card-squared-active="state.isCurrentSection" data-wp-on--click="actions.selectSection"`,
+							})}
+							${Card({
+								title: "Speeds Table",
+								description: "Browse all Pokemon sorted by their speed stat.",
+								element: "button",
+								className: "flex-1 min-w-48",
+								attrs: `type="button" data-wp-context='${JSON.stringify({ sectionId: "speeds-table" })}' data-wp-class--card-squared-active="state.isCurrentSection" data-wp-on--click="actions.selectSection"`,
+							})}
+							${Card({
+								title: "Moves Priority",
+								description: "See all moves sorted by their priority bracket.",
+								element: "button",
+								className: "flex-1 min-w-48",
+								attrs: `type="button" data-wp-context='${JSON.stringify({ sectionId: "moves-priority" })}' data-wp-class--card-squared-active="state.isCurrentSection" data-wp-on--click="actions.selectSection"`,
+							})}
+						</div>
+					`,
+				})}
 
-			${Section({
-				children: html`
+				${Section({
+					children: html`
 					<div
-						data-wp-interactive="pokemon/speeds"
-						data-wp-context='${JSON.stringify({ randomPokemons })}'
+						data-wp-context='${JSON.stringify({ sectionId: "whos-faster", randomPokemons })}'
+						data-wp-bind--hidden="!state.isCurrentSection"
 					>
 						<div>
 							<div
@@ -79,7 +107,34 @@ const WhosFasterPage = () => {
 						<p>Current streak: <strong>0</strong></p>
 					</div>
 				`,
-			})}
+				})}
+
+				${Section({
+					children: html`
+					<div
+						data-wp-context='${JSON.stringify({ sectionId: "speeds-table" })}'
+						data-wp-bind--hidden="!state.isCurrentSection"
+					>
+						<p>Table with all pokemons sorted by speed</p>
+					</div>
+				`,
+				})}
+
+				${Section({
+					children: html`
+					<div
+						data-wp-context='${JSON.stringify({ sectionId: "moves-priority" })}'
+						data-wp-bind--hidden="!state.isCurrentSection"
+					>
+						<p>Table with all moves sorted by priority</p>
+					</div>
+				`,
+				})}
+			</div>
+
+			
+
+			
 		</main>
 	`;
 };

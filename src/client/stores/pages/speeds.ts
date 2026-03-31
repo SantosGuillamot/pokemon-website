@@ -9,6 +9,8 @@ type SpeedsPokemon = {
 };
 
 type PokemonSpeedsContext = {
+	sectionId: string;
+	currentSection: string;
 	pokemonIndex: number;
 	randomPokemons: SpeedsPokemon[];
 };
@@ -25,7 +27,17 @@ function pickTwo(arr: Pokemon[]): [Pokemon, Pokemon] {
 }
 
 store("pokemon/speeds", {
+	state: {
+		get isCurrentSection() {
+			const context = getContext<PokemonSpeedsContext>("pokemon/speeds");
+			return context.currentSection === context.sectionId;
+		},
+	},
 	actions: {
+		selectSection() {
+			const ctx = getContext<PokemonSpeedsContext>("pokemon/speeds");
+			ctx.currentSection = ctx.sectionId;
+		},
 		randomizePokemons() {
 			const context = getContext<PokemonSpeedsContext>("pokemon/speeds");
 			const pokemons = Object.values(pokemonState.pokemons);
