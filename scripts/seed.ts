@@ -50,7 +50,7 @@ async function seedTypes() {
 
 	// Filter out non-battle types
 	const mainTypes = data.results.filter(
-		(t) => t.name !== "unknown" && t.name !== "shadow",
+		(t) => t.name !== "unknown" && t.name !== "shadow" && t.name !== "stellar",
 	);
 
 	// Insert all types with name + color
