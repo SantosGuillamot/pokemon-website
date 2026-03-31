@@ -3,8 +3,8 @@ import type { Type } from "@pokemon-website/types/types";
 import { html } from "hono/html";
 import { getServerData } from "iapi-ssr-processor";
 import Hero from "../components/Hero.js";
-import QuizModeCard from "../components/QuizModeCard.js";
 import PokemonCard from "../components/PokemonCard.js";
+import QuizModeCard from "../components/QuizModeCard.js";
 import QuizSection from "../components/QuizSection.js";
 import Section from "../components/Section.js";
 import { pickRandomPokemon } from "../utils/array.js";
@@ -72,14 +72,14 @@ const LearnTypesPage = () => {
 							${QuizModeCard({
 								title: "Pokemon Weaknesses",
 								description:
-									"A random Pokemon appears with its types. Guess all its weaknesses to keep your streak alive.",
+									"Given a random Pokemon, guess all its weaknesses.",
 								sectionId: "pokemon-weaknesses",
 								ariaPressed: true,
 							})}
 							${QuizModeCard({
 								title: "Fill the Type Chart",
 								description:
-									"An empty type effectiveness table appears. Fill in each cell and see your score at the end.",
+									"Fill an empty type effectiveness table cell by cell.",
 								sectionId: "fill-chart",
 								ariaPressed: true,
 							})}
