@@ -44,26 +44,26 @@ const WhosFasterPage = () => {
 				${Section({
 					children: html`
 						<h2 class="text-center mb-8">Learn Speeds</h2>
-						<div class="flex flex-wrap gap-4">
+						<div class="flex flex-wrap justify-center gap-4">
 							${Card({
 								title: "Who's Faster?",
 								description: "Guess which Pokemon has the higher speed stat.",
 								element: "button",
-								className: "flex-1 min-w-48",
+								className: "max-w-sm w-full sm:max-w-none sm:flex-1",
 								attrs: `type="button" data-wp-context='${JSON.stringify({ sectionId: "whos-faster" })}' data-wp-class--card-squared-active="state.isCurrentSection" data-wp-on--click="actions.selectSection"`,
 							})}
 							${Card({
 								title: "Speeds Table",
 								description: "Browse all Pokemon sorted by their speed stat.",
 								element: "button",
-								className: "flex-1 min-w-48",
+								className: "max-w-sm w-full sm:max-w-none sm:flex-1",
 								attrs: `type="button" data-wp-context='${JSON.stringify({ sectionId: "speeds-table" })}' data-wp-class--card-squared-active="state.isCurrentSection" data-wp-on--click="actions.selectSection"`,
 							})}
 							${Card({
 								title: "Moves Priority",
 								description: "See all moves sorted by their priority bracket.",
 								element: "button",
-								className: "flex-1 min-w-48",
+								className: "max-w-sm w-full sm:max-w-none sm:flex-1",
 								attrs: `type="button" data-wp-context='${JSON.stringify({ sectionId: "moves-priority" })}' data-wp-class--card-squared-active="state.isCurrentSection" data-wp-on--click="actions.selectSection"`,
 							})}
 						</div>
@@ -71,11 +71,8 @@ const WhosFasterPage = () => {
 				})}
 
 				${Section({
+					attrs: `data-wp-context='${JSON.stringify({ sectionId: "whos-faster", randomPokemons })}' data-wp-bind--hidden="!state.isCurrentSection"`,
 					children: html`
-					<div
-						data-wp-context='${JSON.stringify({ sectionId: "whos-faster", randomPokemons })}'
-						data-wp-bind--hidden="!state.isCurrentSection"
-					>
 						<div>
 							<div
 								data-wp-context='{"pokemonIndex": 0}'
@@ -105,29 +102,20 @@ const WhosFasterPage = () => {
 							</button>
 						</div>
 						<p>Current streak: <strong>0</strong></p>
-					</div>
 				`,
 				})}
 
 				${Section({
+					attrs: `data-wp-context='${JSON.stringify({ sectionId: "speeds-table" })}' data-wp-bind--hidden="!state.isCurrentSection"`,
 					children: html`
-					<div
-						data-wp-context='${JSON.stringify({ sectionId: "speeds-table" })}'
-						data-wp-bind--hidden="!state.isCurrentSection"
-					>
 						<p>Table with all pokemons sorted by speed</p>
-					</div>
 				`,
 				})}
 
 				${Section({
+					attrs: `data-wp-context='${JSON.stringify({ sectionId: "moves-priority" })}' data-wp-bind--hidden="!state.isCurrentSection"`,
 					children: html`
-					<div
-						data-wp-context='${JSON.stringify({ sectionId: "moves-priority" })}'
-						data-wp-bind--hidden="!state.isCurrentSection"
-					>
 						<p>Table with all moves sorted by priority</p>
-					</div>
 				`,
 				})}
 			</div>
