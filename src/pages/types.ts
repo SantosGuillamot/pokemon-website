@@ -96,7 +96,7 @@ const LearnTypesPage = () => {
 					watchCallback: "callbacks.storeWeaknessAnswer",
 					restartAction: "actions.restartWeakness",
 					children: html`
-					<div class="flex flex-col sm:flex-row items-start justify-center gap-24 py-10 px-6">
+					<div class="flex flex-col lg:flex-row items-center justify-center gap-12 py-10 px-6">
 						<!-- Left: Pokemon Card -->
 						<div
 							class="w-full max-w-[25rem] mx-auto sm:mx-0 sm:flex-shrink-0"
@@ -107,13 +107,8 @@ const LearnTypesPage = () => {
 						</div>
 						<!-- Right: Type list + Guess button -->
 						<div class="flex flex-col items-center gap-6">
-							<div class="flex flex-col sm:flex-row gap-12">
-								<div class="w-52 flex flex-col gap-1">
-									${allTypes.slice(0, 9).map((type) => TypeRow(type))}
-								</div>
-								<div class="w-52 flex flex-col gap-1">
-									${allTypes.slice(9).map((type) => TypeRow(type))}
-								</div>
+							<div class="grid grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-1">
+								${allTypes.map((type) => TypeRow(type))}
 							</div>
 							<div class="flex items-center gap-4">
 								<button type="button" class="btn btn-primary" data-wp-on--click="actions.submitWeaknessGuess" data-wp-bind--disabled="!state.isWaiting">Guess</button>
