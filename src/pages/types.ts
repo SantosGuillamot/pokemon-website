@@ -1,8 +1,56 @@
+import type { Pokemon } from "@pokemon-website/types/pokemons";
+import type { Type } from "@pokemon-website/types/types";
 import { html } from "hono/html";
+import { getServerData } from "iapi-ssr-processor";
 import Hero from "../components/Hero.js";
+import QuizModeCard from "../components/QuizModeCard.js";
+import PokemonCard from "../components/PokemonCard.js";
+import QuizSection from "../components/QuizSection.js";
 import Section from "../components/Section.js";
+import { pickRandomPokemon } from "../utils/array.js";
+import { defaultQuizContext } from "../utils/quiz.js";
+
+const TypeRow = (type: Type) => html`
+	<div
+		class="type-guess-row"
+		data-wp-context='${JSON.stringify({ typeId: type.id })}'
+	>
+		<img src="${type.imageSmall}" alt="${type.name}" class="type-guess-icon" width="32" height="32" />
+		<span class="type-guess-name">${type.name}</span>
+		<select
+			class="type-guess-select"
+			data-wp-on--change="actions.setTypeGuess"
+			data-wp-bind--value="state.typeGuessValue"
+			data-wp-bind--disabled="!state.isWaiting"
+			data-wp-class--type-result-correct="state.isTypeResultCorrect"
+			data-wp-class--type-result-incorrect="state.isTypeResultIncorrect"
+		>
+			<option value="1">—</option>
+			<option value="0">0</option>
+			<option value="0.25">¼</option>
+			<option value="0.5">½</option>
+			<option value="2">2</option>
+			<option value="4">4</option>
+		</select>
+		<span
+			class="type-correct-label"
+			data-wp-text="state.typeCorrectLabel"
+			data-wp-bind--hidden="state.isWaiting"
+		></span>
+	</div>
+`;
 
 const LearnTypesPage = () => {
+	const { state, config } = getServerData() as unknown as {
+		state: { pokemon: { pokemons: Record<string, Pokemon> } };
+		config: { pokemon: { types: Record<string, Type> } };
+	};
+	const pokemons = Object.values(state.pokemon.pokemons);
+	const allTypes = Object.values(config.pokemon.types).sort(
+		(a, b) => a.id - b.id,
+	);
+	const initialPokemon = pickRandomPokemon(pokemons);
+
 	return html`
 		<main>
 			${Hero({
@@ -13,96 +61,79 @@ const LearnTypesPage = () => {
 				imageBg: "/images/pokemon/artwork/9.png",
 			})}
 
-			${Section({
-				children: html`
-					<div class="grid gap-6 sm:grid-cols-2">
-						<!-- Mode A -->
-						<div class="rounded-lg border-2 border-fog bg-white p-6 space-y-4">
-							<h2>Fill the Type Chart</h2>
-							<p class="text-p text-darker-gray">
-								An empty type effectiveness table appears. Fill in each
-								cell — super effective, not very effective, no effect, or
-								neutral. See your score at the end!
-							</p>
-
-							<!-- Placeholder mini chart -->
-							<div class="overflow-x-auto">
-								<table class="w-full text-p-sm">
-									<thead>
-										<tr>
-											<th class="p-2 text-left"></th>
-											<th class="p-2">Normal</th>
-											<th class="p-2">Fire</th>
-											<th class="p-2">Water</th>
-											<th class="p-2">Grass</th>
-										</tr>
-									</thead>
-									<tbody>
-										<tr>
-											<td class="p-2 font-bold">Normal</td>
-											<td class="p-2 text-center text-darker-gray">—</td>
-											<td class="p-2 text-center text-darker-gray">—</td>
-											<td class="p-2 text-center text-darker-gray">—</td>
-											<td class="p-2 text-center text-darker-gray">—</td>
-										</tr>
-										<tr>
-											<td class="p-2 font-bold">Fire</td>
-											<td class="p-2 text-center text-darker-gray">—</td>
-											<td class="p-2 text-center text-darker-gray">—</td>
-											<td class="p-2 text-center text-darker-gray">—</td>
-											<td class="p-2 text-center text-darker-gray">—</td>
-										</tr>
-										<tr>
-											<td class="p-2 font-bold">Water</td>
-											<td class="p-2 text-center text-darker-gray">—</td>
-											<td class="p-2 text-center text-darker-gray">—</td>
-											<td class="p-2 text-center text-darker-gray">—</td>
-											<td class="p-2 text-center text-darker-gray">—</td>
-										</tr>
-										<tr>
-											<td class="p-2 font-bold">Grass</td>
-											<td class="p-2 text-center text-darker-gray">—</td>
-											<td class="p-2 text-center text-darker-gray">—</td>
-											<td class="p-2 text-center text-darker-gray">—</td>
-											<td class="p-2 text-center text-darker-gray">—</td>
-										</tr>
-									</tbody>
-								</table>
-							</div>
-
-							<button type="button" class="btn btn-primary" disabled>
-								Start Quiz
-							</button>
+			<div
+				data-wp-interactive="pokemon/types"
+				data-wp-context='{"currentSection": null}'
+			>
+				${Section({
+					children: html`
+						<h2 class="text-center mb-8">Learn Types</h2>
+						<div class="flex flex-wrap justify-center gap-4">
+							${QuizModeCard({
+								title: "Pokemon Weaknesses",
+								description:
+									"A random Pokemon appears with its types. Guess all its weaknesses to keep your streak alive.",
+								sectionId: "pokemon-weaknesses",
+								ariaPressed: true,
+							})}
+							${QuizModeCard({
+								title: "Fill the Type Chart",
+								description:
+									"An empty type effectiveness table appears. Fill in each cell and see your score at the end.",
+								sectionId: "fill-chart",
+								ariaPressed: true,
+							})}
 						</div>
+					`,
+				})}
 
-						<!-- Mode B -->
-						<div class="rounded-lg border-2 border-fog bg-white p-6 space-y-4">
-							<h2>Guess the Weaknesses</h2>
-							<p class="text-p text-darker-gray">
-								A Pokemon appears with its type(s). Guess what types it
-								is weak to. One wrong answer ends your streak!
-							</p>
-
-							<!-- Placeholder Pokemon -->
-							<div class="flex flex-col items-center gap-2">
-								<div class="flex h-32 w-32 items-center justify-center rounded-lg bg-fog">
-									<span class="text-darker-gray text-p-sm">Image</span>
+				${QuizSection({
+					sectionId: "pokemon-weaknesses",
+					quizContext: {
+						...defaultQuizContext(initialPokemon),
+						guesses: {},
+					},
+					watchCallback: "callbacks.storeWeaknessAnswer",
+					restartAction: "actions.restartWeakness",
+					children: html`
+					<div class="flex flex-col sm:flex-row items-start justify-center gap-24 py-10 px-6">
+						<!-- Left: Pokemon Card -->
+						<div
+							class="w-full max-w-[25rem] mx-auto sm:mx-0 sm:flex-shrink-0"
+							data-wp-context---pokemon='pokemon::${JSON.stringify({ _pokemonDexNumber: String(initialPokemon.dexNumber), _pokemonFormName: initialPokemon.formName })}'
+							data-wp-watch="callbacks.updateWeaknessContext"
+						>
+							${PokemonCard()}
+						</div>
+						<!-- Right: Type list + Guess button -->
+						<div class="flex flex-col items-center gap-6">
+							<div class="flex flex-col sm:flex-row gap-12">
+								<div class="w-52 flex flex-col gap-1">
+									${allTypes.slice(0, 9).map((type) => TypeRow(type))}
 								</div>
-								<p class="font-heading text-h4 uppercase">Charizard</p>
-								<p class="text-p-sm text-darker-gray">Fire / Flying</p>
+								<div class="w-52 flex flex-col gap-1">
+									${allTypes.slice(9).map((type) => TypeRow(type))}
+								</div>
 							</div>
-
-							<p class="text-p text-darker-gray">
-								Weak to: <strong>???</strong>
-							</p>
-
-							<button type="button" class="btn btn-primary" disabled>
-								Start Streak
-							</button>
+							<div class="flex items-center gap-4">
+								<button type="button" class="btn btn-primary" data-wp-on--click="actions.submitWeaknessGuess" data-wp-bind--disabled="!state.isWaiting">Guess</button>
+								<span class="font-heading text-p-sm text-darker-gray" data-wp-bind--hidden="state.isWaiting"><span data-wp-text="state.correctCount">0</span>/18</span>
+							</div>
 						</div>
 					</div>
+					`,
+				})}
+
+				${Section({
+					class: "section-diagonal py-32",
+					attrs: `data-wp-context='${JSON.stringify({ sectionId: "fill-chart" })}' data-wp-bind--hidden="!state.isCurrentSection"`,
+					children: html`
+					<div class="rounded-lg p-6 quiz-bg" aria-label="Fill the Type Chart">
+						<p>Fill the type chart quiz coming soon</p>
+					</div>
 				`,
-			})}
+				})}
+			</div>
 		</main>
 	`;
 };

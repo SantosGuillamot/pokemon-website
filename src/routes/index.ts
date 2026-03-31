@@ -18,7 +18,12 @@ const app = new Hono();
 
 const pages = [
 	{ path: "/", title: undefined, render: HomePage },
-	{ path: "/types", title: "Types", render: TypesPage },
+	{
+		path: "/types",
+		title: "Types",
+		render: TypesPage,
+		scripts: ["/js/stores/pages/types.js"],
+	},
 	{
 		path: "/speeds",
 		title: "Speeds",
@@ -52,6 +57,7 @@ async function loadTypes() {
 		const typesList = await db.select().from(types).orderBy(asc(types.id));
 		const typesMap: Record<string, (typeof typesList)[number]> = {};
 		for (const type of typesList) {
+			if (type.name === "stellar") continue;
 			typesMap[String(type.id)] = type;
 		}
 		typesConfig = typesMap;

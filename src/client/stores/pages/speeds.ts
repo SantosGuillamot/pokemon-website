@@ -1,12 +1,15 @@
 import type { PokemonStore } from "@pokemon-website/stores/pokemons";
-import type { PokemonContext } from "@pokemon-website/types/pokemons";
 import { getContext, getElement, store } from "@wordpress/interactivity";
 import "@pokemon-website/stores/pokemons";
-
-type SpeedsPokemon = {
-	dexNumber: number;
-	formName: string | null;
-};
+import {
+	isCurrentSection,
+	isIncorrect,
+	isWaiting,
+	type QuizPokemon,
+	randomizeSingle,
+	selectSection,
+	syncPokemonContext,
+} from "../quiz-utils";
 
 type PokemonSpeedsContext = {
 	correctAnswer: number | "tie" | null;
@@ -14,33 +17,30 @@ type PokemonSpeedsContext = {
 	streak: number;
 	quizState: "waiting" | "revealing" | "correct" | "incorrect";
 	pokemonIndex: number;
-	randomPokemons: SpeedsPokemon[];
+	randomPokemons: QuizPokemon[];
 	sectionId: string;
 	animationProgress: number;
 	guessedIndex: number | null;
 	finalStreak: number;
 	// Guess Speed
-	randomPokemon: SpeedsPokemon | null;
+	randomPokemon: QuizPokemon | null;
 	speedGuess: string;
 	correctSpeed: number | null;
 };
 
 const { state: pokemonState } = store<PokemonStore>("pokemon", {});
 
-function toSpeedsPokemon(p: { dexNumber: number; formName: string | null }): SpeedsPokemon {
+function toQuizPokemon(p: {
+	dexNumber: number;
+	formName: string | null;
+}): QuizPokemon {
 	return { dexNumber: p.dexNumber, formName: p.formName };
 }
 
 function randomize(context: PokemonSpeedsContext) {
 	const pokemons = pokemonState.getRandomPokemons(2);
 	if (pokemons.length < 2) return;
-	context.randomPokemons = pokemons.map(toSpeedsPokemon);
-}
-
-function randomizeSingle(context: PokemonSpeedsContext) {
-	const pokemons = pokemonState.getRandomPokemons(1);
-	if (pokemons.length < 1) return;
-	context.randomPokemon = toSpeedsPokemon(pokemons[0]);
+	context.randomPokemons = pokemons.map(toQuizPokemon);
 }
 
 function resetQuizState(context: PokemonSpeedsContext) {
@@ -49,7 +49,10 @@ function resetQuizState(context: PokemonSpeedsContext) {
 	context.animationProgress = 0;
 }
 
-function getDisplayedSpeed(pokemonData: SpeedsPokemon | null | undefined, animationProgress: number): number {
+function getDisplayedSpeed(
+	pokemonData: QuizPokemon | null | undefined,
+	animationProgress: number,
+): number {
 	if (!pokemonData) return 0;
 	const pokemon = pokemonState.getPokemon(
 		pokemonData.dexNumber,
@@ -57,12 +60,6 @@ function getDisplayedSpeed(pokemonData: SpeedsPokemon | null | undefined, animat
 	);
 	if (!pokemon) return 0;
 	return Math.round(animationProgress * pokemon.speed);
-}
-
-function syncPokemonContext(data: SpeedsPokemon) {
-	const pokemonContext = getContext<PokemonContext>("pokemon");
-	pokemonContext._pokemonDexNumber = data.dexNumber.toString();
-	pokemonContext._pokemonFormName = data.formName;
 }
 
 function revealAnswer(
@@ -127,16 +124,13 @@ function revealAnswer(
 store("pokemon/speeds", {
 	state: {
 		get isCurrentSection() {
-			const context = getContext<PokemonSpeedsContext>("pokemon/speeds");
-			return context.currentSection === context.sectionId;
+			return isCurrentSection("pokemon/speeds");
 		},
 		get isWaiting() {
-			const context = getContext<PokemonSpeedsContext>("pokemon/speeds");
-			return context.quizState === "waiting";
+			return isWaiting("pokemon/speeds");
 		},
 		get isIncorrect() {
-			const context = getContext<PokemonSpeedsContext>("pokemon/speeds");
-			return context.quizState === "incorrect";
+			return isIncorrect("pokemon/speeds");
 		},
 		get isGuessedCorrect() {
 			const context = getContext<PokemonSpeedsContext>("pokemon/speeds");
@@ -217,8 +211,7 @@ store("pokemon/speeds", {
 			context.speedGuess = "";
 		},
 		selectSection() {
-			const ctx = getContext<PokemonSpeedsContext>("pokemon/speeds");
-			ctx.currentSection = ctx.sectionId;
+			selectSection("pokemon/speeds");
 		},
 	},
 	callbacks: {

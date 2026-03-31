@@ -1,28 +1,13 @@
 import type { Pokemon } from "@pokemon-website/types/pokemons";
 import { html } from "hono/html";
 import { getServerData } from "iapi-ssr-processor";
-import Card from "../components/Card.js";
 import Hero from "../components/Hero.js";
+import QuizModeCard from "../components/QuizModeCard.js";
 import PokemonCard from "../components/PokemonCard.js";
+import QuizSection from "../components/QuizSection.js";
 import Section from "../components/Section.js";
-import { pickTwo } from "../utils/array.js";
-
-const SpeedQuizStatus = (restartAction: string) => html`
-	<div class="speed-quiz-status font-heading-retro text-h3" aria-live="assertive">
-		<p data-wp-bind--hidden="state.isIncorrect">
-			Streak: <span data-wp-text="context.streak">0</span>
-		</p>
-		<div data-wp-bind--hidden="!state.isIncorrect" class="flex flex-wrap items-center gap-4 sm:gap-12">
-			<p class="text-primary">GAME OVER</p>
-			<p>Final streak: <span data-wp-text="context.finalStreak">0</span></p>
-			<button
-				type="button"
-				class="btn btn-primary"
-				data-wp-on--click="${restartAction}"
-			>Try again</button>
-		</div>
-	</div>
-`;
+import { pickRandomPokemon, pickTwo } from "../utils/array.js";
+import { defaultQuizContext } from "../utils/quiz.js";
 
 const SpeedRevealOverlay = (
 	textBinding: string,
@@ -78,12 +63,7 @@ const WhosFasterPage = () => {
 		{ dexNumber: pokemonA.dexNumber, formName: pokemonA.formName },
 		{ dexNumber: pokemonB.dexNumber, formName: pokemonB.formName },
 	];
-	const guessSpeedPokemon =
-		pokemons[Math.floor(Math.random() * pokemons.length)];
-	const guessSpeedInitial = {
-		dexNumber: guessSpeedPokemon.dexNumber,
-		formName: guessSpeedPokemon.formName,
-	};
+	const guessSpeedInitial = pickRandomPokemon(pokemons);
 	return html`
 		<main>
 			${Hero({
@@ -102,107 +82,92 @@ const WhosFasterPage = () => {
 					children: html`
 						<h2 class="text-center mb-8">Learn Speeds</h2>
 						<div class="flex flex-wrap justify-center gap-4">
-							${Card({
+							${QuizModeCard({
 								title: "Who's Faster?",
 								description: "Guess which Pokemon has the higher speed stat.",
-								element: "button",
-								className: "max-w-sm w-full sm:max-w-none sm:flex-1",
-								attrs: `type="button" data-wp-context='${JSON.stringify({ sectionId: "whos-faster" })}' data-wp-class--card-squared-active="state.isCurrentSection" data-wp-on--click="actions.selectSection"`,
+								sectionId: "whos-faster",
 							})}
-							${Card({
+							${QuizModeCard({
 								title: "Guess Speed",
 								description: "Guess the base speed of a Pokemon.",
-								element: "button",
-								className: "max-w-sm w-full sm:max-w-none sm:flex-1",
-								attrs: `type="button" data-wp-context='${JSON.stringify({ sectionId: "guess-speed" })}' data-wp-class--card-squared-active="state.isCurrentSection" data-wp-on--click="actions.selectSection"`,
+								sectionId: "guess-speed",
 							})}
-							${Card({
+							${QuizModeCard({
 								title: "Speeds Table",
 								description: "Browse all Pokemon sorted by their speed stat.",
-								element: "button",
-								className: "max-w-sm w-full sm:max-w-none sm:flex-1",
-								attrs: `type="button" data-wp-context='${JSON.stringify({ sectionId: "speeds-table" })}' data-wp-class--card-squared-active="state.isCurrentSection" data-wp-on--click="actions.selectSection"`,
+								sectionId: "speeds-table",
 							})}
 						</div>
 					`,
 				})}
 
-				${Section({
-					class: "section-diagonal py-32",
-					attrs: `data-wp-context='${JSON.stringify({ sectionId: "whos-faster", randomPokemons })}' data-wp-bind--hidden="!state.isCurrentSection"`,
+				${QuizSection({
+					sectionId: "whos-faster",
+					sectionContext: { randomPokemons },
+					quizContext: { ...defaultQuizContext(), randomPokemons, animationProgress: 0, guessedIndex: null },
+					watchCallback: "callbacks.storeAnswer",
+					restartAction: "actions.restart",
 					children: html`
-					<div
-						class="speed-quiz speed-quiz-bg overflow-hidden"
-						data-wp-context='${JSON.stringify({ randomPokemons, streak: 0, quizState: "waiting", animationProgress: 0, guessedIndex: null, finalStreak: 0 })}'
-						data-wp-watch="callbacks.storeAnswer"
-					>
-						${SpeedQuizStatus("actions.restart")}
-						<h3 class="sr-only">Which Pokemon is faster?</h3>
-						<div class="flex flex-col sm:flex-row items-center justify-center gap-4 py-10 px-6">
-							${SpeedPokemonCard(0, pokemonA)}
-							<p class="text-h1 font-heading-retro px-12" aria-hidden="true">VS</p>
-							${SpeedPokemonCard(1, pokemonB)}
-						</div>
+					<h3 class="sr-only">Which Pokemon is faster?</h3>
+					<div class="flex flex-col sm:flex-row items-center justify-center gap-4 py-10 px-6">
+						${SpeedPokemonCard(0, pokemonA)}
+						<p class="text-h1 font-heading-retro px-12" aria-hidden="true">VS</p>
+						${SpeedPokemonCard(1, pokemonB)}
 					</div>
-				`,
+					`,
 				})}
 
-				${Section({
-					class: "section-diagonal py-32",
-					attrs: `data-wp-context='${JSON.stringify({ sectionId: "guess-speed" })}' data-wp-bind--hidden="!state.isCurrentSection"`,
+				${QuizSection({
+					sectionId: "guess-speed",
+					quizContext: { ...defaultQuizContext(guessSpeedInitial), animationProgress: 0, speedGuess: "", correctSpeed: null },
+					watchCallback: "callbacks.storeGuessSpeedAnswer",
+					restartAction: "actions.restartGuessSpeed",
 					children: html`
-					<div
-						class="speed-quiz speed-quiz-bg overflow-hidden"
-						data-wp-context='${JSON.stringify({ randomPokemon: guessSpeedInitial, streak: 0, quizState: "waiting", animationProgress: 0, speedGuess: "", correctSpeed: null, finalStreak: 0 })}'
-						data-wp-watch="callbacks.storeGuessSpeedAnswer"
-					>
-						${SpeedQuizStatus("actions.restartGuessSpeed")}
-						<h3 class="sr-only">Guess the speed</h3>
-						<div class="flex flex-col items-center justify-center gap-6 py-10 px-6">
-							<div
-								class="w-full max-w-[25rem] relative"
-								data-wp-context---pokemon='pokemon::${JSON.stringify({ _pokemonDexNumber: String(guessSpeedPokemon.dexNumber), _pokemonFormName: guessSpeedPokemon.formName })}'
-								data-wp-watch="callbacks.updateGuessSpeedContext"
-							>
-								${SpeedRevealOverlay(
-									"state.displayedGuessSpeed",
-									"state.isCorrect",
-									"state.isIncorrect",
-								)}
-								${PokemonCard()}
-							</div>
-							<form
-								class="flex items-center gap-4"
-								data-wp-on--submit="actions.submitGuessSpeed"
-							>
-								<label class="sr-only" for="speed-guess-input">Enter speed guess</label>
-								<input
-									id="speed-guess-input"
-									type="number"
-									placeholder="Speed?"
-									min="0"
-									max="255"
-									class="w-24 px-4 py-[12px] text-center font-heading text-paragraph leading-paragraph border border-black [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-									data-wp-on--input="actions.updateSpeedGuess"
-									data-wp-bind--value="context.speedGuess"
-									data-wp-bind--disabled="!state.isWaiting"
-								/>
-								<button
-									type="submit"
-									class="btn btn-primary"
-									data-wp-bind--disabled="!state.isWaiting"
-								>Guess</button>
-							</form>
+					<h3 class="sr-only">Guess the speed</h3>
+					<div class="flex flex-col items-center justify-center gap-6 py-10 px-6">
+						<div
+							class="w-full max-w-[25rem] relative"
+							data-wp-context---pokemon='pokemon::${JSON.stringify({ _pokemonDexNumber: String(guessSpeedInitial.dexNumber), _pokemonFormName: guessSpeedInitial.formName })}'
+							data-wp-watch="callbacks.updateGuessSpeedContext"
+						>
+							${SpeedRevealOverlay(
+								"state.displayedGuessSpeed",
+								"state.isCorrect",
+								"state.isIncorrect",
+							)}
+							${PokemonCard()}
 						</div>
+						<form
+							class="flex items-center gap-4"
+							data-wp-on--submit="actions.submitGuessSpeed"
+						>
+							<label class="sr-only" for="speed-guess-input">Enter speed guess</label>
+							<input
+								id="speed-guess-input"
+								type="number"
+								placeholder="Speed?"
+								min="0"
+								max="255"
+								class="w-24 px-4 py-[12px] text-center font-heading text-paragraph leading-paragraph border border-black [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+								data-wp-on--input="actions.updateSpeedGuess"
+								data-wp-bind--value="context.speedGuess"
+								data-wp-bind--disabled="!state.isWaiting"
+							/>
+							<button
+								type="submit"
+								class="btn btn-primary"
+								data-wp-bind--disabled="!state.isWaiting"
+							>Guess</button>
+						</form>
 					</div>
-				`,
+					`,
 				})}
 
 				${Section({
 					class: "section-diagonal py-32",
 					attrs: `data-wp-context='${JSON.stringify({ sectionId: "speeds-table" })}' data-wp-bind--hidden="!state.isCurrentSection"`,
 					children: html`
-					<div class="rounded-lg p-6 speed-quiz-bg">
+					<div class="rounded-lg p-6 quiz-bg">
 						<p>Table with all pokemons sorted by speed</p>
 					</div>
 				`,
@@ -212,13 +177,12 @@ const WhosFasterPage = () => {
 					class: "section-diagonal py-32",
 					attrs: `data-wp-context='${JSON.stringify({ sectionId: "moves-priority" })}' data-wp-bind--hidden="!state.isCurrentSection"`,
 					children: html`
-					<div class="rounded-lg p-6 speed-quiz-bg">
+					<div class="rounded-lg p-6 quiz-bg">
 						<p>Table with all moves sorted by priority</p>
 					</div>
 				`,
 				})}
 			</div>
-
 
 
 
