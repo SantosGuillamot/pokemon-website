@@ -18,7 +18,7 @@ function pickTwo(arr: Pokemon[]): [Pokemon, Pokemon] {
 const SpeedPokemonCard = (index: number, pokemon: Pokemon) => html`
 	<button
 		type="button"
-		class="w-full sm:flex-1 cursor-pointer disabled:cursor-default relative"
+		class="w-full max-w-[25rem] sm:flex-1 cursor-pointer disabled:cursor-default relative"
 		aria-label="Select this Pokemon as faster"
 		data-wp-context='{"pokemonIndex": ${index}}'
 		data-wp-context---pokemon='pokemon::${JSON.stringify({ _pokemonDexNumber: String(pokemon.dexNumber), _pokemonFormName: pokemon.formName })}'
@@ -34,7 +34,7 @@ const SpeedPokemonCard = (index: number, pokemon: Pokemon) => html`
 			data-wp-bind--hidden="state.isWaiting"
 		>
 			<span
-				class="text-h1 font-heading-retro flex items-center justify-center w-28 h-28 rounded-full bg-black text-primary"
+				class="text-h1 font-heading-retro flex items-center justify-center w-28 h-28 rounded-full bg-black text-white"
 				data-wp-text="state.displayedSpeed"
 				data-wp-class--speed-correct="state.isGuessedCorrect"
 				data-wp-class--speed-incorrect="state.isGuessedIncorrect"
@@ -104,31 +104,29 @@ const WhosFasterPage = () => {
 					attrs: `data-wp-context='${JSON.stringify({ sectionId: "whos-faster", randomPokemons })}' data-wp-bind--hidden="!state.isCurrentSection"`,
 					children: html`
 					<div
-						class="speed-quiz rounded-lg py-10 px-6 flex flex-col items-center gap-6"
+						class="speed-quiz overflow-hidden"
 						style="background-color: rgb(from var(--color-fog) r g b / 0.6)"
 						data-wp-context='${JSON.stringify({ randomPokemons, streak: 0, quizState: "waiting", animationProgress: 0, guessedIndex: null, finalStreak: 0 })}'
 						data-wp-watch="callbacks.storeAnswer"
 					>
-						<h3>Who's Faster?</h3>
-						<div class="flex flex-col sm:flex-row items-center justify-center gap-4">
-							${SpeedPokemonCard(0, pokemonA)}
-							<p class="text-h1 font-heading-retro" aria-hidden="true">VS</p>
-							<span class="sr-only">versus</span>
-							${SpeedPokemonCard(1, pokemonB)}
-						</div>
-						<div class="flex flex-col items-center gap-2">
+						<div class="speed-quiz-status font-heading-retro text-h3">
 							<p data-wp-bind--hidden="state.isIncorrect">
-								Current streak: <strong data-wp-text="context.streak">0</strong>
+								Streak: <span data-wp-text="context.streak">0</span>
 							</p>
-							<p data-wp-bind--hidden="!state.isIncorrect" class="text-error font-bold">
-								Final streak: <strong data-wp-text="context.finalStreak">0</strong>
-							</p>
-							<button
-								type="button"
-								class="btn btn-primary"
-								data-wp-bind--hidden="!state.isIncorrect"
-								data-wp-on--click="actions.restart"
-							>Restart</button>
+							<div data-wp-bind--hidden="!state.isIncorrect" class="flex items-center gap-12">
+								<p class="text-primary">GAME OVER</p>
+								<p>Final streak: <span data-wp-text="context.finalStreak">0</span></p>
+								<button
+									type="button"
+									class="btn btn-primary"
+									data-wp-on--click="actions.restart"
+								>Try again</button>
+							</div>
+						</div>
+						<div class="flex flex-col sm:flex-row items-center justify-center gap-4 py-10 px-6">
+							${SpeedPokemonCard(0, pokemonA)}
+							<p class="text-h1 font-heading-retro px-12" aria-hidden="true">VS</p>
+							${SpeedPokemonCard(1, pokemonB)}
 						</div>
 					</div>
 				`,
