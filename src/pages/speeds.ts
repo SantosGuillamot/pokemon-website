@@ -18,12 +18,13 @@ function pickTwo(arr: Pokemon[]): [Pokemon, Pokemon] {
 const SpeedPokemonCard = (index: number, pokemon: Pokemon) => html`
 	<button
 		type="button"
-		class="w-full sm:flex-1 cursor-pointer relative"
+		class="w-full sm:flex-1 cursor-pointer disabled:cursor-default relative"
 		aria-label="Select this Pokemon as faster"
 		data-wp-context='{"pokemonIndex": ${index}}'
 		data-wp-context---pokemon='pokemon::${JSON.stringify({ _pokemonDexNumber: String(pokemon.dexNumber), _pokemonFormName: pokemon.formName })}'
 		data-wp-watch="callbacks.updateContext"
 		data-wp-on--click="actions.guessSpeed"
+		data-wp-bind--disabled="!state.isWaiting"
 	>
 		<div
 			class="absolute inset-0 z-10 flex items-center justify-center rounded-sm"
@@ -34,7 +35,9 @@ const SpeedPokemonCard = (index: number, pokemon: Pokemon) => html`
 		>
 			<span
 				class="text-h1 font-heading-retro flex items-center justify-center w-28 h-28 rounded-full bg-black text-primary"
-				data-wp-text="pokemon::state.pokemon.speed"
+				data-wp-text="state.displayedSpeed"
+				data-wp-class--speed-correct="state.isGuessedCorrect"
+				data-wp-class--speed-incorrect="state.isGuessedIncorrect"
 			></span>
 		</div>
 		${PokemonCard()}
@@ -101,9 +104,9 @@ const WhosFasterPage = () => {
 					attrs: `data-wp-context='${JSON.stringify({ sectionId: "whos-faster", randomPokemons })}' data-wp-bind--hidden="!state.isCurrentSection"`,
 					children: html`
 					<div
-						class="rounded-lg py-10 px-6 flex flex-col items-center gap-6"
+						class="speed-quiz rounded-lg py-10 px-6 flex flex-col items-center gap-6"
 						style="background-color: rgb(from var(--color-fog) r g b / 0.6)"
-						data-wp-context='${JSON.stringify({ randomPokemons, streak: 0, quizState: "waiting" })}'
+						data-wp-context='${JSON.stringify({ randomPokemons, streak: 0, quizState: "waiting", animationProgress: 0, guessedIndex: null })}'
 						data-wp-watch="callbacks.storeAnswer"
 					>
 						<h3>Who's Faster?</h3>
