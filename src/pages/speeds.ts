@@ -71,6 +71,8 @@ const WhosFasterPage = () => {
 				})}
 
 				${Section({
+					bgColor: "rgb(from var(--color-black) r g b / 0.05)",
+					class: "section-diagonal py-32",
 					attrs: `data-wp-context='${JSON.stringify({ sectionId: "whos-faster", randomPokemons })}' data-wp-bind--hidden="!state.isCurrentSection"`,
 					children: html`
 						<div>
@@ -106,6 +108,8 @@ const WhosFasterPage = () => {
 				})}
 
 				${Section({
+					bgColor: "rgb(from var(--color-black) r g b / 0.05)",
+					class: "section-diagonal py-32",
 					attrs: `data-wp-context='${JSON.stringify({ sectionId: "speeds-table" })}' data-wp-bind--hidden="!state.isCurrentSection"`,
 					children: html`
 						<p>Table with all pokemons sorted by speed</p>
@@ -113,6 +117,8 @@ const WhosFasterPage = () => {
 				})}
 
 				${Section({
+					bgColor: "rgb(from var(--color-black) r g b / 0.05)",
+					class: "section-diagonal py-32",
 					attrs: `data-wp-context='${JSON.stringify({ sectionId: "moves-priority" })}' data-wp-bind--hidden="!state.isCurrentSection"`,
 					children: html`
 						<p>Table with all moves sorted by priority</p>

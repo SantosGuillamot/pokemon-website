@@ -434,6 +434,11 @@
 		}
 	}
 
+	/* Section — Diagonal */
+	.section-diagonal {
+		clip-path: polygon(0 4rem, 100% 0, 100% calc(100% - 4rem), 0 100%);
+	}
+
 	/* Cards */
 	.card-icon {
 		display: flex;
