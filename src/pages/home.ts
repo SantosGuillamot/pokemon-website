@@ -8,8 +8,8 @@ import {
 	Users,
 } from "lucide-static";
 import Card from "../components/Card.js";
-import Hero from "../sections/Hero.js";
-import Section from "../sections/Section.js";
+import Hero from "../components/Hero.js";
+import Section from "../components/Section.js";
 
 const GAMES = [
 	{

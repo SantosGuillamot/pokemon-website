@@ -1,6 +1,6 @@
 import { html } from "hono/html";
-import Hero from "../sections/Hero.js";
-import Section from "../sections/Section.js";
+import Hero from "../components/Hero.js";
+import Section from "../components/Section.js";
 
 const KoOrNotPage = () => {
 	return html`

@@ -2,8 +2,8 @@ import { html } from "hono/html";
 import { Crosshair, Gauge, Grid2x2 } from "lucide-static";
 import Card from "../components/Card.js";
 import PokemonCard from "../components/PokemonCard.js";
-import Hero from "../sections/Hero.js";
-import Section from "../sections/Section.js";
+import Hero from "../components/Hero.js";
+import Section from "../components/Section.js";
 
 const DesignSystemPage = () => {
 	return html`

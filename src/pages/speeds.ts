@@ -3,8 +3,8 @@ import { html } from "hono/html";
 import { getServerData } from "iapi-ssr-processor";
 import Card from "../components/Card.js";
 import PokemonCard from "../components/PokemonCard.js";
-import Hero from "../sections/Hero.js";
-import Section from "../sections/Section.js";
+import Hero from "../components/Hero.js";
+import Section from "../components/Section.js";
 
 function pickTwo(arr: Pokemon[]): [Pokemon, Pokemon] {
 	const i = Math.floor(Math.random() * arr.length);
