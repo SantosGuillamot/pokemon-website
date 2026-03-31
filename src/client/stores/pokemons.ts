@@ -15,6 +15,10 @@ export type PokemonStore = {
 		pokemon: Pokemon | undefined;
 		pokemonName: string;
 		pokemonTypes: Type[];
+		getPokemon: (
+			dexNumber: number,
+			formName?: string | null,
+		) => Pokemon | undefined;
 	};
 	actions: {
 		loadPokemons: (params?: LoadPokemonsParams) => void;
@@ -52,6 +56,14 @@ const { state } = store<PokemonStore>("pokemon", {
 			return pokemon.typeIds
 				.map((id) => config.types[String(id)])
 				.filter((t): t is Type => t !== undefined);
+		},
+		getPokemon(
+			dexNumber: number,
+			formName: string | null = null,
+		): Pokemon | undefined {
+			return Object.values(state.pokemons).find(
+				(p) => p.dexNumber === dexNumber && p.formName === formName,
+			);
 		},
 	},
 	actions: {

@@ -2,8 +2,8 @@ import type { Pokemon } from "@pokemon-website/types/pokemons";
 import { html } from "hono/html";
 import { getServerData } from "iapi-ssr-processor";
 import Card from "../components/Card.js";
-import PokemonCard from "../components/PokemonCard.js";
 import Hero from "../components/Hero.js";
+import PokemonCard from "../components/PokemonCard.js";
 import Section from "../components/Section.js";
 
 function pickTwo(arr: Pokemon[]): [Pokemon, Pokemon] {
@@ -14,6 +14,32 @@ function pickTwo(arr: Pokemon[]): [Pokemon, Pokemon] {
 	} while (j === i);
 	return [arr[i], arr[j]];
 }
+
+const SpeedPokemonCard = (index: number, pokemon: Pokemon) => html`
+	<button
+		type="button"
+		class="w-full sm:flex-1 cursor-pointer relative"
+		aria-label="Select this Pokemon as faster"
+		data-wp-context='{"pokemonIndex": ${index}}'
+		data-wp-context---pokemon='pokemon::${JSON.stringify({ _pokemonDexNumber: String(pokemon.dexNumber), _pokemonFormName: pokemon.formName })}'
+		data-wp-watch="callbacks.updateContext"
+		data-wp-on--click="actions.guessSpeed"
+	>
+		<div
+			class="absolute inset-0 z-10 flex items-center justify-center rounded-sm"
+			style="background-color: rgb(from var(--color-black) r g b / 0.2)"
+			role="status"
+			aria-label="Speed stat"
+			data-wp-bind--hidden="state.isWaiting"
+		>
+			<span
+				class="text-h1 font-heading-retro flex items-center justify-center w-28 h-28 rounded-full bg-black text-primary"
+				data-wp-text="pokemon::state.pokemon.speed"
+			></span>
+		</div>
+		${PokemonCard()}
+	</button>
+`;
 
 const WhosFasterPage = () => {
 	// Get pokemons from server.
@@ -39,7 +65,7 @@ const WhosFasterPage = () => {
 
 			<div
 				data-wp-interactive="pokemon/speeds"
-				data-wp-context='{"currentSection": "whos-faster"}'
+				data-wp-context='{"currentSection": null}'
 			>
 				${Section({
 					children: html`
@@ -71,57 +97,44 @@ const WhosFasterPage = () => {
 				})}
 
 				${Section({
-					bgColor: "rgb(from var(--color-black) r g b / 0.05)",
 					class: "section-diagonal py-32",
 					attrs: `data-wp-context='${JSON.stringify({ sectionId: "whos-faster", randomPokemons })}' data-wp-bind--hidden="!state.isCurrentSection"`,
 					children: html`
-						<div>
-							<div
-								data-wp-context='{"pokemonIndex": 0}'
-								data-wp-context---pokemon='pokemon::${JSON.stringify({ _pokemonDexNumber: String(pokemonA.dexNumber), _pokemonFormName: pokemonA.formName })}'
-								data-wp-watch="callbacks.updateContext"
-							>
-								${PokemonCard()}
-							</div>
-							<p>VS</p>
-							<div
-								data-wp-context='{"pokemonIndex": 1}'
-								data-wp-context---pokemon='pokemon::${JSON.stringify({ _pokemonDexNumber: String(pokemonB.dexNumber), _pokemonFormName: pokemonB.formName })}'
-								data-wp-watch="callbacks.updateContext"
-							>
-								${PokemonCard()}
-							</div>
+					<div
+						class="rounded-lg py-10 px-6 flex flex-col items-center gap-6"
+						style="background-color: rgb(from var(--color-fog) r g b / 0.6)"
+						data-wp-context='${JSON.stringify({ randomPokemons, streak: 0, quizState: "waiting" })}'
+						data-wp-watch="callbacks.storeAnswer"
+					>
+						<h3>Who's Faster?</h3>
+						<div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+							${SpeedPokemonCard(0, pokemonA)}
+							<p class="text-h1 font-heading-retro" aria-hidden="true">VS</p>
+							<span class="sr-only">versus</span>
+							${SpeedPokemonCard(1, pokemonB)}
 						</div>
-						<div>
-							<button type="button" class="btn btn-primary" data-wp-on--click="actions.randomizePokemons">
-								Change Pokemons
-							</button>
-							<button type="button" class="btn btn-secondary" disabled>
-								They're equal
-							</button>
-							<button type="button" class="btn btn-primary" disabled>
-								Pokemon B is faster
-							</button>
-						</div>
-						<p>Current streak: <strong>0</strong></p>
+						<p>Current streak: <strong data-wp-text="context.streak">0</strong></p>
+					</div>
 				`,
 				})}
 
 				${Section({
-					bgColor: "rgb(from var(--color-black) r g b / 0.05)",
 					class: "section-diagonal py-32",
 					attrs: `data-wp-context='${JSON.stringify({ sectionId: "speeds-table" })}' data-wp-bind--hidden="!state.isCurrentSection"`,
 					children: html`
+					<div class="rounded-lg p-6" style="background-color: rgb(from var(--color-fog) r g b / 0.6)">
 						<p>Table with all pokemons sorted by speed</p>
+					</div>
 				`,
 				})}
 
 				${Section({
-					bgColor: "rgb(from var(--color-black) r g b / 0.05)",
 					class: "section-diagonal py-32",
 					attrs: `data-wp-context='${JSON.stringify({ sectionId: "moves-priority" })}' data-wp-bind--hidden="!state.isCurrentSection"`,
 					children: html`
+					<div class="rounded-lg p-6" style="background-color: rgb(from var(--color-fog) r g b / 0.6)">
 						<p>Table with all moves sorted by priority</p>
+					</div>
 				`,
 				})}
 			</div>

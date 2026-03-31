@@ -303,7 +303,7 @@
 
 	/* Buttons — Secondary */
 	.btn-secondary {
-		background-color: transparent;
+		background-color: var(--color-white);
 		color: var(--color-black);
 		border-color: var(--color-black);
 	}
@@ -436,6 +436,7 @@
 
 	/* Section — Diagonal */
 	.section-diagonal {
+		background-color: var(--color-white);
 		clip-path: polygon(0 4rem, 100% 0, 100% calc(100% - 4rem), 0 100%);
 	}
 
@@ -514,6 +515,16 @@
 		transition:
 			transform 0.1s ease,
 			box-shadow 0.1s ease;
+	}
+
+	button:hover .pokemon-card {
+		transform: translateY(-2px);
+		background-color: color-mix(in srgb, var(--color-fog) 40%, white);
+	}
+
+	button:not(:disabled):active .pokemon-card {
+		transform: translateY(2px);
+		box-shadow: var(--shadow-card-pressed);
 	}
 
 	.pokemon-card-image {

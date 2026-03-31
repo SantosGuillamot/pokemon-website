@@ -21,6 +21,7 @@ const PokemonCard = () => {
 							class="pokemon-card-type-icon"
 							width="24"
 							height="24"
+							loading="lazy"
 						/>
 					</template>
 				</div>

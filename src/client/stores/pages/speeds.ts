@@ -9,10 +9,13 @@ type SpeedsPokemon = {
 };
 
 type PokemonSpeedsContext = {
-	sectionId: string;
+	correctAnswer: number | "tie" | null;
 	currentSection: string;
+	streak: number;
+	quizState: "waiting" | "correct" | "incorrect";
 	pokemonIndex: number;
 	randomPokemons: SpeedsPokemon[];
+	sectionId: string;
 };
 
 const { state: pokemonState } = store<PokemonStore>("pokemon", {});
@@ -32,8 +35,25 @@ store("pokemon/speeds", {
 			const context = getContext<PokemonSpeedsContext>("pokemon/speeds");
 			return context.currentSection === context.sectionId;
 		},
+		get isWaiting() {
+			const context = getContext<PokemonSpeedsContext>("pokemon/speeds");
+			return context.quizState === "waiting";
+		},
 	},
 	actions: {
+		guessSpeed() {
+			const context = getContext<PokemonSpeedsContext>("pokemon/speeds");
+			if (
+				context.correctAnswer === "tie" ||
+				context.correctAnswer === context.pokemonIndex
+			) {
+				context.streak = (context.streak || 0) + 1;
+				context.quizState = "correct";
+			} else {
+				context.streak = 0;
+				context.quizState = "incorrect";
+			}
+		},
 		selectSection() {
 			const ctx = getContext<PokemonSpeedsContext>("pokemon/speeds");
 			ctx.currentSection = ctx.sectionId;
@@ -58,6 +78,23 @@ store("pokemon/speeds", {
 			const pokemonContext = getContext<PokemonContext>("pokemon");
 			pokemonContext._pokemonDexNumber = pokemon.dexNumber.toString();
 			pokemonContext._pokemonFormName = pokemon.formName;
+		},
+		storeAnswer() {
+			const context = getContext<PokemonSpeedsContext>("pokemon/speeds");
+			const pokemonA = pokemonState.getPokemon(
+				context.randomPokemons[0].dexNumber,
+				context.randomPokemons[0].formName,
+			);
+			const pokemonB = pokemonState.getPokemon(
+				context.randomPokemons[1].dexNumber,
+				context.randomPokemons[1].formName,
+			);
+			if (!pokemonA || !pokemonB) return;
+			if (pokemonA.speed === pokemonB.speed) {
+				context.correctAnswer = "tie";
+			} else {
+				context.correctAnswer = pokemonA.speed > pokemonB.speed ? 0 : 1;
+			}
 		},
 	},
 });
