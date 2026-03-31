@@ -19,6 +19,7 @@ export type PokemonStore = {
 			dexNumber: number,
 			formName?: string | null,
 		) => Pokemon | undefined;
+		getRandomPokemons: (count: number) => Pokemon[];
 	};
 	actions: {
 		loadPokemons: (params?: LoadPokemonsParams) => void;
@@ -64,6 +65,15 @@ const { state } = store<PokemonStore>("pokemon", {
 			return Object.values(state.pokemons).find(
 				(p) => p.dexNumber === dexNumber && p.formName === formName,
 			);
+		},
+		getRandomPokemons(count: number): Pokemon[] {
+			const all = Object.values(state.pokemons);
+			if (all.length <= count) return [...all];
+			const indices = new Set<number>();
+			while (indices.size < count) {
+				indices.add(Math.floor(Math.random() * all.length));
+			}
+			return [...indices].map((i) => all[i]);
 		},
 	},
 	actions: {

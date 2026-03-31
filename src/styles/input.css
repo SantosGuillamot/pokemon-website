@@ -41,7 +41,7 @@
 	/* ⚠️ --color-primary has ~1.2:1 contrast on white — only use as background with dark text */
 	--color-primary: #ffde00;
 	--color-secondary: #c41425;
-	--color-success: #22c55e;
+	--color-success: #16a34a;
 	--color-error: #b91c1c;
 	--color-black: #111111;
 	--color-darker-gray: #666666;
@@ -506,6 +506,14 @@
 	}
 
 	/* Speed Quiz */
+	.speed-quiz-bg {
+		background-color: rgb(from var(--color-fog) r g b / 0.6);
+	}
+
+	.speed-overlay-bg {
+		background-color: rgb(from var(--color-black) r g b / 0.2);
+	}
+
 	.speed-quiz-status {
 		display: flex;
 		align-items: center;
@@ -541,12 +549,12 @@
 			box-shadow 0.1s ease;
 	}
 
-	button:not(:disabled):hover .pokemon-card {
+	.speed-pokemon-btn:not(:disabled):hover .pokemon-card {
 		transform: translateY(-2px);
 		background-color: color-mix(in srgb, var(--color-fog) 40%, white);
 	}
 
-	button:not(:disabled):active .pokemon-card {
+	.speed-pokemon-btn:not(:disabled):active .pokemon-card {
 		transform: translateY(2px);
 		box-shadow: var(--shadow-card-pressed);
 	}
