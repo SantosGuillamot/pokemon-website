@@ -106,7 +106,7 @@ const WhosFasterPage = () => {
 					<div
 						class="speed-quiz rounded-lg py-10 px-6 flex flex-col items-center gap-6"
 						style="background-color: rgb(from var(--color-fog) r g b / 0.6)"
-						data-wp-context='${JSON.stringify({ randomPokemons, streak: 0, quizState: "waiting", animationProgress: 0, guessedIndex: null })}'
+						data-wp-context='${JSON.stringify({ randomPokemons, streak: 0, quizState: "waiting", animationProgress: 0, guessedIndex: null, finalStreak: 0 })}'
 						data-wp-watch="callbacks.storeAnswer"
 					>
 						<h3>Who's Faster?</h3>
@@ -116,7 +116,20 @@ const WhosFasterPage = () => {
 							<span class="sr-only">versus</span>
 							${SpeedPokemonCard(1, pokemonB)}
 						</div>
-						<p>Current streak: <strong data-wp-text="context.streak">0</strong></p>
+						<div class="flex flex-col items-center gap-2">
+							<p data-wp-bind--hidden="state.isIncorrect">
+								Current streak: <strong data-wp-text="context.streak">0</strong>
+							</p>
+							<p data-wp-bind--hidden="!state.isIncorrect" class="text-error font-bold">
+								Final streak: <strong data-wp-text="context.finalStreak">0</strong>
+							</p>
+							<button
+								type="button"
+								class="btn btn-primary"
+								data-wp-bind--hidden="!state.isIncorrect"
+								data-wp-on--click="actions.restart"
+							>Restart</button>
+						</div>
 					</div>
 				`,
 				})}

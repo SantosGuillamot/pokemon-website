@@ -18,6 +18,7 @@ type PokemonSpeedsContext = {
 	sectionId: string;
 	animationProgress: number;
 	guessedIndex: number | null;
+	finalStreak: number;
 };
 
 const { state: pokemonState } = store<PokemonStore>("pokemon", {});
@@ -31,6 +32,16 @@ function pickTwo(arr: Pokemon[]): [Pokemon, Pokemon] {
 	return [arr[i], arr[j]];
 }
 
+function randomize(context: PokemonSpeedsContext) {
+	const pokemons = Object.values(pokemonState.pokemons);
+	if (pokemons.length < 2) return;
+	const [a, b] = pickTwo(pokemons);
+	context.randomPokemons = [
+		{ dexNumber: a.dexNumber, formName: a.formName },
+		{ dexNumber: b.dexNumber, formName: b.formName },
+	];
+}
+
 store("pokemon/speeds", {
 	state: {
 		get isCurrentSection() {
@@ -40,6 +51,10 @@ store("pokemon/speeds", {
 		get isWaiting() {
 			const context = getContext<PokemonSpeedsContext>("pokemon/speeds");
 			return context.quizState === "waiting";
+		},
+		get isIncorrect() {
+			const context = getContext<PokemonSpeedsContext>("pokemon/speeds");
+			return context.quizState === "incorrect";
 		},
 		get isGuessedCorrect() {
 			const context = getContext<PokemonSpeedsContext>("pokemon/speeds");
@@ -92,18 +107,13 @@ store("pokemon/speeds", {
 						context.streak = (context.streak || 0) + 1;
 						context.quizState = "correct";
 						setTimeout(() => {
-							const pokemons = Object.values(pokemonState.pokemons);
-							if (pokemons.length < 2) return;
-							const [a, b] = pickTwo(pokemons);
-							context.randomPokemons = [
-								{ dexNumber: a.dexNumber, formName: a.formName },
-								{ dexNumber: b.dexNumber, formName: b.formName },
-							];
+							randomize(context);
 							context.quizState = "waiting";
 							context.animationProgress = 0;
 							context.guessedIndex = null;
 						}, 1000);
 					} else {
+						context.finalStreak = context.streak;
 						context.streak = 0;
 						context.quizState = "incorrect";
 					}
@@ -112,19 +122,17 @@ store("pokemon/speeds", {
 
 			requestAnimationFrame(step);
 		},
+		restart() {
+			const context = getContext<PokemonSpeedsContext>("pokemon/speeds");
+			randomize(context);
+			context.streak = 0;
+			context.quizState = "waiting";
+			context.animationProgress = 0;
+			context.guessedIndex = null;
+		},
 		selectSection() {
 			const ctx = getContext<PokemonSpeedsContext>("pokemon/speeds");
 			ctx.currentSection = ctx.sectionId;
-		},
-		randomizePokemons() {
-			const context = getContext<PokemonSpeedsContext>("pokemon/speeds");
-			const pokemons = Object.values(pokemonState.pokemons);
-			if (pokemons.length < 2) return;
-			const [pokemonA, pokemonB] = pickTwo(pokemons);
-			context.randomPokemons = [
-				{ dexNumber: pokemonA.dexNumber, formName: pokemonA.formName },
-				{ dexNumber: pokemonB.dexNumber, formName: pokemonB.formName },
-			];
 		},
 	},
 	callbacks: {
