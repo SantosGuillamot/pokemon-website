@@ -59,8 +59,7 @@ const route = app
 				asc(pokemons.dexNumber),
 				desc(pokemons.isDefault),
 				asc(pokemons.id),
-			)
-;
+			);
 
 		return c.json(list);
 	})

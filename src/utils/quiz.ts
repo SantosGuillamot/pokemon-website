@@ -7,9 +7,10 @@
  * { ...defaultQuizContext(initialPokemon), guesses: {} }
  * ```
  */
-export function defaultQuizContext(
-	randomPokemon?: { dexNumber: number; formName: string | null },
-) {
+export function defaultQuizContext(randomPokemon?: {
+	dexNumber: number;
+	formName: string | null;
+}) {
 	return {
 		streak: 0,
 		quizState: "waiting" as const,

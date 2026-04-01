@@ -2,8 +2,8 @@ import type { Pokemon } from "@pokemon-website/types/pokemons";
 import { html } from "hono/html";
 import { getServerData } from "iapi-ssr-processor";
 import Hero from "../components/Hero.js";
-import QuizModeCard from "../components/QuizModeCard.js";
 import PokemonCard from "../components/PokemonCard.js";
+import QuizModeCard from "../components/QuizModeCard.js";
 import QuizSection from "../components/QuizSection.js";
 import Section from "../components/Section.js";
 import { pickRandomPokemon, pickTwo } from "../utils/array.js";
@@ -104,7 +104,12 @@ const WhosFasterPage = () => {
 				${QuizSection({
 					sectionId: "whos-faster",
 					sectionContext: { randomPokemons },
-					quizContext: { ...defaultQuizContext(), randomPokemons, animationProgress: 0, guessedIndex: null },
+					quizContext: {
+						...defaultQuizContext(),
+						randomPokemons,
+						animationProgress: 0,
+						guessedIndex: null,
+					},
 					watchCallback: "callbacks.storeAnswer",
 					restartAction: "actions.restart",
 					children: html`
@@ -119,7 +124,12 @@ const WhosFasterPage = () => {
 
 				${QuizSection({
 					sectionId: "guess-speed",
-					quizContext: { ...defaultQuizContext(guessSpeedInitial), animationProgress: 0, speedGuess: "", correctSpeed: null },
+					quizContext: {
+						...defaultQuizContext(guessSpeedInitial),
+						animationProgress: 0,
+						speedGuess: "",
+						correctSpeed: null,
+					},
 					watchCallback: "callbacks.storeGuessSpeedAnswer",
 					restartAction: "actions.restartGuessSpeed",
 					children: html`

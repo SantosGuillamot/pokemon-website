@@ -40,6 +40,25 @@ const TypeRow = (type: Type) => html`
 	</div>
 `;
 
+const ChartCell = (atkType: Type, defType: Type) => html`
+	<td data-wp-context='${JSON.stringify({ atkTypeId: atkType.id, defTypeId: defType.id })}'>
+		<select
+			aria-label="${atkType.name} vs ${defType.name}"
+			class="chart-cell-select"
+			data-wp-on--change="actions.setChartGuess"
+			data-wp-bind--value="state.chartGuessValue"
+			data-wp-bind--disabled="!state.isChartWaiting"
+			data-wp-class--chart-cell-correct="state.isChartCellCorrect"
+			data-wp-class--chart-cell-incorrect="state.isChartCellIncorrect"
+		>
+			<option value="1">\u2014</option>
+			<option value="0">0</option>
+			<option value="0.5">\u00bd</option>
+			<option value="2">2</option>
+		</select>
+	</td>
+`;
+
 const LearnTypesPage = () => {
 	const { state, config } = getServerData() as unknown as {
 		state: { pokemon: { pokemons: Record<string, Pokemon> } };
@@ -112,22 +131,56 @@ const LearnTypesPage = () => {
 							</div>
 							<div class="flex items-center gap-4">
 								<button type="button" class="btn btn-primary" data-wp-on--click="actions.submitWeaknessGuess" data-wp-bind--disabled="!state.isWaiting">Guess</button>
-								<span class="font-heading text-p-sm text-darker-gray" data-wp-bind--hidden="state.isWaiting"><span data-wp-text="state.correctCount">0</span>/18</span>
+								<span class="font-heading text-p-sm text-darker-gray" role="status" aria-live="polite" data-wp-bind--hidden="state.isWaiting"><span data-wp-text="state.correctCount">0</span>/18</span>
 							</div>
 						</div>
 					</div>
 					`,
 				})}
 
-				${Section({
-					class: "section-diagonal py-32",
-					attrs: `data-wp-context='${JSON.stringify({ sectionId: "fill-chart" })}' data-wp-bind--hidden="!state.isCurrentSection"`,
-					children: html`
-					<div class="rounded-lg p-6 quiz-bg" aria-label="Fill the Type Chart">
-						<p>Fill the type chart quiz coming soon</p>
+				<section
+					class="px-6 py-32 section-diagonal"
+					data-wp-context='${JSON.stringify({ sectionId: "fill-chart", chartGuesses: {}, chartState: "waiting" })}'
+					data-wp-bind--hidden="!state.isCurrentSection"
+				>
+					<div class="max-w-content mx-auto chart-scroll-container" role="region" aria-label="Type effectiveness chart" tabindex="0">
+						<table class="type-chart-table mx-auto">
+							<caption class="sr-only">Rows are attacking types, columns are defending types. Select the effectiveness multiplier for each matchup.</caption>
+							<thead>
+								<tr>
+									<th class="chart-corner-cell">
+										<span class="chart-corner-def">DEF →</span>
+										<span class="chart-corner-atk">ATK ↓</span>
+									</th>
+									${allTypes.map(
+										(type) => html`
+										<th scope="col" class="chart-header-cell">
+											<img src="${type.imageSmall}" alt="${type.name}" width="32" height="32" />
+										</th>
+									`,
+									)}
+								</tr>
+							</thead>
+							<tbody>
+								${allTypes.map(
+									(atkType) => html`
+									<tr>
+										<th scope="row" class="chart-row-header">
+											<img src="${atkType.imageSmall}" alt="${atkType.name}" width="32" height="32" />
+										</th>
+										${allTypes.map((defType) => ChartCell(atkType, defType))}
+									</tr>
+								`,
+								)}
+							</tbody>
+						</table>
+						<div class="flex items-center justify-center gap-4 py-6">
+							<button type="button" class="btn btn-primary" data-wp-on--click="actions.submitChartGuess" data-wp-bind--hidden="!state.isChartWaiting">Guess</button>
+							<button type="button" class="btn btn-primary" data-wp-on--click="actions.restartChart" data-wp-bind--hidden="state.isChartWaiting">Try again</button>
+							<span class="font-heading text-p-sm text-darker-gray" role="status" aria-live="polite" data-wp-bind--hidden="state.isChartWaiting"><span data-wp-text="state.chartScore">0</span>/<span data-wp-text="state.chartTotal">0</span></span>
+						</div>
 					</div>
-				`,
-				})}
+				</section>
 			</div>
 		</main>
 	`;

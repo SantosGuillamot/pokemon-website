@@ -26,8 +26,14 @@ type PokemonTypesContext = {
 	quizState: "waiting" | "correct" | "incorrect";
 	guesses: Record<string, number>;
 	finalStreak: number;
-	// Per-type-row context
-	typeId: number;
+	// Fill chart game
+	chartGuesses: Record<string, number>;
+	chartState: "waiting" | "checked";
+	// Per-type-row context (injected by TypeRow)
+	typeId?: number;
+	// Per-chart-cell context (injected by ChartCell)
+	atkTypeId?: number;
+	defTypeId?: number;
 };
 
 const { state: pokemonState } = store<PokemonStore>("pokemon", {});
@@ -55,6 +61,45 @@ function computeEffectiveness(
 		result[atkTypeIdStr] = multiplier;
 	}
 	return result;
+}
+
+function getTypeMatchup(
+	atkTypeId: number,
+	defTypeId: number,
+	cfg?: { types: Record<string, Type> },
+): number {
+	const { types } =
+		cfg ?? (getConfig("pokemon") as { types: Record<string, Type> });
+	const atkType = types[String(atkTypeId)];
+	if (!atkType) return 1;
+	if (atkType.attackNoEffect.includes(defTypeId)) return 0;
+	if (atkType.attackNotVeryEffective.includes(defTypeId)) return 0.5;
+	if (atkType.attackVeryEffective.includes(defTypeId)) return 2;
+	return 1;
+}
+
+/**
+ * Single pass over all type pairs to compute both score and total,
+ * excluding neutral (correct === 1) cells to match the green highlights.
+ */
+function computeChartResults(chartGuesses: Record<string, number>): {
+	score: number;
+	total: number;
+} {
+	const cfg = getConfig("pokemon") as { types: Record<string, Type> };
+	const typeIds = Object.keys(cfg.types).map(Number);
+	let score = 0;
+	let total = 0;
+	for (const atkId of typeIds) {
+		for (const defId of typeIds) {
+			const correct = getTypeMatchup(atkId, defId, cfg);
+			if (correct === 1) continue;
+			total++;
+			const key = `${atkId}-${defId}`;
+			if ((chartGuesses[key] ?? 1) === correct) score++;
+		}
+	}
+	return { score, total };
 }
 
 store("pokemon/types", {
@@ -133,6 +178,49 @@ store("pokemon/types", {
 			};
 			return labels[multiplier] ?? "\u2014";
 		},
+		// Fill chart getters
+		get isChartWaiting() {
+			const context = getContext<PokemonTypesContext>("pokemon/types");
+			return context.chartState === "waiting";
+		},
+		get chartGuessValue() {
+			const context = getContext<PokemonTypesContext>("pokemon/types");
+			const key = `${context.atkTypeId}-${context.defTypeId}`;
+			const guess = context.chartGuesses?.[key] ?? 1;
+			return String(guess);
+		},
+		get isChartCellCorrect() {
+			const context = getContext<PokemonTypesContext>("pokemon/types");
+			if (context.chartState === "waiting") return false;
+			const key = `${context.atkTypeId}-${context.defTypeId}`;
+			const guess = context.chartGuesses?.[key] ?? 1;
+			const correct = getTypeMatchup(
+				context.atkTypeId ?? 0,
+				context.defTypeId ?? 0,
+			);
+			// Exclude normal-effectiveness (1) cells from highlighting to avoid
+			// turning 200+ neutral cells green, which would be visually noisy.
+			return guess === correct && correct !== 1;
+		},
+		get isChartCellIncorrect() {
+			const context = getContext<PokemonTypesContext>("pokemon/types");
+			if (context.chartState === "waiting") return false;
+			const key = `${context.atkTypeId}-${context.defTypeId}`;
+			const guess = context.chartGuesses?.[key] ?? 1;
+			const correct = getTypeMatchup(
+				context.atkTypeId ?? 0,
+				context.defTypeId ?? 0,
+			);
+			return guess !== correct;
+		},
+		get chartScore() {
+			const context = getContext<PokemonTypesContext>("pokemon/types");
+			if (context.chartState === "waiting") return 0;
+			return computeChartResults(context.chartGuesses).score;
+		},
+		get chartTotal() {
+			return computeChartResults({}).total;
+		},
 	},
 	actions: {
 		selectSection() {
@@ -178,6 +266,28 @@ store("pokemon/types", {
 			context.streak = 0;
 			context.quizState = "waiting";
 			context.guesses = {};
+		},
+		// Fill chart actions
+		setChartGuess() {
+			const context = getContext<PokemonTypesContext>("pokemon/types");
+			if (context.chartState !== "waiting") return;
+			const { ref } = getElement();
+			const value = parseFloat((ref as HTMLSelectElement).value);
+			const key = `${context.atkTypeId}-${context.defTypeId}`;
+			context.chartGuesses = {
+				...context.chartGuesses,
+				[key]: value,
+			};
+		},
+		submitChartGuess() {
+			const context = getContext<PokemonTypesContext>("pokemon/types");
+			if (context.chartState !== "waiting") return;
+			context.chartState = "checked";
+		},
+		restartChart() {
+			const context = getContext<PokemonTypesContext>("pokemon/types");
+			context.chartGuesses = {};
+			context.chartState = "waiting";
 		},
 	},
 	callbacks: {
