@@ -9,7 +9,6 @@ import {
 import "@pokemon-website/stores/pokemons";
 import {
 	isCurrentSection,
-	isIncorrect,
 	isWaiting,
 	type QuizPokemon,
 	randomizeSingle,
@@ -23,15 +22,20 @@ type PokemonTypesContext = {
 	// Weakness game
 	randomPokemon: QuizPokemon | null;
 	streak: number;
-	quizState: "waiting" | "correct" | "incorrect";
+	quizState: "waiting" | "correct" | "retry";
 	guesses: Record<string, number>;
 	finalStreak: number;
+	draggedTypeId: number | null;
+	selectedTypeId: number | null;
+	isDragOver?: boolean;
 	// Fill chart game
 	chartGuesses: Record<string, number>;
 	chartState: "waiting" | "checked";
-	// Per-type-row context (injected by TypeRow)
+	// Per-type context
 	typeId?: number;
-	// Per-chart-cell context (injected by ChartCell)
+	// Per-bar context
+	barMultiplier?: number;
+	// Per-chart-cell context
 	atkTypeId?: number;
 	defTypeId?: number;
 };
@@ -110,8 +114,18 @@ store("pokemon/types", {
 		get isWaiting() {
 			return isWaiting("pokemon/types");
 		},
+		get isCorrect() {
+			const context = getContext<PokemonTypesContext>("pokemon/types");
+			return context.quizState === "correct";
+		},
+		get isRetry() {
+			const context = getContext<PokemonTypesContext>("pokemon/types");
+			return context.quizState === "retry";
+		},
 		get isIncorrect() {
-			return isIncorrect("pokemon/types");
+			// Always false — the weakness game uses "retry" instead of "incorrect",
+			// so QuizStatus always shows the streak, never GAME OVER.
+			return false;
 		},
 		get correctCount() {
 			const context = getContext<PokemonTypesContext>("pokemon/types");
@@ -126,12 +140,38 @@ store("pokemon/types", {
 				(typeId) => (context.guesses?.[typeId] ?? 1) === correct[typeId],
 			).length;
 		},
-		// Per-type-row getters
-		get typeGuessValue() {
+		// Source icon getters
+		get isTypePlaced() {
 			const context = getContext<PokemonTypesContext>("pokemon/types");
-			const guess = context.guesses?.[String(context.typeId)] ?? 1;
-			return String(guess);
+			const guess = context.guesses?.[String(context.typeId)];
+			return guess != null && guess !== 1;
 		},
+		get isTypeSelected() {
+			const context = getContext<PokemonTypesContext>("pokemon/types");
+			return context.selectedTypeId === context.typeId;
+		},
+		// Bar getter
+		get isTypeInCurrentBar() {
+			const context = getContext<PokemonTypesContext>("pokemon/types");
+			const guess = context.guesses?.[String(context.typeId)];
+			return guess === context.barMultiplier;
+		},
+		// Source type missed (should have been placed but wasn't)
+		get isSourceTypeMissed() {
+			const context = getContext<PokemonTypesContext>("pokemon/types");
+			if (context.quizState === "waiting") return false;
+			const guess = context.guesses?.[String(context.typeId)];
+			if (guess != null && guess !== 1) return false;
+			if (!context.randomPokemon) return false;
+			const pokemon = pokemonState.getPokemon(
+				context.randomPokemon.dexNumber,
+				context.randomPokemon.formName,
+			);
+			if (!pokemon) return false;
+			const correct = computeEffectiveness(pokemon.typeIds);
+			return (correct[String(context.typeId)] ?? 1) !== 1;
+		},
+		// Per-type result getters (used by bar icons)
 		get isTypeResultCorrect() {
 			const context = getContext<PokemonTypesContext>("pokemon/types");
 			if (context.quizState === "waiting") return false;
@@ -158,25 +198,9 @@ store("pokemon/types", {
 			const guess = context.guesses?.[String(context.typeId)] ?? 1;
 			return guess !== (correct[String(context.typeId)] ?? 1);
 		},
-		get typeCorrectLabel() {
+		get isDragOver() {
 			const context = getContext<PokemonTypesContext>("pokemon/types");
-			if (context.quizState === "waiting" || !context.randomPokemon) return "";
-			const pokemon = pokemonState.getPokemon(
-				context.randomPokemon.dexNumber,
-				context.randomPokemon.formName,
-			);
-			if (!pokemon) return "";
-			const correct = computeEffectiveness(pokemon.typeIds);
-			const multiplier = correct[String(context.typeId)] ?? 1;
-			const labels: Record<number, string> = {
-				1: "\u2014",
-				0: "0",
-				0.25: "\u00bc",
-				0.5: "\u00bd",
-				2: "2",
-				4: "4",
-			};
-			return labels[multiplier] ?? "\u2014";
+			return context.isDragOver === true;
 		},
 		// Fill chart getters
 		get isChartWaiting() {
@@ -226,14 +250,99 @@ store("pokemon/types", {
 		selectSection() {
 			selectSection("pokemon/types");
 		},
-		setTypeGuess() {
+		// Drag and drop
+		startDrag(event: DragEvent) {
 			const context = getContext<PokemonTypesContext>("pokemon/types");
 			if (context.quizState !== "waiting") return;
-			const { ref } = getElement();
-			const value = parseFloat((ref as HTMLSelectElement).value);
-			const typeId = String(context.typeId);
-			context.guesses = { ...context.guesses, [typeId]: value };
+			context.draggedTypeId = context.typeId ?? null;
+			context.selectedTypeId = null;
+			if (event.dataTransfer) {
+				event.dataTransfer.effectAllowed = "move";
+			}
 		},
+		dragEnd() {
+			const context = getContext<PokemonTypesContext>("pokemon/types");
+			context.draggedTypeId = null;
+		},
+		dragEnterBar() {
+			const context = getContext<PokemonTypesContext>("pokemon/types");
+			if (context.quizState !== "waiting" || context.draggedTypeId == null)
+				return;
+			context.isDragOver = true;
+		},
+		dragLeaveBar() {
+			const context = getContext<PokemonTypesContext>("pokemon/types");
+			context.isDragOver = false;
+		},
+		allowDrop(event: DragEvent) {
+			event.preventDefault();
+			if (event.dataTransfer) {
+				event.dataTransfer.dropEffect = "move";
+			}
+		},
+		dropOnBar(event: DragEvent) {
+			event.preventDefault();
+			const context = getContext<PokemonTypesContext>("pokemon/types");
+			if (context.draggedTypeId == null || context.quizState !== "waiting")
+				return;
+			const typeId = String(context.draggedTypeId);
+			const multiplier = context.barMultiplier ?? 1;
+			context.guesses = {
+				...context.guesses,
+				[typeId]: multiplier,
+			};
+			context.isDragOver = false;
+			context.draggedTypeId = null;
+		},
+		dropOnSource(event: DragEvent) {
+			event.preventDefault();
+			const context = getContext<PokemonTypesContext>("pokemon/types");
+			if (context.draggedTypeId == null || context.quizState !== "waiting")
+				return;
+			const typeId = String(context.draggedTypeId);
+			const newGuesses = { ...context.guesses };
+			delete newGuesses[typeId];
+			context.guesses = newGuesses;
+			context.isDragOver = false;
+			context.draggedTypeId = null;
+		},
+		// Click interactions
+		selectSourceType() {
+			const context = getContext<PokemonTypesContext>("pokemon/types");
+			if (context.quizState !== "waiting") return;
+			const typeId = context.typeId ?? null;
+			context.selectedTypeId =
+				context.selectedTypeId === typeId ? null : typeId;
+		},
+		clickBar() {
+			const context = getContext<PokemonTypesContext>("pokemon/types");
+			if (context.quizState !== "waiting" || context.selectedTypeId == null)
+				return;
+			const typeId = String(context.selectedTypeId);
+			const multiplier = context.barMultiplier ?? 1;
+			context.guesses = {
+				...context.guesses,
+				[typeId]: multiplier,
+			};
+			context.selectedTypeId = null;
+		},
+		removeFromBar(event: Event) {
+			event.stopPropagation();
+			const context = getContext<PokemonTypesContext>("pokemon/types");
+			if (context.quizState !== "waiting") return;
+			const typeId = String(context.typeId);
+			const newGuesses = { ...context.guesses };
+			delete newGuesses[typeId];
+			context.guesses = newGuesses;
+		},
+		handleKeydown(event: KeyboardEvent) {
+			if (event.key === "Enter" || event.key === " ") {
+				event.preventDefault();
+				const { ref } = getElement();
+				if (ref) ref.click();
+			}
+		},
+		// Weakness game
 		submitWeaknessGuess() {
 			const context = getContext<PokemonTypesContext>("pokemon/types");
 			if (context.quizState !== "waiting" || !context.randomPokemon) return;
@@ -249,23 +358,38 @@ store("pokemon/types", {
 			if (allCorrect) {
 				context.streak += 1;
 				context.quizState = "correct";
-				setTimeout(() => {
-					randomizeSingle(context);
-					context.guesses = {};
-					context.quizState = "waiting";
-				}, 1500);
 			} else {
-				context.finalStreak = context.streak;
 				context.streak = 0;
-				context.quizState = "incorrect";
+				context.quizState = "retry";
 			}
+			context.selectedTypeId = null;
 		},
+		nextPokemon() {
+			const context = getContext<PokemonTypesContext>("pokemon/types");
+			if (context.quizState !== "correct") return;
+			randomizeSingle(context);
+			context.guesses = {};
+			context.quizState = "waiting";
+			context.selectedTypeId = null;
+			context.draggedTypeId = null;
+		},
+		tryAgainWeakness() {
+			const context = getContext<PokemonTypesContext>("pokemon/types");
+			if (context.quizState !== "retry") return;
+			context.guesses = {};
+			context.quizState = "waiting";
+			context.selectedTypeId = null;
+			context.draggedTypeId = null;
+		},
+		// Full restart — callable from any state via QuizStatus.
 		restartWeakness() {
 			const context = getContext<PokemonTypesContext>("pokemon/types");
 			randomizeSingle(context);
 			context.streak = 0;
 			context.quizState = "waiting";
 			context.guesses = {};
+			context.selectedTypeId = null;
+			context.draggedTypeId = null;
 		},
 		// Fill chart actions
 		setChartGuess() {
@@ -296,10 +420,6 @@ store("pokemon/types", {
 			if (!context.randomPokemon) return;
 			syncPokemonContext(context.randomPokemon);
 		},
-		storeWeaknessAnswer() {
-			// This callback runs when context changes. We don't need to pre-compute
-			// the answer since we compute it on-demand in submitWeaknessGuess.
-			// But we keep it as a hook point for future use.
-		},
+		storeWeaknessAnswer() {},
 	},
 });

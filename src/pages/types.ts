@@ -10,33 +10,71 @@ import Section from "../components/Section.js";
 import { pickRandomPokemon } from "../utils/array.js";
 import { defaultQuizContext } from "../utils/quiz.js";
 
-const TypeRow = (type: Type) => html`
+const SourceTypeIcon = (type: Type) => html`
 	<div
-		class="type-guess-row"
+		class="weakness-source-icon"
 		data-wp-context='${JSON.stringify({ typeId: type.id })}'
+		draggable="true"
+		role="button"
+		tabindex="0"
+		data-wp-on--dragstart="actions.startDrag"
+		data-wp-on--dragend="actions.dragEnd"
+		data-wp-on--click="actions.selectSourceType"
+		data-wp-on--keydown="actions.handleKeydown"
+		data-wp-class--weakness-icon-placed="state.isTypePlaced"
+		data-wp-class--weakness-icon-selected="state.isTypeSelected"
+		data-wp-class--weakness-source-missed="state.isSourceTypeMissed"
 	>
-		<img src="${type.imageSmall}" alt="${type.name}" class="type-guess-icon" width="32" height="32" />
-		<span class="type-guess-name">${type.name}</span>
-		<select
-			class="type-guess-select"
-			data-wp-on--change="actions.setTypeGuess"
-			data-wp-bind--value="state.typeGuessValue"
-			data-wp-bind--disabled="!state.isWaiting"
-			data-wp-class--type-result-correct="state.isTypeResultCorrect"
-			data-wp-class--type-result-incorrect="state.isTypeResultIncorrect"
+		<img src="${type.imageSmall}" alt="${type.name}" width="24" height="24" draggable="false" />
+	</div>
+`;
+
+const EffectivenessBar = (
+	multiplier: number,
+	label: string,
+	cssClass: string,
+	allTypes: Type[],
+) => html`
+	<div
+		class="weakness-bar ${cssClass}"
+		data-wp-context='${JSON.stringify({ barMultiplier: multiplier })}'
+	>
+		<div class="weakness-bar-header">${label}</div>
+		<div
+			class="weakness-bar-content"
+			role="button"
+			tabindex="0"
+			data-wp-on--dragover="actions.allowDrop"
+			data-wp-on--drop="actions.dropOnBar"
+			data-wp-on--dragenter="actions.dragEnterBar"
+			data-wp-on--dragleave="actions.dragLeaveBar"
+			data-wp-on--click="actions.clickBar"
+			data-wp-on--keydown="actions.handleKeydown"
+			data-wp-class--weakness-bar-dragover="state.isDragOver"
 		>
-			<option value="1">—</option>
-			<option value="0">0</option>
-			<option value="0.25">¼</option>
-			<option value="0.5">½</option>
-			<option value="2">2</option>
-			<option value="4">4</option>
-		</select>
-		<span
-			class="type-correct-label"
-			data-wp-text="state.typeCorrectLabel"
-			data-wp-bind--hidden="state.isWaiting"
-		></span>
+			${allTypes.map(
+				(type) => html`
+				<img
+					src="${type.imageSmall}"
+					alt="${type.name}"
+					data-wp-context='${JSON.stringify({ typeId: type.id })}'
+					data-wp-bind--hidden="!state.isTypeInCurrentBar"
+					data-wp-on--click="actions.removeFromBar"
+					data-wp-on--dragstart="actions.startDrag"
+					data-wp-on--dragend="actions.dragEnd"
+					data-wp-on--keydown="actions.handleKeydown"
+					data-wp-class--bar-icon-correct="state.isTypeResultCorrect"
+					data-wp-class--bar-icon-incorrect="state.isTypeResultIncorrect"
+					class="weakness-bar-icon"
+					role="button"
+					tabindex="0"
+					draggable="true"
+					width="24"
+					height="24"
+				/>
+			`,
+			)}
+		</div>
 	</div>
 `;
 
@@ -111,27 +149,47 @@ const LearnTypesPage = () => {
 					quizContext: {
 						...defaultQuizContext(initialPokemon),
 						guesses: {},
+						draggedTypeId: null,
+						selectedTypeId: null,
 					},
 					watchCallback: "callbacks.storeWeaknessAnswer",
 					restartAction: "actions.restartWeakness",
 					children: html`
-					<div class="flex flex-col lg:flex-row items-center justify-center gap-12 py-10 px-6">
+					<div class="flex flex-col lg:flex-row items-center lg:items-stretch justify-center gap-8 lg:gap-12 py-10 px-6">
 						<!-- Left: Pokemon Card -->
 						<div
-							class="w-full max-w-[25rem] mx-auto sm:mx-0 sm:flex-shrink-0"
+							class="w-full max-w-[25rem] mx-auto lg:mx-0 flex-shrink-0"
 							data-wp-context---pokemon='pokemon::${JSON.stringify({ _pokemonDexNumber: String(initialPokemon.dexNumber), _pokemonFormName: initialPokemon.formName })}'
 							data-wp-watch="callbacks.updateWeaknessContext"
 						>
 							${PokemonCard()}
 						</div>
-						<!-- Right: Type list + Guess button -->
-						<div class="flex flex-col items-center gap-6">
-							<div class="grid grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-1">
-								${allTypes.map((type) => TypeRow(type))}
+						<!-- Right: Source icons + Effectiveness bars + Button -->
+						<div class="flex flex-col items-center justify-center gap-3 w-full lg:w-auto">
+							<div class="flex flex-row items-center gap-4">
+								<!-- Source type icons -->
+								<div
+									class="weakness-source-grid"
+									data-wp-on--dragover="actions.allowDrop"
+									data-wp-on--drop="actions.dropOnSource"
+								>
+									${allTypes.map((type) => SourceTypeIcon(type))}
+								</div>
+								<!-- Effectiveness bars -->
+								<div class="weakness-bars flex-1">
+									${EffectivenessBar(4, "4\u00d7", "weakness-bar-4x", allTypes)}
+									${EffectivenessBar(2, "2\u00d7", "weakness-bar-2x", allTypes)}
+									${EffectivenessBar(0.5, "1 / 2\u00d7", "weakness-bar-half", allTypes)}
+									${EffectivenessBar(0.25, "1 / 4\u00d7", "weakness-bar-quarter", allTypes)}
+									${EffectivenessBar(0, "0\u00d7", "weakness-bar-0x", allTypes)}
+								</div>
 							</div>
+							<!-- Button + Score -->
 							<div class="flex items-center gap-4">
-								<button type="button" class="btn btn-primary" data-wp-on--click="actions.submitWeaknessGuess" data-wp-bind--disabled="!state.isWaiting">Guess</button>
-								<span class="font-heading text-p-sm text-darker-gray" role="status" aria-live="polite" data-wp-bind--hidden="state.isWaiting"><span data-wp-text="state.correctCount">0</span>/18</span>
+								<button type="button" class="btn btn-primary" data-wp-on--click="actions.submitWeaknessGuess" data-wp-bind--hidden="!state.isWaiting">Guess</button>
+								<button type="button" class="btn btn-primary" data-wp-on--click="actions.nextPokemon" data-wp-bind--hidden="!state.isCorrect">Next</button>
+								<button type="button" class="btn btn-primary" data-wp-on--click="actions.tryAgainWeakness" data-wp-bind--hidden="!state.isRetry">Try Again</button>
+								<span class="font-heading text-p-sm text-darker-gray" role="status" aria-live="polite" data-wp-bind--hidden="state.isWaiting"><span data-wp-text="state.correctCount">0</span>/${allTypes.length}</span>
 							</div>
 						</div>
 					</div>
