@@ -381,6 +381,15 @@ store("pokemon/types", {
 			context.selectedTypeId = null;
 			context.draggedTypeId = null;
 		},
+		skipPokemon() {
+			const context = getContext<PokemonTypesContext>("pokemon/types");
+			if (context.quizState !== "retry") return;
+			randomizeSingle(context);
+			context.guesses = {};
+			context.quizState = "waiting";
+			context.selectedTypeId = null;
+			context.draggedTypeId = null;
+		},
 		// Full restart — callable from any state via QuizStatus.
 		restartWeakness() {
 			const context = getContext<PokemonTypesContext>("pokemon/types");

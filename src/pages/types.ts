@@ -189,6 +189,7 @@ const LearnTypesPage = () => {
 								<button type="button" class="btn btn-primary" data-wp-on--click="actions.submitWeaknessGuess" data-wp-bind--hidden="!state.isWaiting">Guess</button>
 								<button type="button" class="btn btn-primary" data-wp-on--click="actions.nextPokemon" data-wp-bind--hidden="!state.isCorrect">Next</button>
 								<button type="button" class="btn btn-primary" data-wp-on--click="actions.tryAgainWeakness" data-wp-bind--hidden="!state.isRetry">Try Again</button>
+								<button type="button" class="btn btn-secondary" data-wp-on--click="actions.skipPokemon" data-wp-bind--hidden="!state.isRetry">Skip</button>
 								<span class="font-heading text-p-sm text-darker-gray" role="status" aria-live="polite" data-wp-bind--hidden="state.isWaiting"><span data-wp-text="state.correctCount">0</span>/${allTypes.length}</span>
 							</div>
 						</div>
