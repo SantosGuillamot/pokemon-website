@@ -516,6 +516,14 @@
 		background-color: rgb(from var(--color-black) r g b / 0.2);
 	}
 
+	.speed-overlay-correct {
+		background-color: rgb(from var(--color-success) r g b / 0.2);
+	}
+
+	.speed-overlay-incorrect {
+		background-color: rgb(from var(--color-error) r g b / 0.2);
+	}
+
 	.quiz-status {
 		display: flex;
 		align-items: center;

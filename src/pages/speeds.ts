@@ -18,6 +18,8 @@ const SpeedRevealOverlay = (
 		class="speed-overlay-bg absolute inset-0 z-10 flex items-center justify-center rounded-sm"
 		aria-label="Speed stat"
 		data-wp-bind--hidden="state.isWaiting"
+		data-wp-class--speed-overlay-correct="${correctBinding}"
+		data-wp-class--speed-overlay-incorrect="${incorrectBinding}"
 	>
 		<span
 			class="text-h1 font-heading-retro flex items-center justify-center w-28 h-28 rounded-full bg-black text-white"
