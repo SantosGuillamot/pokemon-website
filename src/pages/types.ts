@@ -97,6 +97,77 @@ const ChartCell = (atkType: Type, defType: Type) => html`
 	</td>
 `;
 
+const serverGetTypeMatchup = (atkType: Type, defType: Type): number => {
+	if (atkType.attackNoEffect.includes(defType.id)) return 0;
+	if (atkType.attackNotVeryEffective.includes(defType.id)) return 0.5;
+	if (atkType.attackVeryEffective.includes(defType.id)) return 2;
+	return 1;
+};
+
+const effectivenessClass = (multiplier: number): string => {
+	if (multiplier === 0) return "chart-cell-eff-0x";
+	if (multiplier === 0.5) return "chart-cell-eff-half";
+	if (multiplier === 2) return "chart-cell-eff-2x";
+	return "chart-cell-eff-neutral";
+};
+
+const StaticChartCell = (atkType: Type, defType: Type) => {
+	const multiplier = serverGetTypeMatchup(atkType, defType);
+	const display =
+		multiplier === 0
+			? "0"
+			: multiplier === 0.5
+				? "\u00bd"
+				: multiplier === 2
+					? "2"
+					: "\u2014";
+	return html`
+		<td aria-label="${atkType.name} vs ${defType.name}: ${multiplier === 0.5 ? "\u00bd" : multiplier} times">
+			<div
+				class="chart-cell-static ${effectivenessClass(multiplier)}"
+				aria-hidden="true"
+			>${display}</div>
+		</td>
+	`;
+};
+
+const TypeChartTable = (
+	allTypes: Type[],
+	renderCell: (atkType: Type, defType: Type) => ReturnType<typeof html>,
+	caption: string,
+) => html`
+	<table class="type-chart-table mx-auto">
+		<caption class="sr-only">${caption}</caption>
+		<thead>
+			<tr>
+				<th class="chart-corner-cell" aria-label="Rows represent attacking type, columns represent defending type">
+					<span class="chart-corner-def" aria-hidden="true">DEF →</span>
+					<span class="chart-corner-atk" aria-hidden="true">ATK ↓</span>
+				</th>
+				${allTypes.map(
+					(type) => html`
+					<th scope="col" class="chart-header-cell">
+						<img src="${type.imageSmall}" alt="${type.name}" width="32" height="32" />
+					</th>
+				`,
+				)}
+			</tr>
+		</thead>
+		<tbody>
+			${allTypes.map(
+				(atkType) => html`
+				<tr>
+					<th scope="row" class="chart-row-header">
+						<img src="${atkType.imageSmall}" alt="${atkType.name}" width="32" height="32" />
+					</th>
+					${allTypes.map((defType) => renderCell(atkType, defType))}
+				</tr>
+			`,
+			)}
+		</tbody>
+	</table>
+`;
+
 const LearnTypesPage = () => {
 	const { state, config } = getServerData() as unknown as {
 		state: { pokemon: { pokemons: Record<string, Pokemon> } };
@@ -113,7 +184,7 @@ const LearnTypesPage = () => {
 			${Hero({
 				title: "Learn Types",
 				description:
-					"Master type effectiveness with two different modes. Fill in the full type chart or guess a Pokemon's weaknesses in a streak challenge.",
+					"Master type effectiveness with three different modes. View the complete type chart, fill it in from memory, or guess a Pokemon's weaknesses.",
 				image: "/images/pokemon/artwork/8.png",
 				imageBg: "/images/pokemon/artwork/9.png",
 			})}
@@ -138,6 +209,13 @@ const LearnTypesPage = () => {
 								description:
 									"Fill an empty type effectiveness table cell by cell.",
 								sectionId: "fill-chart",
+								ariaPressed: true,
+							})}
+							${QuizModeCard({
+								title: "Type Chart",
+								description:
+									"View the complete type effectiveness chart at a glance.",
+								sectionId: "type-chart",
 								ariaPressed: true,
 							})}
 						</div>
@@ -202,42 +280,23 @@ const LearnTypesPage = () => {
 					data-wp-context='${JSON.stringify({ sectionId: "fill-chart", chartGuesses: {}, chartState: "waiting" })}'
 					data-wp-bind--hidden="!state.isCurrentSection"
 				>
-					<div class="max-w-content mx-auto chart-scroll-container" role="region" aria-label="Type effectiveness chart" tabindex="0">
-						<table class="type-chart-table mx-auto">
-							<caption class="sr-only">Rows are attacking types, columns are defending types. Select the effectiveness multiplier for each matchup.</caption>
-							<thead>
-								<tr>
-									<th class="chart-corner-cell">
-										<span class="chart-corner-def">DEF →</span>
-										<span class="chart-corner-atk">ATK ↓</span>
-									</th>
-									${allTypes.map(
-										(type) => html`
-										<th scope="col" class="chart-header-cell">
-											<img src="${type.imageSmall}" alt="${type.name}" width="32" height="32" />
-										</th>
-									`,
-									)}
-								</tr>
-							</thead>
-							<tbody>
-								${allTypes.map(
-									(atkType) => html`
-									<tr>
-										<th scope="row" class="chart-row-header">
-											<img src="${atkType.imageSmall}" alt="${atkType.name}" width="32" height="32" />
-										</th>
-										${allTypes.map((defType) => ChartCell(atkType, defType))}
-									</tr>
-								`,
-								)}
-							</tbody>
-						</table>
+					<div class="max-w-content mx-auto chart-scroll-container" role="region" aria-label="Fill the type chart quiz" tabindex="0">
+						${TypeChartTable(allTypes, ChartCell, "Rows are attacking types, columns are defending types. Select the effectiveness multiplier for each matchup.")}
 						<div class="flex items-center justify-center gap-4 py-6">
 							<button type="button" class="btn btn-primary" data-wp-on--click="actions.submitChartGuess" data-wp-bind--hidden="!state.isChartWaiting">Guess</button>
 							<button type="button" class="btn btn-primary" data-wp-on--click="actions.restartChart" data-wp-bind--hidden="state.isChartWaiting">Try again</button>
 							<span class="font-heading text-p-sm text-darker-gray" role="status" aria-live="polite" data-wp-bind--hidden="state.isChartWaiting"><span data-wp-text="state.chartScore">0</span>/<span data-wp-text="state.chartTotal">0</span></span>
 						</div>
+					</div>
+				</section>
+
+				<section
+					class="px-6 py-32 section-diagonal"
+					data-wp-context='${JSON.stringify({ sectionId: "type-chart" })}'
+					data-wp-bind--hidden="!state.isCurrentSection"
+				>
+					<div class="max-w-content mx-auto chart-scroll-container" role="region" aria-label="Complete type effectiveness reference chart" tabindex="0">
+						${TypeChartTable(allTypes, StaticChartCell, "Complete type effectiveness chart. Rows are attacking types, columns are defending types.")}
 					</div>
 				</section>
 			</div>

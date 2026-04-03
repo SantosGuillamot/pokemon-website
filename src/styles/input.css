@@ -839,6 +839,38 @@
 		opacity: 1;
 	}
 
+	/* Type Chart — Static (read-only) cells */
+	.chart-cell-static {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 3rem;
+		height: 3rem;
+		font-family: var(--font-body);
+		font-size: 0.875rem;
+		font-weight: bold;
+		border: 1px solid var(--color-fog);
+	}
+
+	.chart-cell-eff-2x {
+		background-color: rgb(from #9a3412 r g b / 0.2);
+		color: #9a3412;
+	}
+
+	.chart-cell-eff-half {
+		background-color: rgb(from #1d4ed8 r g b / 0.2);
+		color: #1d4ed8;
+	}
+
+	.chart-cell-eff-0x {
+		background-color: #1e293b;
+		color: var(--color-white);
+	}
+
+	.chart-cell-eff-neutral {
+		color: var(--color-darker-gray);
+	}
+
 }
 
 /* Reduced motion — suppress all animations and transitions globally */
