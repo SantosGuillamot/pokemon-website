@@ -879,6 +879,102 @@
 		color: var(--color-darker-gray);
 	}
 
+	/* Data Table */
+	.data-table-wrapper {
+		/* Container for the entire data table instance */
+	}
+
+	.data-table-scroll {
+		overflow-y: auto;
+		overflow-x: auto;
+		-webkit-overflow-scrolling: touch;
+		scrollbar-width: none;
+	}
+
+	.data-table-scroll::-webkit-scrollbar {
+		display: none;
+	}
+
+	.data-table {
+		width: 100%;
+		border-collapse: collapse;
+		font-family: var(--font-body);
+		font-size: var(--text-paragraph-sm);
+		line-height: var(--text-paragraph-sm--line-height);
+	}
+
+	.data-table-th {
+		position: sticky;
+		top: 0;
+		z-index: 1;
+		background-color: var(--color-black);
+		color: var(--color-white);
+		font-family: var(--font-heading);
+		font-size: var(--text-paragraph-sm);
+		font-weight: bold;
+		letter-spacing: 0.05em;
+		text-align: left;
+		padding: 0.75rem 1rem;
+		white-space: nowrap;
+		user-select: none;
+	}
+
+	.data-table-th[role="button"] {
+		cursor: pointer;
+	}
+
+	.data-table-th[role="button"]:hover {
+		background-color: color-mix(in srgb, var(--color-black) 85%, white);
+	}
+
+	.data-table-th[role="button"]:focus-visible {
+		outline: 2px solid var(--color-primary);
+		outline-offset: -2px;
+	}
+
+	.data-table-th.data-table-th-sorted {
+		background-color: color-mix(in srgb, var(--color-black) 90%, var(--color-primary));
+	}
+
+	.data-table-sort-icon {
+		margin-left: 0.5rem;
+		font-size: 0.75rem;
+	}
+
+	.data-table-td {
+		padding: 0.5rem 1rem;
+		border-bottom: 1px solid var(--color-fog);
+		vertical-align: middle;
+	}
+
+	.data-table-empty-cell {
+		text-align: center;
+		padding: 2rem 1rem;
+		color: var(--color-darker-gray);
+		font-style: italic;
+	}
+
+	.data-table-row:hover {
+		background-color: rgb(from var(--color-fog) r g b / 0.4);
+	}
+
+	.data-table-row[role="button"] {
+		cursor: pointer;
+	}
+
+	.data-table-row[role="button"]:focus-visible {
+		outline: 2px solid var(--color-secondary);
+		outline-offset: -2px;
+	}
+
+	.data-table-row.data-table-row-selected {
+		background-color: rgb(from var(--color-primary) r g b / 0.2);
+	}
+
+	.data-table-row.data-table-row-selected:hover {
+		background-color: rgb(from var(--color-primary) r g b / 0.3);
+	}
+
 }
 
 /* Reduced motion — suppress all animations and transitions globally */

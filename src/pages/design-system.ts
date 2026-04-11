@@ -1,11 +1,41 @@
+import type {
+	DataTableColumn,
+	DataTableRow,
+} from "@pokemon-website/types/data-table";
+import type { Pokemon } from "@pokemon-website/types/pokemons";
 import { html } from "hono/html";
+import { getServerData } from "iapi-ssr-processor";
 import { Crosshair, Gauge, Grid2x2 } from "lucide-static";
 import Card from "../components/Card.js";
+import DataTable from "../components/DataTable.js";
 import Hero from "../components/Hero.js";
 import PokemonCard from "../components/PokemonCard.js";
 import Section from "../components/Section.js";
 
 const DesignSystemPage = () => {
+	const { state } = getServerData() as unknown as {
+		state: { pokemon: { pokemons: Record<string, Pokemon> } };
+	};
+	const pokemons = Object.values(state.pokemon.pokemons);
+
+	const speedRows: DataTableRow[] = pokemons.map((p) => ({
+		id: String(p.id),
+		name: p.name.replaceAll("-", " "),
+		speed: p.speed,
+		hp: p.hp,
+		attack: p.attack,
+		defense: p.defense,
+		spAttack: p.spAttack,
+		spDefense: p.spDefense,
+	}));
+
+	const nameRows: DataTableRow[] = pokemons.map((p) => ({
+		id: String(p.id),
+		name: p.name.replaceAll("-", " "),
+		speed: p.speed,
+		hp: p.hp,
+		attack: p.attack,
+	}));
 	return html`
 		<main>
 			${Hero({
@@ -371,6 +401,80 @@ const DesignSystemPage = () => {
 										<p class="text-paragraph-sm mt-1">White</p>
 										<p class="text-paragraph-sm text-darker-gray">#FFFFFF</p>
 									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				`,
+			})}
+			<!-- Data Tables -->
+			${Section({
+				children: html`
+					<div>
+						<h2 class="mb-8 pb-2 border-b border-fog">Data Tables</h2>
+
+						<div class="space-y-12">
+							<!-- Standalone table -->
+							<div>
+								<h3 class="mb-4">Standalone — Speed Table</h3>
+								<p class="text-paragraph-sm text-darker-gray mb-4">
+									All Pokemon in Champions sorted by speed. Click column headers to re-sort.
+								</p>
+								<div data-wp-interactive="pokemon/data-table">
+									${DataTable({
+										columns: [
+											{
+												key: "name",
+												label: "Name",
+												sortable: true,
+												searchable: true,
+											},
+											{ key: "speed", label: "Speed", sortable: true },
+											{ key: "hp", label: "HP", sortable: true },
+											{ key: "attack", label: "Atk", sortable: true },
+											{ key: "defense", label: "Def", sortable: true },
+											{ key: "spAttack", label: "SpA", sortable: true },
+											{ key: "spDefense", label: "SpD", sortable: true },
+										] satisfies DataTableColumn[],
+										rows: speedRows,
+										caption: "Pokemon speeds",
+										maxHeight: "32rem",
+										searchPlaceholder: "Search Pokemon...",
+										sortColumn: "speed",
+										sortDirection: "desc",
+									})}
+								</div>
+							</div>
+
+							<!-- Selectable (picker mode) -->
+							<div>
+								<h3 class="mb-4">Selectable — Picker Mode</h3>
+								<p class="text-paragraph-sm text-darker-gray mb-4">
+									Click a row to select it. Check the console for the selected name.
+								</p>
+								<div data-wp-interactive="pokemon/data-table">
+									${DataTable({
+										columns: [
+											{
+												key: "name",
+												label: "Name",
+												sortable: true,
+												searchable: true,
+											},
+											{ key: "speed", label: "Speed", sortable: true },
+											{ key: "hp", label: "HP", sortable: true },
+											{ key: "attack", label: "Atk", sortable: true },
+										] satisfies DataTableColumn[],
+										rows: nameRows,
+										selectable: true,
+										maxHeight: "24rem",
+										caption: "Select a Pokemon",
+										searchPlaceholder: "Search Pokemon...",
+										sortColumn: "name",
+										sortDirection: "asc",
+										watchCallback:
+											"pokemon/design-system::callbacks.onPokemonSelected",
+									})}
 								</div>
 							</div>
 						</div>

@@ -7,8 +7,10 @@ const entryPoints = [
 	"src/client/stores/router.ts",
 	"src/client/stores/nav.ts",
 	"src/client/stores/quiz-utils.ts",
+	"src/client/stores/data-table.ts",
 	"src/client/stores/pages/speeds.ts",
 	"src/client/stores/pages/types.ts",
+	"src/client/stores/pages/design-system.ts",
 ];
 
 const buildOptions: esbuild.BuildOptions = {
