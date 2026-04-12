@@ -38,7 +38,12 @@ const pages = [
 		render: DamageCalculatorPage,
 	},
 	{ path: "/team-building", title: "Team Building", render: TeamBuildingPage },
-	{ path: "/design-system", title: "Design System", render: DesignSystemPage },
+	{
+		path: "/design-system",
+		title: "Design System",
+		render: DesignSystemPage,
+		scripts: ["/js/stores/pages/design-system.js"],
+	},
 ];
 
 for (const { path, title, render, scripts } of pages) {
