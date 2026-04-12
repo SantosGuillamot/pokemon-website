@@ -3,12 +3,17 @@ import fs from "node:fs";
 import path from "node:path";
 import { eq } from "drizzle-orm";
 import { db } from "../src/db/client";
-import { pokemons } from "../src/db/schema/index";
+import { items, pokemons } from "../src/db/schema/index";
 
 const ARTWORK_URL =
 	"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/{id}.png";
 
 const OUTPUT_DIR = path.resolve("public/images/pokemon/artwork");
+
+const ITEM_SPRITE_URL =
+	"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/{name}.png";
+
+const ITEMS_OUTPUT_DIR = path.resolve("public/images/items");
 
 function sleep(ms: number) {
 	return new Promise((resolve) => setTimeout(resolve, ms));
@@ -99,6 +104,59 @@ async function main() {
 
 	console.log(
 		`Done! Downloaded: ${downloaded}, Skipped: ${skipped}, Failed: ${failed}`,
+	);
+
+	// --- Item sprites ---
+	console.log("\nFetching item list from database...");
+
+	const itemRows = await db
+		.select({
+			id: items.id,
+			name: items.name,
+		})
+		.from(items);
+
+	const itemTotal = itemRows.length;
+	console.log(`Found ${itemTotal} items. Downloading sprites...`);
+
+	fs.mkdirSync(ITEMS_OUTPUT_DIR, { recursive: true });
+
+	let itemDownloaded = 0;
+	let itemSkipped = 0;
+	let itemFailed = 0;
+
+	for (let i = 0; i < itemTotal; i++) {
+		const item = itemRows[i];
+
+		const url = ITEM_SPRITE_URL.replace("{name}", item.name);
+		const dest = path.join(ITEMS_OUTPUT_DIR, `${item.name}.png`);
+
+		const result = await downloadImage(url, dest);
+
+		if (result === "downloaded") {
+			itemDownloaded++;
+			const imageUrl = `/images/items/${item.name}.png`;
+			await db.update(items).set({ imageUrl }).where(eq(items.id, item.id));
+		} else if (result === "skipped") {
+			itemSkipped++;
+		} else {
+			itemFailed++;
+			console.warn(`  No sprite available for item "${item.name}"`);
+			await db
+				.update(items)
+				.set({ imageUrl: null })
+				.where(eq(items.id, item.id));
+		}
+
+		await sleep(100);
+
+		if ((i + 1) % 25 === 0 || i + 1 === itemTotal) {
+			console.log(`  Processed ${i + 1}/${itemTotal} items...`);
+		}
+	}
+
+	console.log(
+		`Done! Downloaded: ${itemDownloaded}, Skipped: ${itemSkipped}, Failed: ${itemFailed}`,
 	);
 
 	process.exit(0);
