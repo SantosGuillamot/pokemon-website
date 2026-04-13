@@ -16,7 +16,6 @@ export const items = pgTable("items", {
 	category: varchar("category").notNull(),
 	effect: text("effect"),
 	meta: jsonb("meta"),
-	inChampions: boolean("in_champions").notNull().default(false),
 	isMegaStone: boolean("is_mega_stone").notNull().default(false),
 	megaPokemonId: integer("mega_pokemon_id").references(() => pokemons.id),
 });

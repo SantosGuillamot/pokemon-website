@@ -50,7 +50,7 @@ for (const { path, title, render, scripts } of pages) {
 	app.get(path, async (c) => {
 		resetServerState();
 		await loadTypes();
-		await loadPokemons({ inChampions: true });
+		await loadPokemons();
 		return c.html(Layout({ title, scripts, children: await render() }));
 	});
 }

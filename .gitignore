@@ -21,6 +21,9 @@ public/images
 # Claude
 .claude
 
+# Scraping cache
+data/champions/.pokemon-cache.json
+
 # Migrations
 drizzle/
 # TODO: remove after first version is designed — delete all migration files,

@@ -79,9 +79,7 @@ const DataTable = ({
 		   data-wp-class--data-table-row-selected="state.isRowSelected"`
 		: "";
 
-	const watchAttr = watchCallback
-		? `data-wp-watch="${watchCallback}"`
-		: "";
+	const watchAttr = watchCallback ? `data-wp-watch="${watchCallback}"` : "";
 
 	return html`
 		<div

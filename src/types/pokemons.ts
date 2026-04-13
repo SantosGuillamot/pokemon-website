@@ -11,7 +11,6 @@ export type PokemonContext = {
 export type LoadPokemonsParams = {
 	ids?: number[];
 	dexNumbers?: number[];
-	inChampions?: boolean;
 };
 
 export function buildPokemonsSearchParams(
@@ -23,9 +22,6 @@ export function buildPokemonsSearchParams(
 	}
 	if (params?.dexNumbers?.length) {
 		searchParams.set("dex_numbers", params.dexNumbers.join(","));
-	}
-	if (params?.inChampions !== undefined) {
-		searchParams.set("in_champions", String(params.inChampions));
 	}
 	return searchParams;
 }
