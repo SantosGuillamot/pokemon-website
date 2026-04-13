@@ -29,5 +29,4 @@ export const pokemons = pgTable("pokemons", {
 	typeIds: jsonb("type_ids").$type<number[]>().notNull().default([]),
 	abilityIds: jsonb("ability_ids").$type<number[]>().notNull().default([]),
 	moveIds: jsonb("move_ids").$type<number[]>().notNull().default([]),
-	inChampions: boolean("in_champions").notNull().default(false),
 });

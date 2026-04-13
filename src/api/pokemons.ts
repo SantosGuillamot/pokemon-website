@@ -9,7 +9,6 @@ const route = app
 	.get("/", async (c) => {
 		const idsParam = c.req.query("ids");
 		const dexNumbersParam = c.req.query("dex_numbers");
-		const inChampionsParam = c.req.query("in_champions");
 
 		const conditions = [];
 
@@ -47,10 +46,6 @@ const route = app
 			conditions.push(inArray(pokemons.dexNumber, dexNumbers));
 		}
 
-		if (inChampionsParam === "true") {
-			conditions.push(eq(pokemons.inChampions, true));
-		}
-
 		const list = await db
 			.select()
 			.from(pokemons)
@@ -65,22 +60,15 @@ const route = app
 	})
 	.get("/:dexNumber", async (c) => {
 		const dexNumber = Number(c.req.param("dexNumber"));
-		const inChampionsParam = c.req.query("in_champions");
 
 		if (Number.isNaN(dexNumber)) {
 			return c.json({ error: "Invalid dex number" }, 400);
 		}
 
-		const conditions = [eq(pokemons.dexNumber, dexNumber)];
-
-		if (inChampionsParam === "true") {
-			conditions.push(eq(pokemons.inChampions, true));
-		}
-
 		const list = await db
 			.select()
 			.from(pokemons)
-			.where(and(...conditions))
+			.where(eq(pokemons.dexNumber, dexNumber))
 			.orderBy(asc(pokemons.dexNumber), desc(pokemons.isDefault));
 
 		if (list.length === 0) {

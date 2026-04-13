@@ -933,7 +933,11 @@
 	}
 
 	.data-table-th.data-table-th-sorted {
-		background-color: color-mix(in srgb, var(--color-black) 90%, var(--color-primary));
+		background-color: color-mix(
+			in srgb,
+			var(--color-black) 90%,
+			var(--color-primary)
+		);
 	}
 
 	.data-table-sort-icon {
@@ -974,7 +978,6 @@
 	.data-table-row.data-table-row-selected:hover {
 		background-color: rgb(from var(--color-primary) r g b / 0.3);
 	}
-
 }
 
 /* Reduced motion — suppress all animations and transitions globally */

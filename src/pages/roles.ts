@@ -9,7 +9,7 @@ const RolesPage = () => {
 				title: "Roles",
 				description:
 					"A Pokemon appears — decide whether it hits harder physically or specially, and whether it walls physical or special attacks. One wrong answer ends your streak!",
-				image: "/images/pokemon/artwork/8.png",
+				image: "/images/pokemon/artwork/25.png",
 				imageBg: "/images/pokemon/artwork/9.png",
 			})}
 

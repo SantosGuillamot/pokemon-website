@@ -42,7 +42,7 @@ const DesignSystemPage = () => {
 				title: "Design System",
 				description:
 					"A living reference of all design elements. Use this page to test, compare, and make decisions.",
-				image: "/images/pokemon/artwork/8.png",
+				image: "/images/pokemon/artwork/25.png",
 				imageBg: "/images/pokemon/artwork/9.png",
 			})}
 
