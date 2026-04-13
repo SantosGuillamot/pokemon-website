@@ -37,7 +37,8 @@ const Layout = ({
 							"@pokemon-website/stores/pokemons": "/js/stores/pokemons.js",
 							"@pokemon-website/stores/router": "/js/stores/router.js",
 							"@pokemon-website/stores/nav": "/js/stores/nav.js",
-							"@pokemon-website/stores/quiz-utils": "/js/stores/quiz-utils.js"
+							"@pokemon-website/stores/quiz-utils": "/js/stores/quiz-utils.js",
+							"@pokemon-website/stores/pages/team-building": "/js/stores/pages/team-building.js"
 						}
 					}
 				</script>

@@ -10,6 +10,7 @@ const entryPoints = [
 	"src/client/stores/data-table.ts",
 	"src/client/stores/pages/speeds.ts",
 	"src/client/stores/pages/types.ts",
+	"src/client/stores/pages/team-building.ts",
 	"src/client/stores/pages/design-system.ts",
 ];
 

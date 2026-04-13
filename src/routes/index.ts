@@ -37,7 +37,12 @@ const pages = [
 		title: "Damage Calculator",
 		render: DamageCalculatorPage,
 	},
-	{ path: "/team-building", title: "Team Building", render: TeamBuildingPage },
+	{
+		path: "/team-building",
+		title: "Team Building",
+		render: TeamBuildingPage,
+		scripts: ["/js/stores/pages/team-building.js"],
+	},
 	{
 		path: "/design-system",
 		title: "Design System",

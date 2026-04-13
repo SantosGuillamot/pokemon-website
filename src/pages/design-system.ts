@@ -444,6 +444,76 @@ const DesignSystemPage = () => {
 				`,
 			})}
 
+			<!-- Team Builder Storage -->
+			${Section({
+				children: html`
+					<div
+						data-wp-interactive="pokemon/team-builder"
+						data-wp-init="callbacks.init"
+					>
+						<h2 class="mb-8 pb-2 border-b border-fog">Team Builder Storage</h2>
+						<p class="text-paragraph-sm text-darker-gray mb-8">
+							Temporary test section — exercises the localStorage CRUD layer directly.
+						</p>
+
+						<!-- Meta Pokemons -->
+						<div class="mb-12">
+							<h3 class="mb-4">Meta Pokemons</h3>
+							<button
+								type="button"
+								class="btn btn-primary mb-6"
+								data-wp-on--click="pokemon/design-system::actions.createSampleMetaPokemon"
+							>
+								Add Sample Meta Pokemon
+							</button>
+							<ul class="space-y-2">
+								<template data-wp-each="state.metaPokemons">
+									<li class="flex items-center gap-4 p-3 border border-fog rounded">
+										<span class="flex-1">
+											<strong data-wp-text="context.item.nickname"></strong>
+											<span class="text-paragraph-sm text-darker-gray ml-2">(pokemonId: <span data-wp-text="context.item.pokemonId"></span>)</span>
+										</span>
+										<button
+											type="button"
+											class="btn btn-secondary"
+											data-wp-on--click="pokemon/design-system::actions.deleteMetaPokemon"
+										>
+											Delete
+										</button>
+									</li>
+								</template>
+							</ul>
+						</div>
+
+						<!-- Teams -->
+						<div>
+							<h3 class="mb-4">Teams</h3>
+							<button
+								type="button"
+								class="btn btn-primary mb-6"
+								data-wp-on--click="pokemon/design-system::actions.createSampleTeam"
+							>
+								Add Sample Team
+							</button>
+							<ul class="space-y-2">
+								<template data-wp-each="state.teams">
+									<li class="flex items-center gap-4 p-3 border border-fog rounded">
+										<span class="flex-1" data-wp-text="context.item.name"></span>
+										<button
+											type="button"
+											class="btn btn-secondary"
+											data-wp-on--click="pokemon/design-system::actions.deleteTeam"
+										>
+											Delete
+										</button>
+									</li>
+								</template>
+							</ul>
+						</div>
+					</div>
+				`,
+			})}
+
 			<!-- Data Tables -->
 			${Section({
 				children: html`
