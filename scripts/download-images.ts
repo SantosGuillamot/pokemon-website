@@ -11,7 +11,10 @@ const ARTWORK_URL =
 const OUTPUT_DIR = path.resolve("public/images/pokemon/artwork");
 
 const ITEM_SPRITE_URL =
-	"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/{name}.png";
+	"https://www.serebii.net/itemdex/sprites/sv/{name}.png";
+
+const MEGA_STONE_SPRITE_URL =
+	"https://www.serebii.net/itemdex/sprites/za/{name}.png";
 
 const ITEMS_OUTPUT_DIR = path.resolve("public/images/items");
 
@@ -113,6 +116,7 @@ async function main() {
 		.select({
 			id: items.id,
 			name: items.name,
+			isMegaStone: items.isMegaStone,
 		})
 		.from(items);
 
@@ -128,7 +132,8 @@ async function main() {
 	for (let i = 0; i < itemTotal; i++) {
 		const item = itemRows[i];
 
-		const url = ITEM_SPRITE_URL.replace("{name}", item.name);
+		const baseUrl = item.isMegaStone ? MEGA_STONE_SPRITE_URL : ITEM_SPRITE_URL;
+		const url = baseUrl.replace("{name}", item.name.replace(/-/g, ""));
 		const dest = path.join(ITEMS_OUTPUT_DIR, `${item.name}.png`);
 
 		const result = await downloadImage(url, dest);
@@ -139,6 +144,8 @@ async function main() {
 			await db.update(items).set({ imageUrl }).where(eq(items.id, item.id));
 		} else if (result === "skipped") {
 			itemSkipped++;
+			const imageUrl = `/images/items/${item.name}.png`;
+			await db.update(items).set({ imageUrl }).where(eq(items.id, item.id));
 		} else {
 			itemFailed++;
 			console.warn(`  No sprite available for item "${item.name}"`);

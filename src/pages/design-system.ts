@@ -407,6 +407,43 @@ const DesignSystemPage = () => {
 					</div>
 				`,
 			})}
+			<!-- Item Images -->
+			${Section({
+				children: html`
+					<div>
+						<h2 class="mb-8 pb-2 border-b border-fog">Item Images</h2>
+
+						<div class="flex flex-wrap gap-8">
+							<div class="text-center">
+								<img
+									src="/images/items/kings-rock.png"
+									alt="King's Rock"
+									class="w-16 h-16"
+								/>
+								<p class="text-paragraph-sm mt-2">King's Rock</p>
+							</div>
+							<div class="text-center">
+								<img
+									src="/images/items/never-melt-ice.png"
+									alt="Never-Melt Ice"
+									class="w-16 h-16"
+								/>
+								<p class="text-paragraph-sm mt-2">Never-Melt Ice</p>
+							</div>
+							<div class="text-center">
+								<img
+									src="/images/items/dragoninite.png"
+									alt="Dragoninite"
+									class="w-16 h-16"
+								/>
+								<p class="text-paragraph-sm mt-2">Dragoninite</p>
+								<p class="text-paragraph-sm text-darker-gray">Mega Stone</p>
+							</div>
+						</div>
+					</div>
+				`,
+			})}
+
 			<!-- Data Tables -->
 			${Section({
 				children: html`
