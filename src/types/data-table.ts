@@ -43,6 +43,12 @@ export type DataTableContext = {
 	sortDirection: "asc" | "desc";
 	/** Text search filter. Empty string means no filter. */
 	searchTerm: string;
+	/**
+	 * How search behaves:
+	 * - "filter": hide non-matching rows (default)
+	 * - "scroll": keep all rows visible, scroll to and highlight matches
+	 */
+	searchMode: "filter" | "scroll";
 	/** Whether single-selection mode is enabled. */
 	selectable: boolean;
 	/** The id of the currently selected row, or null. */

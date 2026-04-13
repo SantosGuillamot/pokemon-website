@@ -12,6 +12,7 @@ type DataTableStore = {
 		isColumnSorted: boolean;
 		sortIcon: string;
 		isRowSelected: boolean;
+		isRowHighlighted: boolean;
 	};
 };
 
@@ -21,8 +22,8 @@ store("pokemon/data-table", {
 			const ctx = getContext<DataTableContext>("pokemon/data-table");
 			let result = [...ctx.rows];
 
-			// 1. Filter by searchTerm
-			if (ctx.searchTerm.trim()) {
+			// 1. Filter by searchTerm (only in filter mode)
+			if (ctx.searchMode !== "scroll" && ctx.searchTerm.trim()) {
 				const term = ctx.searchTerm.trim().toLowerCase();
 				const searchableKeys = ctx.columns
 					.filter((c) => c.searchable)
@@ -78,10 +79,24 @@ store("pokemon/data-table", {
 			return ctx.sortDirection === "asc" ? "\u2191" : "\u2193"; // up or down arrow
 		},
 
-		// -- Per-row getter --
+		// -- Per-row getters --
 		get isRowSelected(): boolean {
 			const ctx = getContext<DataTableContext>("pokemon/data-table");
 			return ctx.selectable && ctx.selectedId === ctx.item?.id;
+		},
+
+		get isRowHighlighted(): boolean {
+			const ctx = getContext<DataTableContext>("pokemon/data-table");
+			if (ctx.searchMode !== "scroll" || !ctx.searchTerm.trim() || !ctx.item)
+				return false;
+			const term = ctx.searchTerm.trim().toLowerCase();
+			const searchableKeys = ctx.columns
+				.filter((c) => c.searchable)
+				.map((c) => c.key);
+			return searchableKeys.some((key) => {
+				const val = ctx.item?.[key];
+				return val != null && String(val).toLowerCase().includes(term);
+			});
 		},
 	},
 
@@ -116,6 +131,41 @@ store("pokemon/data-table", {
 			const ctx = getContext<DataTableContext>("pokemon/data-table");
 			const { ref } = getElement();
 			ctx.searchTerm = (ref as HTMLInputElement).value;
+		},
+	},
+
+	callbacks: {
+		scrollToSearchMatch() {
+			const ctx = getContext<DataTableContext>("pokemon/data-table");
+			if (ctx.searchMode !== "scroll") return;
+
+			const term = ctx.searchTerm.trim().toLowerCase();
+			if (!term) return;
+
+			const { state } = store<DataTableStore>("pokemon/data-table");
+			const rows = state.visibleRows;
+			const searchableKeys = ctx.columns
+				.filter((c) => c.searchable)
+				.map((c) => c.key);
+
+			const matchIndex = rows.findIndex((row) =>
+				searchableKeys.some((key) => {
+					const val = row[key];
+					return val != null && String(val).toLowerCase().includes(term);
+				}),
+			);
+
+			if (matchIndex === -1) return;
+
+			const { ref } = getElement();
+			if (!ref) return;
+			const tableRows = ref.querySelectorAll(
+				"tbody:first-of-type .data-table-row",
+			);
+			const targetRow = tableRows[matchIndex];
+			if (targetRow) {
+				targetRow.scrollIntoView({ block: "center", behavior: "smooth" });
+			}
 		},
 	},
 });

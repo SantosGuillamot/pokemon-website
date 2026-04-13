@@ -31,6 +31,12 @@ type DataTableProps = {
 	sortColumn?: string | null;
 	/** Initial sort direction. Defaults to "asc". Only meaningful when `sortColumn` is set. */
 	sortDirection?: "asc" | "desc";
+	/**
+	 * How search behaves:
+	 * - "filter": hide non-matching rows (default)
+	 * - "scroll": keep all rows visible, scroll to and highlight matches
+	 */
+	searchMode?: "filter" | "scroll";
 };
 
 const renderCell = (col: DataTableColumn) => {
@@ -41,8 +47,8 @@ const renderCell = (col: DataTableColumn) => {
 				<img
 					data-wp-bind--src="context.item.${col.key}"
 					${col.altKey ? raw(`data-wp-bind--alt="context.item.${col.altKey}"`) : 'alt=""'}
-					width="32"
-					height="32"
+					width="48"
+					height="48"
 				/>
 			</td>`;
 		default:
@@ -61,6 +67,7 @@ const DataTable = ({
 	watchCallback,
 	sortColumn: initialSortColumn = null,
 	sortDirection: initialSortDirection = "asc",
+	searchMode = "filter",
 }: DataTableProps) => {
 	const context: DataTableContext = {
 		columns,
@@ -68,6 +75,7 @@ const DataTable = ({
 		sortColumn: initialSortColumn,
 		sortDirection: initialSortDirection,
 		searchTerm: "",
+		searchMode,
 		selectable,
 		selectedId: null,
 	};
@@ -80,19 +88,24 @@ const DataTable = ({
 		: "";
 
 	const watchAttr = watchCallback ? `data-wp-watch="${watchCallback}"` : "";
+	const scrollWatchAttr =
+		searchMode === "scroll"
+			? 'data-wp-watch--scroll="callbacks.scrollToSearchMatch"'
+			: "";
 
 	return html`
 		<div
 			data-wp-context='${JSON.stringify(context)}'
 			class="data-table-wrapper ${className || ""}"
 			${raw(watchAttr)}
+			${raw(scrollWatchAttr)}
 		>
 			${
 				searchPlaceholder
 					? html`<input
 							type="text"
 							placeholder="${searchPlaceholder}"
-							class="mb-4 w-full max-w-sm px-4 py-2 border border-fog rounded-lg text-paragraph-sm font-body"
+							class="mb-4 w-full max-w-sm px-4 py-2 bg-fog text-paragraph font-body outline-none"
 							data-wp-on--input="actions.updateSearchTerm"
 						/>`
 					: ""
@@ -136,7 +149,7 @@ const DataTable = ({
 					</thead>
 					<tbody>
 						<template data-wp-each="state.visibleRows">
-							<tr class="data-table-row" ${raw(selectableAttrs)}>
+							<tr class="data-table-row" ${raw(selectableAttrs)} data-wp-class--data-table-row-highlighted="state.isRowHighlighted">
 								${columns.map((col) => renderCell(col))}
 							</tr>
 						</template>

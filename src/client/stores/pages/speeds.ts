@@ -1,6 +1,7 @@
 import type { PokemonStore } from "@pokemon-website/stores/pokemons";
 import { getContext, getElement, store } from "@wordpress/interactivity";
 import "@pokemon-website/stores/pokemons";
+import "../data-table.js";
 import {
 	isCurrentSection,
 	isIncorrect,

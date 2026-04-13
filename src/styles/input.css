@@ -899,8 +899,8 @@
 		width: 100%;
 		border-collapse: collapse;
 		font-family: var(--font-body);
-		font-size: var(--text-paragraph-sm);
-		line-height: var(--text-paragraph-sm--line-height);
+		font-size: var(--text-paragraph);
+		line-height: var(--text-paragraph--line-height);
 	}
 
 	.data-table-th {
@@ -977,6 +977,14 @@
 
 	.data-table-row.data-table-row-selected:hover {
 		background-color: rgb(from var(--color-primary) r g b / 0.3);
+	}
+
+	.data-table-row.data-table-row-highlighted {
+		background-color: rgb(from var(--color-primary) r g b / 0.15);
+	}
+
+	.data-table-row.data-table-row-highlighted:hover {
+		background-color: rgb(from var(--color-primary) r g b / 0.25);
 	}
 }
 

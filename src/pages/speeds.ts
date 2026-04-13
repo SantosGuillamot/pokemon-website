@@ -1,6 +1,8 @@
 import type { Pokemon } from "@pokemon-website/types/pokemons";
+import type { DataTableColumn, DataTableRow } from "@pokemon-website/types/data-table";
 import { html } from "hono/html";
 import { getServerData } from "iapi-ssr-processor";
+import DataTable from "../components/DataTable.js";
 import Hero from "../components/Hero.js";
 import PokemonCard from "../components/PokemonCard.js";
 import QuizModeCard from "../components/QuizModeCard.js";
@@ -66,6 +68,17 @@ const WhosFasterPage = () => {
 		{ dexNumber: pokemonB.dexNumber, formName: pokemonB.formName },
 	];
 	const guessSpeedInitial = pickRandomPokemon(pokemons);
+
+	const capitalize = (s: string) =>
+		s.replace(/\b\w/g, (c) => c.toUpperCase());
+
+	const speedRows: DataTableRow[] = pokemons.map((p) => ({
+		id: String(p.id),
+		sprite: p.imageUrl ?? "",
+		name: capitalize(p.name.replaceAll("-", " ")),
+		speed: p.speed,
+	}));
+
 	return html`
 		<main>
 			${Hero({
@@ -179,8 +192,21 @@ const WhosFasterPage = () => {
 					class: "section-diagonal py-32",
 					attrs: `data-wp-context='${JSON.stringify({ sectionId: "speeds-table" })}' data-wp-bind--hidden="!state.isCurrentSection"`,
 					children: html`
-					<div class="rounded-lg p-6 quiz-bg">
-						<p>Table with all pokemons sorted by speed</p>
+					<div class="rounded-lg p-6" data-wp-interactive="pokemon/data-table">
+						${DataTable({
+							columns: [
+								{ key: "sprite", label: "", render: "image", altKey: "name", cellClass: "w-20" },
+								{ key: "name", label: "Name", sortable: true, searchable: true },
+								{ key: "speed", label: "Speed", sortable: true, headerClass: "w-20" },
+							] satisfies DataTableColumn[],
+							rows: speedRows,
+							caption: "Pokemon sorted by speed",
+							maxHeight: "70vh",
+							searchPlaceholder: "Search Pokemon...",
+							searchMode: "scroll",
+							sortColumn: "speed",
+							sortDirection: "desc",
+						})}
 					</div>
 				`,
 				})}
