@@ -39,7 +39,7 @@ const pages = [
 	},
 	{
 		path: "/team-building",
-		title: "Team Building",
+		title: "Team Builder",
 		render: TeamBuildingPage,
 		scripts: ["/js/stores/pages/team-building.js"],
 	},

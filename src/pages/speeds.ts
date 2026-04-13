@@ -5,7 +5,7 @@ import { getServerData } from "iapi-ssr-processor";
 import DataTable from "../components/DataTable.js";
 import Hero from "../components/Hero.js";
 import PokemonCard from "../components/PokemonCard.js";
-import QuizModeCard from "../components/QuizModeCard.js";
+import SectionCard from "../components/SectionCard.js";
 import QuizSection from "../components/QuizSection.js";
 import Section from "../components/Section.js";
 import { pickRandomPokemon, pickTwo } from "../utils/array.js";
@@ -97,17 +97,17 @@ const WhosFasterPage = () => {
 					children: html`
 						<h2 class="text-center mb-8">Learn Speeds</h2>
 						<div class="flex flex-wrap justify-center gap-4">
-							${QuizModeCard({
+							${SectionCard({
 								title: "Who's Faster?",
 								description: "Guess which Pokemon has the higher speed stat.",
 								sectionId: "whos-faster",
 							})}
-							${QuizModeCard({
+							${SectionCard({
 								title: "Guess Speed",
 								description: "Guess the base speed of a Pokemon.",
 								sectionId: "guess-speed",
 							})}
-							${QuizModeCard({
+							${SectionCard({
 								title: "Speeds Table",
 								description: "Browse all Pokemon sorted by their speed stat.",
 								sectionId: "speeds-table",
