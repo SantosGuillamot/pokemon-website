@@ -27,12 +27,7 @@ export function syncPokemonContext(data: QuizPokemon) {
 	pokemonContext._pokemonFormName = data.formName;
 }
 
-export function isCurrentSection(namespace: string): boolean {
-	const context = getContext<{ currentSection: string; sectionId: string }>(
-		namespace,
-	);
-	return context.currentSection === context.sectionId;
-}
+export { isCurrentSection, selectSection } from "@pokemon-website/stores/section-utils";
 
 export function isWaiting(namespace: string): boolean {
 	const context = getContext<{ quizState: string }>(namespace);
@@ -44,9 +39,3 @@ export function isIncorrect(namespace: string): boolean {
 	return context.quizState === "incorrect";
 }
 
-export function selectSection(namespace: string) {
-	const ctx = getContext<{ currentSection: string; sectionId: string }>(
-		namespace,
-	);
-	ctx.currentSection = ctx.sectionId;
-}

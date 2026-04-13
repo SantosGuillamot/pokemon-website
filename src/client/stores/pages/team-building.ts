@@ -1,6 +1,10 @@
 import type { MetaPokemon, Team } from "@pokemon-website/types/team-builder";
 import { store } from "@wordpress/interactivity";
 import {
+	isCurrentSection,
+	selectSection,
+} from "@pokemon-website/stores/section-utils";
+import {
 	createMetaPokemon,
 	createTeam,
 	deleteMetaPokemon,
@@ -14,6 +18,7 @@ import {
 type TeamBuilderState = {
 	metaPokemons: MetaPokemon[];
 	teams: Team[];
+	isCurrentSection: boolean;
 };
 
 export type TeamBuilderStore = {
@@ -29,6 +34,7 @@ export type TeamBuilderStore = {
 		) => void;
 		saveTeam: (team: Team) => void;
 		deleteTeam: (id: string) => void;
+		selectSection: () => void;
 	};
 };
 
@@ -36,6 +42,9 @@ const { state } = store("pokemon/team-builder", {
 	state: {
 		metaPokemons: [] as MetaPokemon[],
 		teams: [] as Team[],
+		get isCurrentSection() {
+			return isCurrentSection("pokemon/team-builder");
+		},
 	},
 	actions: {
 		createMetaPokemon(
@@ -83,6 +92,9 @@ const { state } = store("pokemon/team-builder", {
 			const s = state as TeamBuilderState;
 			deleteTeam(id);
 			s.teams = s.teams.filter((t) => t.id !== id);
+		},
+		selectSection() {
+			selectSection("pokemon/team-builder");
 		},
 	},
 	callbacks: {

@@ -1,6 +1,6 @@
 import Card from "./Card.js";
 
-type QuizModeCardProps = {
+type SectionCardProps = {
 	title: string;
 	description: string;
 	sectionId: string;
@@ -8,15 +8,15 @@ type QuizModeCardProps = {
 };
 
 /**
- * A Card preconfigured for quiz section selection buttons.
- * Used in both the types and speeds pages.
+ * A Card preconfigured for section selection buttons.
+ * Used in quiz and non-quiz pages.
  */
-const QuizModeCard = ({
+const SectionCard = ({
 	title,
 	description,
 	sectionId,
 	ariaPressed = false,
-}: QuizModeCardProps) => {
+}: SectionCardProps) => {
 	const ariaPressedAttr = ariaPressed
 		? ' data-wp-bind--aria-pressed="state.isCurrentSection"'
 		: "";
@@ -30,4 +30,4 @@ const QuizModeCard = ({
 	});
 };
 
-export default QuizModeCard;
+export default SectionCard;

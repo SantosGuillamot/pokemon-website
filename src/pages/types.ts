@@ -4,7 +4,7 @@ import { html } from "hono/html";
 import { getServerData } from "iapi-ssr-processor";
 import Hero from "../components/Hero.js";
 import PokemonCard from "../components/PokemonCard.js";
-import QuizModeCard from "../components/QuizModeCard.js";
+import SectionCard from "../components/SectionCard.js";
 import QuizSection from "../components/QuizSection.js";
 import Section from "../components/Section.js";
 import { pickRandomPokemon } from "../utils/array.js";
@@ -197,21 +197,21 @@ const LearnTypesPage = () => {
 					children: html`
 						<h2 class="text-center mb-8">Learn Types</h2>
 						<div class="flex flex-wrap justify-center gap-4">
-							${QuizModeCard({
+							${SectionCard({
 								title: "Pokemon Weaknesses",
 								description:
 									"Given a random Pokemon, guess all its weaknesses.",
 								sectionId: "pokemon-weaknesses",
 								ariaPressed: true,
 							})}
-							${QuizModeCard({
+							${SectionCard({
 								title: "Fill the Type Chart",
 								description:
 									"Fill an empty type effectiveness table cell by cell.",
 								sectionId: "fill-chart",
 								ariaPressed: true,
 							})}
-							${QuizModeCard({
+							${SectionCard({
 								title: "Type Chart",
 								description:
 									"View the complete type effectiveness chart at a glance.",
