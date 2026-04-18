@@ -20,7 +20,21 @@ store("pokemon/data-table", {
 	state: {
 		get visibleRows() {
 			const ctx = getContext<DataTableContext>("pokemon/data-table");
-			let result = [...ctx.rows];
+			// When `rowsStore`/`rowsKey` are set on the context (see
+			// `DataTable.ts`), source the rows reactively from a
+			// page-level store. Reading `store(...).state[key]` inside a
+			// getter registers a cross-store dependency, so mutations
+			// to that state invalidate this getter and re-run the
+			// `<template data-wp-each>`.
+			const rawRows: DataTableRow[] =
+				ctx.rowsStore && ctx.rowsKey
+					? (((
+							store(ctx.rowsStore) as {
+								state: Record<string, unknown>;
+							}
+						).state[ctx.rowsKey] as DataTableRow[]) ?? [])
+					: ctx.rows;
+			let result = [...rawRows];
 
 			// 1. Filter by searchTerm (only in filter mode)
 			if (ctx.searchMode !== "scroll" && ctx.searchTerm.trim()) {

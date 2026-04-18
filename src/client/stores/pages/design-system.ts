@@ -13,18 +13,19 @@ store("pokemon/design-system", {
 	actions: {
 		createSampleMetaPokemon() {
 			teamBuilderActions.createMetaPokemon({
-				nickname: "Test Charizard",
-				pokemonId: 6,
+				nickname: `Test Charizard ${Date.now()}`,
+				pokemonId: 4402,
 				moveIds: [53, 56, null, null],
 				abilityId: null,
-				itemId: null,
+				itemId: 2239,
+				natureId: 5,
 				statPoints: {
-					hp: 0,
-					attack: 0,
-					defense: 0,
-					spAttack: 0,
-					spDefense: 0,
-					speed: 0,
+					hp: 6,
+					attack: 4,
+					defense: 8,
+					spAttack: 20,
+					spDefense: 10,
+					speed: 18,
 				},
 			});
 		},

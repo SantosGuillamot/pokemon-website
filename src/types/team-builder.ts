@@ -46,6 +46,7 @@ export type MetaPokemon = {
 	moveIds: [number | null, number | null, number | null, number | null];
 	abilityId: number | null;
 	itemId: number | null;
+	natureId: number | null;
 	statPoints: StatPoints;
 	createdAt: string;
 	updatedAt: string;

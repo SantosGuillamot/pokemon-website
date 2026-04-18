@@ -4,6 +4,7 @@ import type {
 	DataTableRow,
 } from "@pokemon-website/types/data-table";
 import { html, raw } from "hono/html";
+import type { HtmlEscapedString } from "hono/utils/html";
 
 type DataTableProps = {
 	/** Column definitions. */
@@ -20,12 +21,7 @@ type DataTableProps = {
 	maxHeight?: string;
 	/** If provided, renders a search input above the table with this placeholder text. */
 	searchPlaceholder?: string;
-	/**
-	 * A fully-qualified `data-wp-watch` callback reference to place on the
-	 * context wrapper, e.g. "pokemon/design-system::callbacks.onPokemonSelected".
-	 * Because the watch is rendered inside the DataTable's `data-wp-context`,
-	 * the callback can read the table's context via `getContext("pokemon/data-table")`.
-	 */
+	/** Fully-qualified `data-wp-watch` callback reference placed on the context wrapper. */
 	watchCallback?: string;
 	/** Initial sort column key. When provided, the table starts sorted by this column. */
 	sortColumn?: string | null;
@@ -37,20 +33,71 @@ type DataTableProps = {
 	 * - "scroll": keep all rows visible, scroll to and highlight matches
 	 */
 	searchMode?: "filter" | "scroll";
+	/**
+	 * Message shown inside the table when there are no visible rows.
+	 * Defaults to "No results found.".
+	 */
+	emptyMessage?: string;
+	/** Optional HTML rendered on the right side of the header row (e.g. "Add New" button). */
+	headerEnd?: HtmlEscapedString | Promise<HtmlEscapedString> | string;
+	/** When set with `rowsKey`, sources rows reactively from `store(rowsStore).state[rowsKey]`. */
+	rowsStore?: string;
+	/** See `rowsStore`. */
+	rowsKey?: string;
 };
 
 const renderCell = (col: DataTableColumn) => {
 	const cls = `data-table-td ${col.cellClass || ""}`;
 	switch (col.render) {
-		case "image":
+		case "image": {
+			// `data-wp-bind--hidden` truthy-hides, so empty row values keep the
+			// <img> off-DOM and avoid the browser's empty-src document re-fetch.
+			const srcKey = col.imageKey ?? col.key;
+			const size = col.imageSize ?? 48;
 			return html`<td class="${cls}">
 				<img
-					data-wp-bind--src="context.item.${col.key}"
+					data-wp-bind--src="context.item.${srcKey}"
+					data-wp-bind--hidden="!context.item.${srcKey}"
 					${col.altKey ? raw(`data-wp-bind--alt="context.item.${col.altKey}"`) : 'alt=""'}
-					width="48"
-					height="48"
+					width="${size}"
+					height="${size}"
 				/>
 			</td>`;
+		}
+		case "types": {
+			return html`<td class="${cls}">
+				<div class="pokemon-card-types">
+					<img
+						class="pokemon-card-type-icon"
+						data-wp-bind--src="context.item.type1"
+						data-wp-bind--hidden="!context.item.type1"
+						data-wp-bind--alt="context.item.type1Name"
+						width="24"
+						height="24"
+					/>
+					<img
+						class="pokemon-card-type-icon"
+						data-wp-bind--src="context.item.type2"
+						data-wp-bind--hidden="!context.item.type2"
+						data-wp-bind--alt="context.item.type2Name"
+						width="24"
+						height="24"
+					/>
+				</div>
+			</td>`;
+		}
+		case "action": {
+			const action = col.action;
+			if (!action) return html`<td class="${cls}"></td>`;
+			return html`<td class="${cls}">
+				<button
+					type="button"
+					class="data-table-action-btn"
+					aria-label="${action.label}"
+					data-wp-on--click="${action.callback}"
+				>${raw(action.icon)}</button>
+			</td>`;
+		}
 		default:
 			return html`<td class="${cls}" data-wp-text="context.item.${col.key}"></td>`;
 	}
@@ -68,6 +115,10 @@ const DataTable = ({
 	sortColumn: initialSortColumn = null,
 	sortDirection: initialSortDirection = "asc",
 	searchMode = "filter",
+	emptyMessage,
+	headerEnd,
+	rowsStore,
+	rowsKey,
 }: DataTableProps) => {
 	const context: DataTableContext = {
 		columns,
@@ -78,6 +129,7 @@ const DataTable = ({
 		searchMode,
 		selectable,
 		selectedId: null,
+		...(rowsStore && rowsKey ? { rowsStore, rowsKey } : {}),
 	};
 
 	const selectableAttrs = selectable
@@ -101,13 +153,20 @@ const DataTable = ({
 			${raw(scrollWatchAttr)}
 		>
 			${
-				searchPlaceholder
-					? html`<input
-							type="text"
-							placeholder="${searchPlaceholder}"
-							class="mb-4 w-full max-w-sm px-4 py-2 bg-fog text-paragraph font-body outline-none"
-							data-wp-on--input="actions.updateSearchTerm"
-						/>`
+				searchPlaceholder || headerEnd
+					? html`<div class="mb-4 flex items-center justify-between gap-4">
+							${
+								searchPlaceholder
+									? html`<input
+											type="text"
+											placeholder="${searchPlaceholder}"
+											class="w-full max-w-sm px-4 py-2 bg-fog text-paragraph font-body outline-none"
+											data-wp-on--input="actions.updateSearchTerm"
+										/>`
+									: ""
+							}
+							${headerEnd ?? ""}
+						</div>`
 					: ""
 			}
 			<div
@@ -154,8 +213,6 @@ const DataTable = ({
 							</tr>
 						</template>
 					</tbody>
-					<!-- Empty state in a separate tbody so it is never
-					     confused with data-wp-each generated rows -->
 					<tbody>
 						<tr
 							class="data-table-empty-row"
@@ -165,7 +222,7 @@ const DataTable = ({
 								class="data-table-td data-table-empty-cell"
 								colspan="${columns.length}"
 							>
-								No results found.
+								${emptyMessage ?? "No results found."}
 							</td>
 						</tr>
 					</tbody>

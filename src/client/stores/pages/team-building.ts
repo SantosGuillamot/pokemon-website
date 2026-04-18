@@ -1,9 +1,17 @@
-import type { MetaPokemon, Team } from "@pokemon-website/types/team-builder";
-import { store } from "@wordpress/interactivity";
+import "@pokemon-website/stores/data-table";
+import type { PokemonStore } from "@pokemon-website/stores/pokemons";
 import {
 	isCurrentSection,
 	selectSection,
 } from "@pokemon-website/stores/section-utils";
+import type {
+	DataTableContext,
+	DataTableRow,
+} from "@pokemon-website/types/data-table";
+import type { Item, Nature } from "@pokemon-website/types/reference-data";
+import type { MetaPokemon, Team } from "@pokemon-website/types/team-builder";
+import type { Type } from "@pokemon-website/types/types";
+import { getConfig, getContext, store } from "@wordpress/interactivity";
 import {
 	createMetaPokemon,
 	createTeam,
@@ -19,6 +27,7 @@ type TeamBuilderState = {
 	metaPokemons: MetaPokemon[];
 	teams: Team[];
 	isCurrentSection: boolean;
+	metaPokemonRows: DataTableRow[];
 };
 
 export type TeamBuilderStore = {
@@ -29,14 +38,19 @@ export type TeamBuilderStore = {
 		) => void;
 		saveMetaPokemon: (pokemon: MetaPokemon) => void;
 		deleteMetaPokemon: (id: string) => void;
-		createTeam: (
-			draft: Omit<Team, "id" | "createdAt" | "updatedAt">,
-		) => void;
+		deleteMetaPokemonWithConfirm: () => void;
+		openNewEditor: () => void;
+		createTeam: (draft: Omit<Team, "id" | "createdAt" | "updatedAt">) => void;
 		saveTeam: (team: Team) => void;
 		deleteTeam: (id: string) => void;
 		selectSection: () => void;
 	};
+	callbacks: {
+		init: () => void;
+	};
 };
+
+const capitalize = (s: string) => (s ? s[0].toUpperCase() + s.slice(1) : "");
 
 const { state } = store("pokemon/team-builder", {
 	state: {
@@ -44,6 +58,56 @@ const { state } = store("pokemon/team-builder", {
 		teams: [] as Team[],
 		get isCurrentSection() {
 			return isCurrentSection("pokemon/team-builder");
+		},
+		get metaPokemonRows(): DataTableRow[] {
+			const s = state as TeamBuilderState;
+			const pokemons = store<PokemonStore>("pokemon").state.pokemons;
+			const config = getConfig("pokemon") as {
+				types?: Record<string, Type>;
+				items?: Record<string, Item>;
+				natures?: Record<string, Nature>;
+			};
+			const types = config.types ?? {};
+			const items = config.items ?? {};
+			const natures = config.natures ?? {};
+
+			const rows: DataTableRow[] = [];
+			for (const mp of s.metaPokemons) {
+				const p = pokemons[String(mp.pokemonId)];
+				if (!p) continue;
+
+				const typeRecords = p.typeIds
+					.map((id) => types[String(id)])
+					.filter((t): t is Type => !!t);
+				const t1 = typeRecords[0];
+				const t2 = typeRecords[1];
+
+				const item =
+					mp.itemId != null ? items[String(mp.itemId)] : undefined;
+
+				rows.push({
+					id: mp.id,
+					sprite: p.imageUrl ?? "",
+					itemImage: item?.imageUrl ?? "",
+					itemName: item?.name ?? "",
+					nickname: mp.nickname,
+					type1: t1?.imageSmall ?? "",
+					type1Name: t1?.name ?? "",
+					type2: t2?.imageSmall ?? "",
+					type2Name: t2?.name ?? "",
+					natureName:
+						mp.natureId != null
+							? capitalize(natures[String(mp.natureId)]?.name ?? "")
+							: "",
+					hp: mp.statPoints.hp,
+					attack: mp.statPoints.attack,
+					defense: mp.statPoints.defense,
+					spAttack: mp.statPoints.spAttack,
+					spDefense: mp.statPoints.spDefense,
+					speed: mp.statPoints.speed,
+				});
+			}
+			return rows;
 		},
 	},
 	actions: {
@@ -65,7 +129,6 @@ const { state } = store("pokemon/team-builder", {
 			const s = state as TeamBuilderState;
 			deleteMetaPokemon(id);
 			s.metaPokemons = s.metaPokemons.filter((mp) => mp.id !== id);
-			// Nullify references in in-memory teams to stay in sync with storage cascade
 			const now = new Date().toISOString();
 			s.teams = s.teams.map((team) => {
 				if (!team.members.includes(id)) return team;
@@ -77,6 +140,19 @@ const { state } = store("pokemon/team-builder", {
 					updatedAt: now,
 				};
 			});
+		},
+		deleteMetaPokemonWithConfirm() {
+			const ctx = getContext<DataTableContext>("pokemon/data-table");
+			const item = ctx.item;
+			if (!item) return;
+			const nickname = String(item.nickname ?? "");
+			if (!window.confirm(`Delete "${nickname}"?`)) return;
+			(
+				store("pokemon/team-builder") as TeamBuilderStore
+			).actions.deleteMetaPokemon(String(item.id));
+		},
+		openNewEditor() {
+			// Stub — editor lands in a later issue.
 		},
 		createTeam(draft: Omit<Team, "id" | "createdAt" | "updatedAt">) {
 			const s = state as TeamBuilderState;
