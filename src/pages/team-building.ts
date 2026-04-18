@@ -1,7 +1,8 @@
 import { html } from "hono/html";
 import Hero from "../components/Hero.js";
-import SectionCard from "../components/SectionCard.js";
+import MetaPokemonsSection from "../components/MetaPokemonsSection.js";
 import Section from "../components/Section.js";
+import SectionCard from "../components/SectionCard.js";
 
 const TeamBuildingPage = () => {
 	return html`
@@ -17,6 +18,7 @@ const TeamBuildingPage = () => {
 			<div
 				data-wp-interactive="pokemon/team-builder"
 				data-wp-context='{"currentSection": null}'
+				data-wp-init="callbacks.init"
 			>
 				${Section({
 					children: html`
@@ -24,12 +26,14 @@ const TeamBuildingPage = () => {
 						<div class="flex flex-wrap justify-center gap-4">
 							${SectionCard({
 								title: "Team Builder",
-								description: "Build your competitive team and analyze type coverage and meta matchups.",
+								description:
+									"Build your competitive team and analyze type coverage and meta matchups.",
 								sectionId: "team-builder",
 							})}
 							${SectionCard({
 								title: "Meta Pokemons",
-								description: "Define the meta Pokemon configurations used for team comparisons.",
+								description:
+									"Define the meta Pokemon configurations used for team comparisons.",
 								sectionId: "meta-pokemons",
 							})}
 						</div>
@@ -90,20 +94,7 @@ const TeamBuildingPage = () => {
 
 				${Section({
 					attrs: `data-wp-context='{"sectionId": "meta-pokemons"}' data-wp-bind--hidden="!state.isCurrentSection"`,
-					children: html`
-						<div class="space-y-4">
-							<h3>Meta Pokemons</h3>
-							<p class="text-p text-darker-gray">
-								Define the Pokemon configurations that represent the current meta.
-								These will be used to analyze your team's matchups and coverage.
-							</p>
-							<div class="rounded-lg border-2 border-fog bg-white p-6 space-y-4">
-								<p class="text-center text-p text-darker-gray">
-									No meta Pokemon defined yet. Meta Pokemon management coming soon.
-								</p>
-							</div>
-						</div>
-					`,
+					children: MetaPokemonsSection(),
 				})}
 			</div>
 		</main>
