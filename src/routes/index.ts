@@ -8,6 +8,7 @@ import DamageCalculatorPage from "../pages/damage-calculator.js";
 import DesignSystemPage from "../pages/design-system.js";
 import HomePage from "../pages/home.js";
 import RolesPage from "../pages/roles.js";
+import SpecialAttackPage from "../pages/special-attack.js";
 import SpeedsPage from "../pages/speeds.js";
 import TeamBuildingPage from "../pages/team-building.js";
 import TypesPage from "../pages/types.js";
@@ -35,6 +36,12 @@ const pages = [
 		title: "Speeds",
 		render: SpeedsPage,
 		scripts: ["/js/stores/pages/speeds.js"],
+	},
+	{
+		path: "/special-attack",
+		title: "Special Attack",
+		render: SpecialAttackPage,
+		scripts: ["/js/stores/pages/special-attack.js"],
 	},
 	{ path: "/roles", title: "Roles", render: RolesPage },
 	{ path: "/will-it-ko", title: "Will It KO", render: WillItKoPage },
