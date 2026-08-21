@@ -36,6 +36,8 @@ the "Who's Faster?" page does for the Speed stat.
 
 **Page shell / section visibility.** Everything is wrapped in `<div data-wp-interactive="pokemon/speeds" data-wp-context='{"currentSection": null}'>` (speeds.ts:92-94). `currentSection` starts null. Every section except Hero and "Learn Speeds" binds `data-wp-bind--hidden="!state.isCurrentSection"` (`isCurrentSection` = `context.currentSection === context.sectionId`, `src/client/stores/section-utils.ts:3-8`). So on load the user sees only the Hero + the three cards; clicking a card reveals exactly one section (tab-like, single-visible).
 
+**Insufficient-data guard (added in review iteration 1).** Before any of the above renders, the page component returns early when fewer than two Pokémon are loaded: `if (pokemons.length < 2) { return html\`<main><p>Not enough Pokemon loaded.</p></main>\`; }` (speeds.ts:61-64). This is a whole-page replacement — the ENTIRE page is the single bare message; the Hero, the "Learn Speeds" selector, the quiz sections, and the table do NOT render, and no error is thrown. So the model's insufficient-data behavior is "replace the whole page with a graceful message," not "swap only the quiz region." (This corrects the ungrounded framing flagged by the spec-reviewer for consolidated Requirement 12.)
+
 **Sections and observable behavior:**
 - (a) HERO (speeds.ts:84-90) — presentational. Title "Who's Faster?", description about guessing which is faster / ties / one wrong answer ends your streak. Two decorative artwork images (25.png fg, 9.png bg).
 - (b) "LEARN SPEEDS" section (speeds.ts:96-117) — always visible. h2 + three `SectionCard` buttons acting as a section selector: "Who's Faster?" (whos-faster), "Guess Speed" (guess-speed), "Speeds Table" (speeds-table). Clicking calls `actions.selectSection` (sets `currentSection`); the active card gets `card-squared-active` styling.
@@ -55,6 +57,7 @@ the "Who's Faster?" page does for the Speed stat.
 - "moves-priority" section is unreachable — `grep -rn "moves-priority" src` → only the section definition itself; no control sets it.
 - Special Attack data already exists as `spAttack` in the same server data — `src/db/schema/pokemons.ts:21-26`, `src/types/pokemons.ts:4`, `src/api/pokemons.ts:49-59` → `spAttack smallint notNull`, returned unprojected, read from `state.pokemon.pokemons`.
 - "SpA" is the established column label for Special Attack — `src/pages/design-system.ts:543`, `src/components/MetaPokemonsSection.ts:48` → `label: "SpA"`.
+- Model's insufficient-data behavior replaces the whole page with a bare message — `src/pages/speeds.ts:61-64` (read directly) → `if (pokemons.length < 2) return html\`<main><p>Not enough Pokemon loaded.</p></main>\``; the early return precedes and therefore suppresses the Hero, selector, quiz sections, and table, with no error thrown.
 
 ### R2: Precedent for stat-comparison game pages + Special Attack naming
 
@@ -96,5 +99,5 @@ Each requirement is an observable outcome. Concrete copy strings (page name, lab
 9. The current streak is visible while the head-to-head quiz is being played. (R1 3c)
 10. Data-table section — a sortable, searchable table lists all loaded Pokémon with, at minimum, sprite, name, and Special Attack value; it is sorted by Special Attack descending by default; the user can sort by name or by Special Attack; searching scrolls to and highlights matching rows rather than filtering others out. (R1 3e; R2)
 11. Every Special Attack value shown (quiz and table) is the Pokémon's `spAttack` value from the existing server data; no new data source, query, or schema is introduced. (R1: data; R2)
-12. Edge case — if fewer than two Pokémon are available, the page shows a graceful "not enough Pokémon" message in place of the quiz rather than erroring, mirroring the model page. (R1: shell)
+12. Edge case — if fewer than two Pokémon are available, the page renders only a graceful "not enough Pokémon" message (no hero, selector, or table) and does not error, mirroring the model page's whole-page early return. (R1: insufficient-data guard)
 13. The observable behavior of all existing pages (the "Who's Faster?"/Speeds page, other games, the homepage, and navigation) is unchanged apart from the added navigation entry and homepage card for the new page. (Out of Scope 5)

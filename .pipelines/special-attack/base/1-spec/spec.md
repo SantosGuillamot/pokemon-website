@@ -19,7 +19,7 @@ This feature adds a new page that mirrors the "Who's Faster?" experience for Spe
 9. **Streak visibility.** The current streak is visible while the head-to-head quiz is being played.
 10. **Data table.** A sortable, searchable table lists all loaded Pokémon with (at minimum) sprite, name, and Special Attack value; it is sorted by Special Attack descending by default; the user can sort by name or by Special Attack; searching scrolls to and highlights matching rows rather than filtering the rest out.
 11. **Existing data only.** Every Special Attack value shown (quiz and table) is the Pokémon's existing `spAttack` value from the server data already loaded for pages; no new data source, query, or schema is introduced.
-12. **Insufficient-data edge case.** If fewer than two Pokémon are available, the page shows a graceful "not enough Pokémon" message in place of the quiz rather than erroring.
+12. **Insufficient-data edge case.** If fewer than two Pokémon are available, the page renders only a graceful "not enough Pokémon" message — no hero, section selector, or table — and does not error, mirroring the model page's whole-page early return.
 13. **No regressions elsewhere.** The observable behavior of all existing pages (the "Who's Faster?"/Speeds page, other games, the homepage, and navigation) is unchanged apart from the added navigation entry and homepage card for the new page.
 
 ## Out of Scope
@@ -43,5 +43,5 @@ This feature adds a new page that mirrors the "Who's Faster?" experience for Spe
 - Given a user who prefers reduced motion, when values are revealed, then the final Special Attack values are shown immediately without the count-up animation.
 - Given the data-table section, when it is shown, then it lists all loaded Pokémon with sprite, name, and Special Attack, sorted by Special Attack from highest to lowest by default.
 - Given the data table, when the user clicks the name or Special Attack column header, then the rows sort by that column (toggling ascending/descending); when the user searches for a Pokémon name, then matching rows are scrolled to and highlighted while other rows remain present.
-- Given a data set with fewer than two Pokémon available, when the user opens the page, then a "not enough Pokémon" message is shown instead of the quiz and no error occurs.
+- Given a data set with fewer than two Pokémon available, when the user opens the page, then the page renders only a "not enough Pokémon" message with no hero, section selector, or table, and no error occurs.
 - Given the existing "Who's Faster?"/Speeds page and other existing pages, when the feature ships, then their observable behavior is unchanged.
