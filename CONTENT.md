@@ -9,7 +9,7 @@ Game scope: **Pokemon Champions** (releasing April 2026). The available Pokemon 
 Landing page introducing the site and linking to all features.
 
 - Brief presentation/hero section
-- One card per feature page (Who's Faster, KO or Not, Learn Types, Roles, Damage Calculator, Team Building)
+- One card per feature page (Who's Faster, KO or Not, Learn Types, Roles, Special Attack, Damage Calculator, Team Building)
 
 ---
 
@@ -70,7 +70,19 @@ Minigame to learn whether a Pokemon leans physical or special. No auth required.
 
 ---
 
-## 6. Damage Calculator
+## 6. Special Attack
+
+Minigame to train Special Attack knowledge. No auth required.
+
+- Show two Pokemon side by side
+- User guesses which one has the higher Special Attack stat (if the two are tied, either choice is accepted)
+- Streak-based: one wrong answer ends the run
+- Display the current streak count
+- Also offers a sortable, searchable table of all Pokemon by their Special Attack stat
+
+---
+
+## 7. Damage Calculator
 
 Full damage calculator for Pokemon Champions. No auth required.
 
@@ -82,7 +94,7 @@ Full damage calculator for Pokemon Champions. No auth required.
 
 ---
 
-## 7. Team Building
+## 8. Team Building
 
 Theory crafting tool for competitive teams. **Requires auth** (to save teams).
 
