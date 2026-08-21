@@ -13,6 +13,7 @@ const entryPoints = [
 	"src/client/stores/pages/types.ts",
 	"src/client/stores/pages/team-building.ts",
 	"src/client/stores/pages/design-system.ts",
+	"src/client/stores/pages/special-attack.ts",
 ];
 
 const buildOptions: esbuild.BuildOptions = {
