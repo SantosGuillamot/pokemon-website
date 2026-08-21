@@ -4,7 +4,7 @@
 
 This plan implements a new `/special-attack` page that mirrors the shipped "Who's Faster?" Speeds page (`/speeds`) for the Special Attack stat: a hero, a "Learn Special Attack" selector of section cards, a head-to-head "guess which has the higher Special Attack" streak quiz, and a sortable/searchable table of all Pokémon by Special Attack. It deliberately drops the Speeds page's numeric "guess the number" game and its dead "moves-priority" stub (both out of scope). The approach is the design's **clean fork**: add a new SSR page component and a new client store under the **distinct** Interactivity namespace `pokemon/special-attack`, reuse the already-generic shared components/utilities unchanged, and change only the stat read from `.speed` to the already-present `.spAttack`. No new data model, query, schema, or API is introduced — `spAttack` is already loaded server-side alongside `speed`.
 
-Investigation behind the scope: I read the model page `src/pages/speeds.ts` and its store `src/client/stores/pages/speeds.ts`, plus the shared components (`Hero`, `SectionCard`, `QuizSection`, `QuizStatus`, `DataTable`, `PokemonCard`, `Section`, `Card`) and utilities (`quiz-utils`, `section-utils`, `utils/array.ts`, `utils/quiz.ts`), and the four wiring surfaces (`src/routes/index.ts`, `scripts/build.ts`, `src/components/Nav.ts`, `src/pages/home.ts`). I confirmed: `spAttack` exists on the Pokémon schema (`src/db/schema/pokemons.ts:24`, `sp_attack`) and on the inferred `Pokemon` type; the `pokemon`, `pokemon/data-table`, `quiz-utils`, and `section-utils` stores are stat-agnostic and driven entirely by context/props; `lucide-static` exports `Zap` (verified via `require('lucide-static')`); the `.speed-*` reveal/hover CSS classes are global (single bundle) and referenced only by the Speeds page. Searches that came back empty and shaped scope: there is **no** unit-test runner, e2e harness, or `test`/`vitest`/`jest`/`playwright`/`cypress` dependency in `package.json` (grep of dev/prod deps returned none), and the codebase contains no test files — so this plan adds none and states verification explicitly below (see **Verification approach**).
+Investigation behind the scope: I read the model page `src/pages/speeds.ts` and its store `src/client/stores/pages/speeds.ts`, plus the shared components (`Hero`, `SectionCard`, `QuizSection`, `QuizStatus`, `DataTable`, `PokemonCard`, `Section`, `Card`) and utilities (`quiz-utils`, `section-utils`, `utils/array.ts`, `utils/quiz.ts`), and the four wiring surfaces (`src/routes/index.ts`, `scripts/build.ts`, `src/components/Nav.ts`, `src/pages/home.ts`). I confirmed: `spAttack` exists on the Pokémon schema (`src/db/schema/pokemons.ts:24`, `sp_attack`) and on the inferred `Pokemon` type; the `pokemon`, `pokemon/data-table`, `quiz-utils`, and `section-utils` stores are stat-agnostic and driven entirely by context/props; `lucide-static` exports `Zap` (verified via `require('lucide-static')`); the `.speed-*` reveal/hover CSS classes are global (single bundle) and referenced only by the Speeds page. Searches that came back empty and shaped scope: there is **no** unit-test runner, e2e harness, or `test`/`vitest`/`jest`/`playwright`/`cypress` dependency in `package.json` (grep of dev/prod deps returned none), and the codebase contains no test files — so this plan adds none and states verification explicitly below (see **Verification approach**). I also ran both guardrail gates against the base commit `3c16a16` and recorded their state: **both are already red** (`npm run lint` exits 1 with 12 errors + 4 warnings; `npx tsc --noEmit` exits 2 with 1 error in `src/utils.ts`), entirely in files this feature never edits. Because these two gates plus manual runtime observation are the *only* verification available, the exact pre-existing baseline is recorded under **Verification approach** and every gate criterion is measured as "no NEW findings," never as "the gate passes" — and the pre-existing failures are explicitly out of scope to fix (Requirement 13 / Out-of-Scope 5).
 
 The order is: build the two new files (client store, then page component), wire them in (build entry point, then route), add the two additive discoverability entries (nav link, homepage card), and finish with an end-to-end validation pass. The single highest-risk item is design residual **R-3**: the new store MUST register the namespace `pokemon/special-attack`, and the page's `data-wp-interactive` string MUST match it exactly — reusing `pokemon/speeds` would merge and corrupt both pages' state across client-side navigation. This is called out in Task 1 and Task 2 acceptance.
 
@@ -19,13 +19,37 @@ No scoped gates were passed to this planner. Both gates the build phase runs are
 
 ## Verification approach
 
-There is no unit-test runner and no e2e harness configured in this repository (`package.json` has `lint` = `biome check` and no test script; no test framework is installed). Per the phase guidance, this plan does **not** invent a test command and does **not** add test scaffolding (the design sanctions none, reuses shipped stat-agnostic logic, and the codebase has zero tests — adding a runner would be unsanctioned scope). Instead, every task's Acceptance is verified by:
+There is no unit-test runner and no e2e harness configured in this repository (`package.json` has `lint` = `biome check`, `lint:fix` = `biome check --write`, and no test script; no test framework is installed). Per the phase guidance, this plan does **not** invent a test command and does **not** add test scaffolding (the design sanctions none, reuses shipped stat-agnostic logic, and the codebase has zero tests — adding a runner would be unsanctioned scope). The only automated verification available is the two guardrail gates plus manual runtime observation.
 
-1. **`npm run lint`** (`biome check`) — passes with no new errors.
-2. **`npx tsc --noEmit`** — passes with no new type errors.
+### Baseline gate state (recorded at base commit `3c16a16`)
+
+Both gates are **already red** on the base commit, entirely in files this feature does not edit. This baseline is pre-existing and strictly **out of scope** — fixing any of it would breach Requirement 13 / Out-of-Scope 5. Every gate criterion below is therefore measured as **no NEW findings relative to this baseline**, never as "the gate passes."
+
+- **`npm run lint` (`biome check`) — exit code 1: "Found 12 errors. Found 4 warnings." (72 files checked).** All pre-existing, in files outside this feature's scope:
+  - `src/styles/input.css`: 2× `parse` errors (Tailwind `@theme` at line 35), 1× `lint/correctness/noUnknownFunction` (`theme(...)` at line 124), 1× format error, plus 4× `lint/complexity/noImportantStyles` **warnings** (lines 1025–1028).
+  - `scripts/download-images.ts`: 1× format error.
+  - `scripts/scrape-champions-pokemon.ts`: 1× format error.
+  - `src/client/lib/team-builder-storage.ts`: 1× format error.
+  - `src/client/stores/pages/team-building.ts`: 1× format error.
+  - `src/client/stores/quiz-utils.ts`: 1× format error.
+  - `src/pages/speeds.ts`: 1× `assist/source/organizeImports` error + 1× format error.
+  - `src/pages/types.ts`: 1× `assist/source/organizeImports` error.
+  - (Totals to the 12 errors + 4 warnings above.)
+- **`npx tsc --noEmit` — exit code 2: 1 error** — `src/utils.ts(58,19): error TS18046: 'config.pokemon.types' is of type 'unknown'.` Pre-existing; `src/utils.ts` is never touched by this feature.
+
+### Scope directive (mandatory for every task)
+
+- A build-writer MUST NOT modify any file outside its task's declared **Files to change** in order to make a gate green. In particular, do **not** "fix" the pre-existing findings in `src/styles/input.css`, `src/utils.ts`, `scripts/download-images.ts`, `scripts/scrape-champions-pokemon.ts`, `src/client/lib/team-builder-storage.ts`, `src/client/stores/pages/team-building.ts`, `src/client/stores/quiz-utils.ts`, `src/pages/speeds.ts`, or `src/pages/types.ts` — they are out of scope and constitute the baseline against which "new" is measured.
+- The bar is strictly: the task's own diff introduces **zero new** biome errors/warnings and **zero new** tsc errors beyond the recorded baseline.
+- **Import-sort / format trap (the one realistic way this diff can add a NEW finding):** biome enforces sorted imports and consistent formatting. Task 4 adds a `SpecialAttackPage` import to `src/routes/index.ts`; Task 6 adds `Zap` to the `lucide-static` import in `src/pages/home.ts`; and Tasks 1–2 create new files modeled on `src/pages/speeds.ts` / `src/client/stores/pages/speeds.ts` (whose own imports are unsorted in the baseline — do not copy that ordering). Insert new imports in biome's sorted order and keep the new files formatted. To auto-fix, run biome **path-scoped to the task's own changed files only** (e.g. `npx biome check --write src/pages/special-attack.ts`) — do **not** run the unscoped `npm run lint:fix`, which would rewrite the pre-existing unrelated files and breach the scope directive above.
+
+Every task's Acceptance is then verified by:
+
+1. **`npm run lint`** (`biome check`) — introduces **no new** lint errors or warnings relative to the recorded baseline.
+2. **`npx tsc --noEmit`** — introduces **no new** type errors relative to the recorded baseline.
 3. **App runtime observation** — build assets (`npm run build:js` and `npm run build:css`) and run the app (`npm run dev`), then observe the task's listed behaviors in the browser. The `## E2E test plan` flows below are the concrete drive-through the final task and the reviewer use.
 
-For the coding/wiring tasks (Type `tdd`), the build-writer treats each Acceptance bullet as the behavioral specification and confirms it via lint + typecheck + the runtime observation above; it must **not** scaffold or invent a unit-test runner. The final task (Type `e2e`) is executed as a documented manual/scripted browser drive-through of the E2E flows (the reviewer re-drives the same flows), not an automated suite.
+For the coding/wiring tasks (Type `tdd`), the build-writer treats each Acceptance bullet as the behavioral specification and confirms it via the two gates (measured as "no new findings" above) plus the runtime observation; it must **not** scaffold or invent a unit-test runner. The final task (Type `e2e`) is executed as a documented manual/scripted browser drive-through of the E2E flows (the reviewer re-drives the same flows), not an automated suite.
 
 ## E2E test plan
 
@@ -128,7 +152,7 @@ For the coding/wiring tasks (Type `tdd`), the build-writer treats each Acceptanc
   - `getDisplayedSpAttack`/`displayedSpAttack` reads `spAttack` (never `speed`) and returns `0` when the client-side Pokémon lookup misses.
   - `revealAnswer` retains the reduced-motion branch: when `prefers-reduced-motion` is set it sets `animationProgress = 1` and resolves the outcome without the `requestAnimationFrame` count-up.
   - `guessSpAttack` marks the selection correct when `correctAnswer === "tie"` or `correctAnswer === pokemonIndex`; on correct it increments `streak` and advances to a new pair, on incorrect it records `finalStreak` and ends the run.
-  - `npm run lint` and `npx tsc --noEmit` pass.
+  - Introduces **no new** lint or typecheck errors/warnings relative to the recorded baseline (see **Verification approach**), and modifies no file outside this task's **Files to change**.
 
 ### Task 2: Create the Special Attack SSR page component
 
@@ -163,7 +187,7 @@ For the coding/wiring tasks (Type `tdd`), the build-writer treats each Acceptanc
   - Each `SectionCard`'s `sectionId` (`whos-higher-special-attack`, `special-attack-table`) matches the `sectionId` on its corresponding revealable section wrapper, so exactly one section is revealed per selection.
   - The `DataTable` has a "Special Attack" column keyed `spAttack`; rows are built as `{ id, sprite, name, spAttack }` from each Pokémon's `spAttack`; `sortColumn` is `"spAttack"`, `sortDirection` is `"desc"`, `searchMode` is `"scroll"`; the name column is sortable and searchable and the Special Attack column is sortable.
   - The head-to-head choice/reveal markup reuses the `.speed-*` classes and binds to `state.displayedSpAttack`, `state.isGuessedCorrect`, `state.isGuessedIncorrect`, and `actions.guessSpAttack`.
-  - `npm run lint` and `npx tsc --noEmit` pass.
+  - Introduces **no new** lint or typecheck errors/warnings relative to the recorded baseline (see **Verification approach**), and modifies no file outside this task's **Files to change**.
 
 ### Task 3: Register the store bundle as an esbuild entry point
 
@@ -176,7 +200,7 @@ For the coding/wiring tasks (Type `tdd`), the build-writer treats each Acceptanc
 - **Acceptance:**
   - `entryPoints` in `scripts/build.ts` includes `src/client/stores/pages/special-attack.ts`.
   - `npm run build:js` completes without error and emits `public/js/stores/pages/special-attack.js`.
-  - `npm run lint` and `npx tsc --noEmit` pass.
+  - Introduces **no new** lint or typecheck errors/warnings relative to the recorded baseline (see **Verification approach**), and modifies no file outside this task's **Files to change**.
 
 ### Task 4: Register the `/special-attack` route
 
@@ -193,7 +217,7 @@ For the coding/wiring tasks (Type `tdd`), the build-writer treats each Acceptanc
   - The rendered document loads the script `/js/stores/pages/special-attack.js`.
   - The Layout/page `<title>` reflects "Special Attack".
   - Existing routes still resolve unchanged.
-  - `npm run lint` and `npx tsc --noEmit` pass.
+  - Introduces **no new** lint or typecheck errors/warnings relative to the recorded baseline (see **Verification approach**), and modifies no file outside this task's **Files to change**.
 
 ### Task 5: Add the "SPECIAL ATTACK" navigation entry
 
@@ -207,7 +231,7 @@ For the coding/wiring tasks (Type `tdd`), the build-writer treats each Acceptanc
   - `GAME_LINKS` contains a fifth entry `{ label: "SPECIAL ATTACK", href: "/special-attack" }`.
   - The desktop Games dropdown and the mobile Games group both render the "SPECIAL ATTACK" link pointing to `/special-attack`, and activating it navigates to the new page.
   - The four existing game links (Types, Speeds, Roles, Will It KO?) are unchanged.
-  - `npm run lint` and `npx tsc --noEmit` pass.
+  - Introduces **no new** lint or typecheck errors/warnings relative to the recorded baseline (see **Verification approach**), and modifies no file outside this task's **Files to change**.
 
 ### Task 6: Add the homepage "Special Attack" game card
 
@@ -222,7 +246,7 @@ For the coding/wiring tasks (Type `tdd`), the build-writer treats each Acceptanc
 - **Acceptance:**
   - `GAMES` contains a card `{ title: "Special Attack", href: "/special-attack", icon: Zap, ... }`, and the homepage Games section renders it linking to `/special-attack`.
   - The existing game cards and the Tools section are unchanged.
-  - `npm run lint` and `npx tsc --noEmit` pass.
+  - Introduces **no new** lint or typecheck errors/warnings relative to the recorded baseline (see **Verification approach**), and modifies no file outside this task's **Files to change**.
 
 ### Task 7: End-to-end validation of all flows and regressions
 
@@ -234,4 +258,4 @@ For the coding/wiring tasks (Type `tdd`), the build-writer treats each Acceptanc
 - **Acceptance:**
   - E2E Flows 1–11 all behave as specified in the `## E2E test plan`.
   - Flow 12 passes: `/speeds` (both its head-to-head and numeric guess-speed games and its table), the homepage, and other existing pages are unchanged apart from the added nav entry and homepage card; navigating back and forth between `/speeds` and `/special-attack` does not merge or corrupt either page's quiz/streak state (confirming the distinct namespace, R-3).
-  - `npm run lint` and `npx tsc --noEmit` pass on the full worktree.
+  - On the full worktree, `npm run lint` and `npx tsc --noEmit` show **no new** findings beyond the recorded baseline (see **Verification approach**) — i.e., exactly the same pre-existing 12 errors + 4 warnings (lint) and 1 error in `src/utils.ts` (tsc), and nothing introduced by this feature's diff.
