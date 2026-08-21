@@ -8,6 +8,7 @@ const GAME_LINKS = [
 	{ label: "SPEEDS", href: "/speeds" },
 	{ label: "ROLES", href: "/roles" },
 	{ label: "WILL IT KO?", href: "/will-it-ko" },
+	{ label: "SPECIAL ATTACK", href: "/special-attack" },
 ];
 
 const TOOL_LINKS = [
