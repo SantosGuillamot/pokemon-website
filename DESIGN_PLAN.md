@@ -257,13 +257,13 @@ The main repeating element on the index page.
 - [x] **Background**: Solid `--color-primary` yellow (`#FFDE00`). All text and icons use `--color-black` (`#111111`). Soft box-shadow using `--color-black` at low opacity.
 - [x] **Layout (desktop)**:
   - **Left**: Logo (`logo.svg`, 40px) + "POKEMON" text. Space Mono bold, uppercase, `0.1em` tracking. Links to `/`.
-  - **Center-right**: Tool links (CALCULATOR, TEAM BUILDER) as direct links + GAMES dropdown (TYPES, SPEEDS, ROLES, WILL IT KO?). Same H4 style. Spaced with `2rem` gap.
+  - **Center-right**: Tool links (CALCULATOR, TEAM BUILDER) as direct links + GAMES dropdown (TYPES, SPEEDS, ROLES, WILL IT KO?, SPECIAL ATTACK). Same H4 style. Spaced with `2rem` gap.
   - **Games dropdown**: Button with Lucide `ChevronDown` (rotates 180° on open). Panel: white background, `--shadow-nav`, rounded. Items: Space Mono uppercase, `fog` hover. Opens on hover (desktop) or click. Managed via IAPI state (`isGamesDropdownOpen`).
   - **Far right**: Social icons (Website/Globe, X/Twitter, GitHub) inline SVGs, `20px`. Separated from nav links by a subtle left border (`border-black/20`). Open in new tab.
 - [x] **Layout (mobile)**: Logo + "POKEMON" text on the left (always visible). Hamburger icon (`Menu` from Lucide) on the right.
 - [x] **Mobile menu**: Full-screen overlay on white (`#FFFFFF`) background. X close button (`X` from Lucide) top-right. Links stacked vertically and centered: Games group (with "Games" label in small uppercase `--color-darker-gray`) then separator (`h-px w-16 bg-black/20`) then Tool links. Font: Space Mono bold, `text-2xl`, uppercase. Social icons grouped at the bottom.
 - [x] **Active page indicator**: `2px` underline offset below the link text using `--color-black`. Driven client-side via IAPI `callbacks.isActive` reading `window.location.pathname` — no server-side path passing needed. Applied on both desktop and mobile.
-- [x] **Nav items**: Tool links — CALCULATOR (`/damage-calculator`), TEAM BUILDER (`/team-building`). Games dropdown — TYPES (`/types`), SPEEDS (`/speeds`), ROLES (`/roles`), WILL IT KO? (`/will-it-ko`). Design system route excluded (dev-only).
+- [x] **Nav items**: Tool links — CALCULATOR (`/damage-calculator`), TEAM BUILDER (`/team-building`). Games dropdown — TYPES (`/types`), SPEEDS (`/speeds`), ROLES (`/roles`), WILL IT KO? (`/will-it-ko`), SPECIAL ATTACK (`/special-attack`). Design system route excluded (dev-only).
 - [x] **Nav link hover**: Subtle opacity reduction or `color-mix()` lighten on hover, with `transition-colors`. No underline on hover (reserved for active state).
 - [x] **Breakpoint**: Nav links + social icons visible on `md` (768px) and up. Below `md`, collapse to hamburger.
 - [ ] **Mobile menu accessibility**: Review focus management — focus the close button (or first focusable element) on open, trap Tab/Shift+Tab within the overlay, return focus to the hamburger on close.
