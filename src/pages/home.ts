@@ -6,6 +6,7 @@ import {
 	Swords,
 	Timer,
 	Users,
+	Zap,
 } from "lucide-static";
 import Card from "../components/Card.js";
 import Hero from "../components/Hero.js";
@@ -39,6 +40,13 @@ const GAMES = [
 			"Train your damage intuition. Can this move one-hit KO the defender?",
 		href: "/will-it-ko",
 		icon: Swords,
+	},
+	{
+		title: "Special Attack",
+		description:
+			"Test your Special Attack knowledge! Two Pokemon appear — guess which one hits harder specially.",
+		href: "/special-attack",
+		icon: Zap,
 	},
 ];
 
